@@ -1,0 +1,1785 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IS - Experience House</title>
+
+  <!-- Favicon with dollar sign with wings emoji -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/scrollbars.css">
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
+
+  <style>
+    :root{
+      --bg: #ce4127;
+      --fg: #F7E491;
+      --muted: #F7E491;
+      --border: rgba(247, 228, 145, 1);
+      --dot: #F7E491;
+      --dot-glow: rgba(247, 228, 145, 0.6);
+      --accent-img: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop');
+      --gutter: clamp(16px, 6vw, 140px);
+      --toast-bg: rgba(255,255,255,.08);
+
+      /* Embed sizing caps */
+      --embed-w-cap: 2400px;
+      --embed-h-cap: 78vh;
+      --embed-pad: 24px;
+
+      /* vh fallback var for older iOS */
+      --vh: 1vh;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      overflow: clip;
+    }
+
+    .screen {
+      position: relative;
+      width: 100vw;
+
+      /* viewport height fixes */
+      height: 100vh;
+      height: 100svh;
+      height: 100dvh;
+      height: calc(var(--vh) * 100);
+
+      overflow: hidden;
+      background: var(--bg);
+      isolation: isolate;
+    }
+
+    /* LEFT-ALIGNED content area */
+    .center{
+      width: 100vw;
+      position: absolute;
+      inset: 0;
+      display: grid;
+      align-items: center;
+      justify-items: start;
+      text-align: left;
+      pointer-events: none;
+    }
+    .stack{
+      display: grid;
+      gap: clamp(.5rem, 1.5vh, 1rem);
+      align-items: start;
+      justify-items: start;
+      text-align: left;
+    }
+
+    .eyebrow {
+      position: relative; z-index: 2;
+      padding-left: var(--gutter);
+      letter-spacing: .18em;
+      font-size: clamp(.7rem, 1.2vw, 1rem);
+      text-transform: uppercase;
+      color: var(--muted);
+      pointer-events: auto;
+    }
+
+    /* Projects horizontal scroll */
+    .projects-container {
+      pointer-events: auto;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: visible; /* allow hover preview to render above */
+      scroll-behavior: auto;
+      -webkit-overflow-scrolling: touch;
+      /* padding-left: calc(50% - var(--gutter)); */
+      /* padding-right: calc(50% - var(--gutter)); */
+      touch-action: pan-x;
+      overscroll-behavior-x: contain;
+      margin: 0 auto;
+      cursor: grab;
+      will-change: scroll-position;
+    }
+    
+    .projects-container:active {
+      cursor: grabbing;
+    }
+
+    .projects-list {
+      list-style: none;
+      display: flex;
+      gap: 5rem;
+      padding-right: var(--gutter);
+      min-width: max-content;
+      margin: 0;
+    }
+
+    .project-item {
+      flex-shrink: 0;
+      /* min-width: 400px; */
+      will-change: transform, opacity;
+      transform-origin: center center;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      perspective: 1000px;
+    }
+
+    .project-link {
+      display: block;
+      position: relative;
+      text-decoration: none !important;
+      color: var(--fg);
+      transition: opacity 0.2s ease;
+      pointer-events: auto;
+      border: none;
+      outline: none;
+    }
+
+    /* Floating animation for video preview */
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    /* Hover video preview (desktop only) */
+    @media (min-width: 1024px) {
+      /* Portal preview lives in <body>, so it never gets clipped by the slider */
+      .project-preview {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 560px;
+        height: auto; /* set dynamically per-video */
+        border-radius: 14px;
+        overflow: hidden;
+        background: #000;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity .18s ease, visibility .18s ease;
+        box-shadow: 0 18px 48px rgba(0,0,0,.55);
+        z-index: 50;
+      }
+      .project-preview.is-visible {
+        opacity: 1;
+        visibility: visible;
+        animation: float 3s ease-in-out infinite;
+      }
+      .project-preview video {
+        display: block;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+      }
+    }
+
+    .project-link:visited,
+    .project-link:active,
+    .project-link:focus {
+      text-decoration: none !important;
+      border: none;
+      outline: none;
+    }
+
+    .project-link:hover {
+      opacity: 0.7;
+      text-decoration: none !important;
+    }
+
+    .project-number {
+      font-size: 1.2rem;
+      font-weight: 500;
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .project-name {
+      font-size: clamp(4rem, 10vw, 12rem);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: var(--fg);
+    }
+
+    /* top-left showreel */
+    .showreel {
+      position: absolute; left: clamp(16px, 2vw, 32px); top: clamp(14px, 2.2vh, 28px);
+      display: inline-flex; align-items: center; gap: .9rem;
+      color: var(--fg);
+      cursor: none !important;
+      pointer-events: auto;
+      user-select: none;
+      text-decoration: none;
+      z-index: 3;
+    }
+    
+    /* Hover animation for play icon - move right then come back from left */
+    @keyframes playIconHover {
+      0% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(20px);
+      }
+      51% {
+        transform: translateX(-20px);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+    
+    .showreel .icon {
+      width: 46px; height: 46px; border-radius: 10px;
+      position: relative; display: grid; place-items: center;
+      outline: 1.5px solid var(--border);
+      transition: transform .15s ease;
+    }
+    .showreel .icon::before {
+      content: ""; position: absolute; inset: 0;
+      border: 1.5px dashed rgba(247, 228, 145,.25);
+      border-radius: 10px;
+      transform: scale(.86);
+    }
+    .showreel .play {
+      width: 0; height: 0;
+      border-left: 10px solid var(--fg);
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      margin-left: 2px;
+      transition: none;
+    }
+    
+    .showreel:hover .play {
+      animation: playIconHover 0.6s ease-out;
+    }
+    
+    .showreel span.label{
+      font-weight: 600;
+      letter-spacing: .06em;
+      font-size: clamp(.75rem, 1.1vw, 1rem);
+      text-transform: uppercase;
+      opacity: .95;
+    }
+    .showreel:hover .icon{ transform: scale(1.04); }
+
+    /* bottom-left: logo + pills */
+    .bottom-left {
+      margin-bottom: 24px;
+      position: absolute; left: clamp(12px, 2.4vw, 48px); bottom: clamp(14px, 2.2vh, 28px);
+      display: flex; align-items: flex-end; gap: 24px;
+      z-index: 2;
+      pointer-events: auto;
+      cursor: none !important;
+    }
+    .logo-svg { width: 36px; height: auto; display: block; }
+
+    .pills { display: flex; gap: clamp(10px, 1.2vw, 16px); flex-wrap: wrap; }
+    .pill {
+      pointer-events: auto;
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .65rem 1.1rem;
+      border: 1.6px solid var(--fg);
+      border-radius: 999px;
+      background: #f7e491;
+      color: #CE4127;
+      border-color: #CE4127;
+      font-weight: 600;
+      letter-spacing: .05em;
+      font-size: clamp(.72rem, .95vw, .9rem);
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background .2s ease, color .2s ease, transform .12s ease, border-color .2s ease;
+      cursor: none !important;
+    }
+    .pill .dot{ width: .45rem; height: .45rem; border-radius: 50%; background: #CE4127; }
+    .pill:hover { background: var(--bg); color: var(--fg); transform: translateY(-1px); }
+    .pill:hover .dot{ background: var(--fg); }
+
+    /* bottom-right rock wedge */
+    .wedge {
+      position: absolute; right: -6vw; bottom: -10vh;
+      width: min(64vw, 1100px);
+      height: min(42vh, 480px);
+      background-image: var(--accent-img);
+      background-size: cover; background-position: center;
+      filter: grayscale(1) contrast(1.2) brightness(.9);
+      opacity: .9;
+      clip-path: polygon(22% 0, 100% 0, 100% 100%, 0 100%, 8% 62%);
+      transform: rotate(-2deg);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    :focus-visible { outline: 2px dashed #fff; outline-offset: 3px; }
+
+    /* under 520px tweaks */
+    @media (max-width: 520px){
+      :root{ --gutter: clamp(12px, 5vw, 24px); }
+      .showreel span.label{ display:none; }
+      
+      /* Center content on small screens */
+      .center {
+        justify-items: center;
+      }
+      
+      .stack {
+        justify-items: center;
+        width: 100%;
+      }
+      
+      .projects-container {
+        /* padding-left: calc(50% - var(--gutter)); */
+        /* padding-right: calc(50% - var(--gutter)); */
+        width: 100%;
+      }
+      
+      .projects-list {
+        gap: 8rem;
+        padding-right: var(--gutter);
+      }
+      
+      .project-item {
+        min-width: 280px;
+      }
+      
+      .project-name {
+        font-size: clamp(2rem, 10vw, 6rem);
+      }
+    }
+
+    /* under 470px → stack pills vertically ABOVE the logo */
+    @media (max-width: 470px){
+    	.logo-svg { width: 48px; }
+      .bottom-left{
+        margin-bottom: 0;
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        gap: 44px;
+      }
+      .pills{
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 8px;
+      }
+      .pill{
+        padding: .5rem .8rem;
+        font-size: .8rem;
+        letter-spacing: .03em;
+      }
+      .center {
+        align-items: center;
+        justify-items: center;
+        /* margin-top: 100px; */
+      }
+      
+      .stack {
+        justify-items: center;
+        width: 100%;
+      }
+      
+      .projects-list {
+        gap: 6rem;
+      }
+      
+      .project-item {
+        min-width: 250px;
+      }
+    }
+
+    /* Hide the toast completely */
+    .toast { display: none !important; }
+
+    /* ---------- Custom cursor (desktop only) ---------- */
+    html, body, a, button, [role="button"], input, textarea, select, .pill, .showreel {
+      cursor: none !important;
+    }
+
+    .cursor-dot, .cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .cursor-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #F7E491;
+      mix-blend-mode: normal;
+    }
+    .cursor-ring {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid #F7E491;
+      transition: width .15s ease, height .15s ease, opacity .15s ease, transform .15s ease;
+      opacity: .9;
+    }
+    .cursor-ring.is-hover {
+      transform: translate(-50%, -50%) scale(1.15);
+      opacity: 1;
+    }
+    /* top-right coords HUD */
+    .coords{
+      position: fixed;
+      top: 14px;
+      right: 18px;
+      z-index: 9998;
+      pointer-events: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      color: rgba(247,228,145,.75);
+      text-align: right;
+      letter-spacing: .02em;
+    }
+    .coords b{ color: #F7E491; font-weight: 600; }
+    @media (hover: none) {
+      .cursor-dot, .cursor-ring { display: none !important; }
+      html, body { cursor: auto !important; }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .cursor-ring { transition: none; }
+    }
+
+    /* Page load animations - Slide in from different directions */
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100px);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideRight {
+      from {
+        transform: translateX(-100px);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideLeft {
+      from {
+        transform: translateX(100px);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    /* Initially position elements off-screen */
+    .showreel {
+      transform: translateY(-100px);
+    }
+
+    .center {
+      transform: translateX(-100px);
+    }
+
+    .bottom-left {
+      transform: translateX(-100px) translateY(100px);
+    }
+
+    /* Animate in on load */
+    .showreel.animate-in {
+      animation: slideDown 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
+    }
+
+    .center.animate-in {
+      animation: slideRight 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+    }
+
+    .bottom-left.animate-in {
+      animation: slideRight 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+    }
+
+    /* Page Transition Overlay */
+    .page-transition {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg); /* Default to current page background */
+      z-index: 99999;
+      pointer-events: none;
+      transform: translateY(100%);
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1),
+                  background 0.1s ease;
+    }
+    
+    /* Red background when transitioning to work.html */
+    .page-transition.to-red {
+      background: #ce4127;
+    }
+    
+    /* Yellow background when transitioning to yellow pages */
+    .page-transition.to-yellow {
+      background: #F7E491;
+    }
+
+    .page-transition.to-dark {
+      background: #060605;
+    }
+
+    .page-transition.is-active {
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .page-transition.is-exiting {
+      transform: translateY(-100%);
+    }
+
+    /* Elements change color as overlay covers them */
+    body.transitioning .showreel,
+    body.transitioning .center,
+    body.transitioning .bottom-left,
+    body.transitioning .coords {
+      transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  fill 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  stroke 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.transitioning .showreel *,
+    body.transitioning .center *,
+    body.transitioning .bottom-left *,
+    body.transitioning .coords * {
+      transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  fill 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  stroke 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Prevent flash of unstyled content */
+    body.page-loading {
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <main class="screen" aria-label="Experience Studio Hero">
+
+    <!-- Top-left: show reel -->
+    <a class="showreel" href="#" id="btn-showreel" aria-label="Play show reel">
+      <span class="icon" aria-hidden="true"><i class="play"></i></span>
+      <span class="label">Play show reel</span>
+    </a>
+
+    <!-- LEFT-ALIGNED stack -->
+    <section class="center">
+      <div class="stack" role="group" aria-label="Headline">
+        <!-- Projects horizontal scroll -->
+        <div class="projects-container">
+          <ul class="projects-list" id="projectsList">
+            <li class="project-item" data-video="Video/Screen Recording 2025-12-05 at 3.02.08 PM.mov">
+              <a href="project.html?project=01" class="project-link">
+                <div class="project-number">01</div>
+                <div class="project-name">GATORADE</div>
+              </a>
+            </li>
+            <li class="project-item" data-video="Video/Screen Recording 2025-12-07 at 10.40.28 AM.mov">
+              <a href="project.html?project=02" class="project-link">
+                <div class="project-number">02</div>
+                <div class="project-name">MAGIC SPOON</div>
+              </a>
+            </li>
+            <li class="project-item" data-video="Video/Screen Recording 2025-12-06 at 5.44.12 PM.mov">
+              <a href="project.html?project=03" class="project-link">
+                <div class="project-number">03</div>
+                <div class="project-name">OZINT SECURITY</div>
+              </a>
+            </li>
+            <li class="project-item" data-video="Video/Screen Recording 2025-12-25 at 10.14.29 PM.mov">
+              <a href="project.html?project=04" class="project-link">
+                <div class="project-number">04</div>
+                <div class="project-name">SUPERLOCAL</div>
+              </a>
+            </li>
+            <li class="project-item" data-video="Video/Screen Recording 2026-06-03 at 1.40.59 PM.mov">
+              <a href="project.html?project=05" class="project-link">
+                <div class="project-number">05</div>
+                <div class="project-name">DAHARI</div>
+              </a>
+            </li>
+            <li class="project-item" data-video="media/06-qubex.mp4">
+              <a href="project.html?project=06" class="project-link">
+                <div class="project-number">06</div>
+                <div class="project-name">QUBEX</div>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Bottom-left: logo + pills -->
+    <div class="bottom-left">
+      <a href="index.html" aria-label="Go to home">
+        <svg class="logo-svg" width="310" height="328" viewBox="0 0 310 328" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M309.689 240.691C309.689 253.905 307.329 265.861 302.61 276.558C298.205 287.256 291.755 296.537 283.26 304.403C274.765 311.954 264.382 317.775 252.112 321.865C240.156 325.955 226.627 328 211.525 328C198.625 328 185.725 326.584 172.825 323.752C160.24 321.235 148.756 317.46 138.374 312.426C128.306 307.392 119.968 301.414 113.361 294.492C107.068 287.256 103.922 279.233 103.922 270.423V219.925H112.417C117.766 251.703 128.148 274.513 143.565 288.357C159.296 302.2 180.534 309.122 207.277 309.122C215.458 309.122 223.166 308.178 230.402 306.291C237.954 304.088 244.561 300.942 250.224 296.852C255.887 292.762 260.449 287.728 263.91 281.75C267.371 275.772 269.102 268.85 269.102 260.984C269.102 247.14 264.697 235.342 255.887 225.588C247.392 215.835 234.493 205.924 217.188 195.856L159.139 161.404C139.003 149.448 124.687 137.335 116.192 125.065C108.012 112.794 103.922 97.8494 103.922 80.2302C103.922 67.9597 106.124 56.9477 110.529 47.1943C114.934 37.4408 121.069 29.1031 128.935 22.1813C137.115 14.9448 146.711 9.43884 157.723 5.66332C169.05 1.88777 181.635 0 195.479 0C207.12 0 218.919 1.25852 230.874 3.77555C243.145 6.29256 254.157 10.0681 263.91 15.1022C273.664 19.8216 281.687 25.7995 287.979 33.036C294.272 39.9578 297.418 47.8235 297.418 56.6331V107.131H288.923C283.575 75.3535 273.349 52.7002 258.247 39.1712C243.145 25.6422 222.222 18.8777 195.479 18.8777C188.557 18.8777 181.792 19.9789 175.185 22.1813C168.578 24.3837 162.757 27.53 157.723 31.6202C152.689 35.7103 148.599 40.7443 145.453 46.7223C142.307 52.7002 140.733 59.3074 140.733 66.5439C140.733 73.4657 141.835 79.6009 144.037 84.9496C146.239 90.2983 149.543 95.3324 153.948 100.052C158.353 104.771 163.859 109.491 170.466 114.21C177.073 118.615 184.624 123.334 193.119 128.368L251.168 162.82C261.236 168.798 269.888 174.619 277.125 180.282C284.676 185.631 290.811 191.451 295.531 197.744C300.25 203.722 303.711 210.172 305.913 217.094C308.43 224.015 309.689 231.881 309.689 240.691Z" fill="#F7E491"/>
+          <path d="M0 8.49506H42.4748V263.344C42.4748 277.502 44.3626 288.986 48.1381 297.796C52.2283 306.291 61.3525 310.538 75.5108 310.538H84.9497V319.977H42.4748C34.2945 319.977 27.3727 319.348 21.7094 318.089C16.3607 316.516 11.9559 313.684 8.49497 309.594C5.34868 305.189 3.14628 299.369 1.88777 292.132C0.629256 284.896 0 275.3 0 263.344V8.49506Z" fill="#F7E491"/>
+        </svg>
+      </a>
+      <nav class="pills" aria-label="Primary">
+        <a class="pill" href="work.html"><i class="dot" aria-hidden="true"></i> Website</a>
+        <a class="pill" href="long-term.html"><i class="dot" aria-hidden="true"></i> Projects</a>
+        <a class="pill" href="About.html"><i class="dot" aria-hidden="true"></i> Our House</a>
+        <a class="pill" href="contact.html"><i class="dot" aria-hidden="true"></i> Let's Talk</a>
+      </nav>
+    </div>
+  </main>
+
+  <!-- Page Transition Overlay -->
+  <div class="page-transition is-active" id="pageTransition"></div>
+
+  <!-- toast (hidden via CSS) -->
+  <div class="toast" id="toast">Copied to clipboard</div>
+
+  <!-- Custom cursor elements -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <!-- Coords HUD -->
+  <div class="coords" aria-hidden="true">
+    <div>[X].<b id="mx">0</b>px</div>
+    <div>[Y].<b id="my">0</b>px</div>
+  </div>
+
+  <script>
+    // Page load animations
+    (function() {
+      const showreel = document.querySelector('.showreel');
+      const center = document.querySelector('.center');
+      const bottomLeft = document.querySelector('.bottom-left');
+      
+      // Trigger animations after page loads
+      window.addEventListener('load', () => {
+        if (showreel) showreel.classList.add('animate-in');
+        if (center) center.classList.add('animate-in');
+        if (bottomLeft) bottomLeft.classList.add('animate-in');
+      });
+    })();
+
+    // GSAP-powered smooth horizontal scroll (makethecut style)
+    (function() {
+      const projectsContainer = document.querySelector('.projects-container');
+      if (!projectsContainer) return;
+
+      // Register ScrollToPlugin
+      gsap.registerPlugin(ScrollToPlugin);
+
+      let scrollTween = null;
+      let isScrolling = false;
+      let scrollTimeout;
+      let effectsTween = null;
+      let rafId = null;
+
+      // Calculate center position for each item
+      function getItemCenterPosition(item) {
+        const containerRect = projectsContainer.getBoundingClientRect();
+        const itemRect = item.getBoundingClientRect();
+        const containerCenter = containerRect.width / 2;
+        const itemLeft = itemRect.left - containerRect.left;
+        const itemWidth = itemRect.width;
+        const itemCenter = itemLeft + itemWidth / 2;
+        return projectsContainer.scrollLeft + (itemCenter - containerCenter);
+      }
+
+      // Smooth scroll to item center using GSAP
+      function smoothScrollToItem(item, duration = 0.8) {
+        if (!item) return;
+        
+        // Kill any existing scroll animation
+        if (scrollTween) {
+          scrollTween.kill();
+        }
+        
+        const targetScroll = getItemCenterPosition(item);
+        
+        scrollTween = gsap.to(projectsContainer, {
+          scrollLeft: targetScroll,
+          duration: duration,
+          ease: "power3.out",
+          onStart: () => {
+            isScrolling = true;
+          },
+          onUpdate: () => {
+            // Update effects during scroll
+            updateItemEffects();
+          },
+          onComplete: () => {
+            scrollTween = null;
+            isScrolling = false;
+            updateItemEffects(); // Final update
+          }
+        });
+      }
+
+      // Find current centered item (prefer original items, map clones to originals)
+      function getCurrentCenteredItem() {
+        const items = projectsContainer.querySelectorAll('.project-item');
+        if (items.length === 0 || originalItems.length === 0) return null;
+        
+        const containerCenter = projectsContainer.clientWidth / 2;
+        let currentItem = null;
+        let currentDistance = Infinity;
+        
+        // First, try to find from original items
+        originalItems.forEach(item => {
+          const itemRect = item.getBoundingClientRect();
+          const containerRect = projectsContainer.getBoundingClientRect();
+          const itemCenter = itemRect.left + itemRect.width / 2 - containerRect.left;
+          const distance = Math.abs(itemCenter - containerCenter);
+          
+          if (distance < currentDistance) {
+            currentDistance = distance;
+            currentItem = item;
+          }
+        });
+        
+        // If no original item is close enough, check all items (including clones)
+        if (currentDistance > containerCenter * 0.5) {
+          items.forEach(item => {
+            const itemRect = item.getBoundingClientRect();
+            const containerRect = projectsContainer.getBoundingClientRect();
+            const itemCenter = itemRect.left + itemRect.width / 2 - containerRect.left;
+            const distance = Math.abs(itemCenter - containerCenter);
+            
+            if (distance < currentDistance) {
+              currentDistance = distance;
+              currentItem = item;
+            }
+          });
+        }
+        
+        // If we found a clone, map it back to the original item
+        if (currentItem && !originalItems.includes(currentItem)) {
+          const allItems = Array.from(items);
+          const cloneIndex = allItems.indexOf(currentItem);
+          // Map clone index to original index
+          // Clones are appended after originals, so: originalIndex = cloneIndex % originalItems.length
+          const originalIndex = cloneIndex % originalItems.length;
+          currentItem = originalItems[originalIndex];
+        }
+        
+        return currentItem;
+      }
+
+      // Find the actual DOM element closest to center (DO NOT map clones).
+      // We use this for endless carousel navigation so moving "next" keeps direction
+      // even when you're at the end of the original set (it continues into clones).
+      function getCurrentCenteredElement() {
+        const items = projectsContainer.querySelectorAll('.project-item');
+        if (items.length === 0) return null;
+
+        const containerCenter = projectsContainer.clientWidth / 2;
+        let currentEl = null;
+        let minDistance = Infinity;
+
+        const containerRect = projectsContainer.getBoundingClientRect();
+        items.forEach((item) => {
+          const itemRect = item.getBoundingClientRect();
+          const itemCenter = itemRect.left + itemRect.width / 2 - containerRect.left;
+          const distance = Math.abs(itemCenter - containerCenter);
+          if (distance < minDistance) {
+            minDistance = distance;
+            currentEl = item;
+          }
+        });
+
+        return currentEl;
+      }
+
+      // Snap to nearest item center
+      function snapToNearestItem() {
+        if (isScrolling) return; // Don't snap if already scrolling
+        
+        // Snap to the actual element so endless carousel doesn't jump last->first
+        const nearestItem = getCurrentCenteredElement();
+        if (nearestItem) {
+          const containerCenter = projectsContainer.clientWidth / 2;
+          const itemRect = nearestItem.getBoundingClientRect();
+          const containerRect = projectsContainer.getBoundingClientRect();
+          const itemCenter = itemRect.left + itemRect.width / 2 - containerRect.left;
+          const distance = Math.abs(itemCenter - containerCenter);
+          
+          // Only snap if not already centered (within 50px)
+          if (distance > 50) {
+            smoothScrollToItem(nearestItem, 0.6);
+          }
+        }
+      }
+
+      // Visual effects on scroll (optimized with requestAnimationFrame)
+      function updateItemEffects() {
+        if (rafId) return; // Already scheduled
+        
+        rafId = requestAnimationFrame(() => {
+          const items = projectsContainer.querySelectorAll('.project-item');
+          const containerCenter = projectsContainer.clientWidth / 2;
+          
+          // Kill existing effects
+          if (effectsTween) {
+            effectsTween.kill();
+          }
+          
+          // Create timeline for all items
+          effectsTween = gsap.timeline();
+          
+          items.forEach(item => {
+            const itemRect = item.getBoundingClientRect();
+            const containerRect = projectsContainer.getBoundingClientRect();
+            const itemCenter = itemRect.left + itemRect.width / 2 - containerRect.left;
+            const distanceFromCenter = Math.abs(itemCenter - containerCenter);
+            const distanceRatio = distanceFromCenter / containerCenter;
+            
+            // Scale and opacity based on distance
+            const scale = Math.max(0.85, 1 - (distanceRatio * 0.15));
+            const opacity = Math.max(0.6, 1 - (distanceRatio * 0.4));
+            
+            effectsTween.to(item, {
+              scale: scale,
+              opacity: opacity,
+              duration: 0.4,
+              ease: "power2.out"
+            }, 0); // All animations start at same time
+          });
+          
+          rafId = null;
+        });
+      }
+
+      // Desktop: Mouse wheel scrolling - immediate smooth scroll (makethecut style)
+      let wheelTimeout;
+      let isWheeling = false;
+      let wheelDirection = 0;
+      let lastWheelTime = 0;
+      let isDragging = false;
+      let isHoveringItem = false;
+
+      // Lock carousel scrolling while hovering an item
+      const projectsListEl = document.getElementById('projectsList');
+      if (projectsListEl) {
+        projectsListEl.addEventListener('mouseover', (e) => {
+          const item = e.target && e.target.closest ? e.target.closest('.project-item') : null;
+          if (!item || !projectsListEl.contains(item)) return;
+          if (e.relatedTarget && item.contains(e.relatedTarget)) return;
+          isHoveringItem = true;
+          // Stop any active tween immediately when hovering
+          if (scrollTween) {
+            scrollTween.kill();
+            scrollTween = null;
+            isScrolling = false;
+          }
+        });
+        projectsListEl.addEventListener('mouseout', (e) => {
+          const item = e.target && e.target.closest ? e.target.closest('.project-item') : null;
+          if (!item || !projectsListEl.contains(item)) return;
+          if (e.relatedTarget && item.contains(e.relatedTarget)) return;
+          isHoveringItem = false;
+        });
+      }
+
+      // Recycle DOM nodes to create a true endless carousel of ONLY the original items.
+      // direction: 1 => move forward (to the right), -1 => move backward (to the left)
+      function recycleOnce(direction) {
+        // Step size isn't constant because item widths can vary.
+        // Measure it from current layout each time.
+        const measureForwardStep = () => {
+          const items = Array.from(projectsList.querySelectorAll('.project-item'));
+          if (items.length < 2) return 0;
+          return Math.abs(items[1].offsetLeft - items[0].offsetLeft) || 0;
+        };
+        const measureBackwardStep = () => {
+          const items = Array.from(projectsList.querySelectorAll('.project-item'));
+          if (items.length < 2) return 0;
+          const last = items[items.length - 1];
+          const prev = items[items.length - 2];
+          return Math.abs(last.offsetLeft - prev.offsetLeft) || 0;
+        };
+
+        if (direction > 0) {
+          const first = projectsList.firstElementChild;
+          if (!first) return false;
+          const step = measureForwardStep();
+          if (!step) return false;
+          projectsList.appendChild(first);
+          // keep visual position stable
+          projectsContainer.scrollLeft -= step;
+          return true;
+        }
+
+        const last = projectsList.lastElementChild;
+        if (!last) return false;
+        const step = measureBackwardStep();
+        if (!step) return false;
+        projectsList.insertBefore(last, projectsList.firstElementChild);
+        projectsContainer.scrollLeft += step;
+        return true;
+      }
+      
+      projectsContainer.addEventListener('wheel', (e) => {
+        if (isHoveringItem) {
+          e.preventDefault();
+          return;
+        }
+        const isScrollingHorizontally = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+        
+        if (!isScrollingHorizontally && e.deltaY !== 0) {
+          e.preventDefault();
+          isWheeling = true;
+          
+          const now = performance.now();
+          const direction = e.deltaY > 0 ? 1 : -1;
+          
+          // If direction changed or too much time passed, reset
+          if (direction !== wheelDirection || (now - lastWheelTime) > 200) {
+            wheelDirection = direction;
+            // Kill existing animation and scroll immediately
+            if (scrollTween) {
+              scrollTween.kill();
+              scrollTween = null;
+            }
+            
+            const currentEl = getCurrentCenteredElement();
+            if (currentEl) {
+              const items = Array.from(projectsContainer.querySelectorAll('.project-item'));
+              const currentIndex = items.indexOf(currentEl);
+              if (currentIndex !== -1) {
+                let targetIndex = currentIndex + direction;
+                let targetEl = items[targetIndex];
+
+                // If we're near an end OR target doesn't exist, recycle once and retry so
+                // we keep moving in the same direction forever.
+                const nearStart = targetIndex <= 0;
+                const nearEnd = targetIndex >= items.length - 1;
+                if (!targetEl || nearStart || nearEnd) {
+                  if (recycleOnce(direction)) {
+                    const itemsAfter = Array.from(projectsContainer.querySelectorAll('.project-item'));
+                    const currentElAfter = getCurrentCenteredElement();
+                    const currentIndexAfter = currentElAfter ? itemsAfter.indexOf(currentElAfter) : -1;
+                    if (currentIndexAfter !== -1) {
+                      targetIndex = currentIndexAfter + direction;
+                      targetEl = itemsAfter[targetIndex];
+                    }
+                  }
+                }
+
+                if (targetEl) smoothScrollToItem(targetEl, 0.7);
+              }
+            }
+          }
+          
+          lastWheelTime = now;
+          
+          // Clear previous timeout
+          clearTimeout(wheelTimeout);
+          
+          // Reset wheeling flag after scroll completes
+          wheelTimeout = setTimeout(() => {
+            isWheeling = false;
+            wheelDirection = 0;
+          }, 300);
+        }
+      }, { passive: false });
+
+      // Global wheel -> carousel (works even when pointer is not over the carousel)
+      // Converts vertical wheel into carousel step navigation.
+      function shouldIgnoreGlobalWheel(target) {
+        if (!target) return false;
+        const el = target instanceof Element ? target : null;
+        if (!el) return false;
+        // Don't hijack wheel on form controls / editable regions
+        if (el.closest('input, textarea, select, [contenteditable="true"]')) return true;
+        return false;
+      }
+
+      window.addEventListener('wheel', (e) => {
+        if (!projectsContainer) return;
+        if (shouldIgnoreGlobalWheel(e.target)) return;
+        if (isHoveringItem) {
+          e.preventDefault();
+          return;
+        }
+
+        const isScrollingHorizontally = Math.abs(e.deltaX) > Math.abs(e.deltaY);
+        if (isScrollingHorizontally) return;
+        if (e.deltaY === 0) return;
+
+        // Prevent default vertical scroll and forward to carousel
+        e.preventDefault();
+
+        // Reuse the same logic by calling the container handler path:
+        // create a minimal event-like object by directly running the logic above.
+        // (We dispatch a WheelEvent to keep behavior identical.)
+        const evt = new WheelEvent('wheel', {
+          deltaX: 0,
+          deltaY: e.deltaY,
+          bubbles: false,
+          cancelable: true
+        });
+        projectsContainer.dispatchEvent(evt);
+      }, { passive: false });
+
+      // Keyboard navigation (desktop carousel)
+      function shouldIgnoreKeydown(target) {
+        const el = target instanceof Element ? target : null;
+        if (!el) return false;
+        if (el.closest('input, textarea, select, [contenteditable="true"]')) return true;
+        return false;
+      }
+
+      function stepCarousel(direction) {
+        // direction: 1 => next (right), -1 => prev (left)
+        if (isHoveringItem) return;
+        if (scrollTween) {
+          scrollTween.kill();
+          scrollTween = null;
+        }
+        const currentEl = getCurrentCenteredElement();
+        if (!currentEl) return;
+        const items = Array.from(projectsContainer.querySelectorAll('.project-item'));
+        const currentIndex = items.indexOf(currentEl);
+        if (currentIndex === -1) return;
+
+        let targetIndex = currentIndex + direction;
+        let targetEl = items[targetIndex];
+
+        // If we would go past ends, recycle once and retry (true endless)
+        const nearStart = targetIndex <= 0;
+        const nearEnd = targetIndex >= items.length - 1;
+        if (!targetEl || nearStart || nearEnd) {
+          if (recycleOnce(direction)) {
+            const itemsAfter = Array.from(projectsContainer.querySelectorAll('.project-item'));
+            const curAfter = getCurrentCenteredElement();
+            const idxAfter = curAfter ? itemsAfter.indexOf(curAfter) : -1;
+            if (idxAfter !== -1) {
+              targetIndex = idxAfter + direction;
+              targetEl = itemsAfter[targetIndex];
+            }
+          }
+        }
+
+        if (targetEl) smoothScrollToItem(targetEl, 0.7);
+      }
+
+      window.addEventListener('keydown', (e) => {
+        if (shouldIgnoreKeydown(e.target)) return;
+        // Don’t interfere with browser/OS shortcuts
+        if (e.metaKey || e.ctrlKey || e.altKey) return;
+
+        const key = e.key;
+        if (key === 'ArrowRight' || key === 'd' || key === 'D') {
+          e.preventDefault();
+          stepCarousel(1);
+        } else if (key === 'ArrowLeft' || key === 'a' || key === 'A') {
+          e.preventDefault();
+          stepCarousel(-1);
+        }
+      });
+
+      // Desktop: Drag-to-scroll (carousel feel) + snap on release
+      let dragStartX = 0;
+      let dragStartScrollLeft = 0;
+      let dragMoved = false;
+      const DRAG_THRESHOLD_PX = 6;
+
+      projectsContainer.addEventListener('pointerdown', (e) => {
+        if (isHoveringItem) return;
+        // Don't start dragging when clicking on an item/link
+        if (e.target && e.target.closest && e.target.closest('.project-item')) return;
+        // Only left mouse / primary touch contact
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        isDragging = true;
+        dragMoved = false;
+
+        // Stop any GSAP scroll tween so drag feels direct
+        if (scrollTween) {
+          scrollTween.kill();
+          scrollTween = null;
+        }
+
+        projectsContainer.setPointerCapture(e.pointerId);
+        dragStartX = e.clientX;
+        dragStartScrollLeft = projectsContainer.scrollLeft;
+      });
+
+      projectsContainer.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - dragStartX;
+        if (Math.abs(dx) > DRAG_THRESHOLD_PX) dragMoved = true;
+
+        // Drag right -> scroll left, drag left -> scroll right
+        projectsContainer.scrollLeft = dragStartScrollLeft - dx;
+
+        // Keep loop seamless during drag
+        handleInfiniteScroll();
+        updateItemEffects();
+      }, { passive: true });
+
+      function endDrag(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        try { projectsContainer.releasePointerCapture(e.pointerId); } catch (_) {}
+
+        // If user actually dragged, snap to nearest item when they release
+        if (dragMoved) {
+          // Small delay so scrollLeft settles after last move event
+          setTimeout(() => {
+            snapToNearestItem();
+          }, 50);
+        }
+      }
+
+      projectsContainer.addEventListener('pointerup', endDrag);
+      projectsContainer.addEventListener('pointercancel', endDrag);
+
+      // Mobile: Touch scrolling with GSAP momentum
+      let touchStartX = 0;
+      let touchStartScroll = 0;
+      let touchVelocity = 0;
+      let lastTouchTime = 0;
+      let lastTouchX = 0;
+      let isTouching = false;
+
+      projectsContainer.addEventListener('touchstart', (e) => {
+        if (isHoveringItem) return;
+        isTouching = true;
+        // Kill any existing scroll animation
+        if (scrollTween) {
+          scrollTween.kill();
+          scrollTween = null;
+        }
+        
+        touchStartX = e.touches[0].clientX;
+        touchStartScroll = projectsContainer.scrollLeft;
+        touchVelocity = 0;
+        lastTouchTime = performance.now();
+        lastTouchX = touchStartX;
+        isScrolling = false;
+      }, { passive: true });
+
+      projectsContainer.addEventListener('touchmove', (e) => {
+        const touchX = e.touches[0].clientX;
+        const deltaX = touchStartX - touchX;
+        projectsContainer.scrollLeft = touchStartScroll + deltaX;
+        // Keep endless carousel working while finger is dragging near edges
+        handleInfiniteScroll();
+        
+        // Calculate velocity for momentum
+        const now = performance.now();
+        const timeDelta = now - lastTouchTime;
+        if (timeDelta > 0) {
+          touchVelocity = (lastTouchX - touchX) / timeDelta;
+        }
+        lastTouchTime = now;
+        lastTouchX = touchX;
+        
+        // Update effects during touch
+        updateItemEffects();
+      }, { passive: true });
+
+      projectsContainer.addEventListener('touchend', () => {
+        isTouching = false;
+        
+        // Apply momentum after touch ends
+        if (Math.abs(touchVelocity) > 0.2) {
+          const maxScroll = projectsContainer.scrollWidth - projectsContainer.clientWidth;
+          const momentumDistance = touchVelocity * 350;
+          let targetScroll = projectsContainer.scrollLeft + momentumDistance;
+          
+          // Clamp to bounds
+          targetScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+          
+          // Use GSAP for smooth momentum scroll
+          scrollTween = gsap.to(projectsContainer, {
+            scrollLeft: targetScroll,
+            duration: 1.2,
+            ease: "power3.out",
+            onStart: () => {
+              isScrolling = true;
+            },
+            onUpdate: () => {
+              updateItemEffects();
+            },
+            onComplete: () => {
+              scrollTween = null;
+              isScrolling = false;
+              // Snap to nearest item after momentum
+              setTimeout(() => {
+                snapToNearestItem();
+              }, 100);
+            }
+          });
+        } else {
+          // If slow swipe, snap immediately
+          setTimeout(() => {
+            snapToNearestItem();
+          }, 100);
+        }
+      }, { passive: true });
+
+      // Track scroll for infinite scroll and visual effects (throttled)
+      let lastScrollUpdate = 0;
+      projectsContainer.addEventListener('scroll', () => {
+        handleInfiniteScroll();
+        
+        // Throttle visual effects updates
+        const now = performance.now();
+        if (now - lastScrollUpdate > 16) { // ~60fps
+          updateItemEffects();
+          lastScrollUpdate = now;
+        }
+        
+        // Clear timeout after scroll stops
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          if (!isScrolling && !isWheeling && !isTouching && !isDragging) {
+            snapToNearestItem();
+          }
+        }, 200);
+      }, { passive: true });
+
+      // Infinite scroll setup
+      const projectsList = document.getElementById('projectsList');
+      if (!projectsList) return;
+
+      let originalItems = [];
+      let itemSetWidth = 0;
+      let itemStep = 0; // distance in px between consecutive items (includes gap)
+      function computeItemStep() {
+        const items = Array.from(projectsList.querySelectorAll('.project-item'));
+        if (items.length < 2) return 0;
+        const step = Math.abs(items[1].offsetLeft - items[0].offsetLeft) || 0;
+        return step;
+      }
+
+      // Clone items for infinite scroll
+      function setupInfiniteScroll() {
+        // Keep ONLY the original 6 items. We'll recycle DOM nodes to simulate endless carousel.
+        originalItems = Array.from(projectsList.querySelectorAll('.project-item'));
+        if (originalItems.length === 0) return;
+        const firstOriginal = originalItems[0];
+
+        // Calculate width of one set
+        const tempContainer = document.createElement('div');
+        tempContainer.style.visibility = 'hidden';
+        tempContainer.style.position = 'absolute';
+        tempContainer.style.width = 'auto';
+        tempContainer.appendChild(projectsList.cloneNode(true));
+        document.body.appendChild(tempContainer);
+        
+        const firstSet = tempContainer.querySelector('.projects-list');
+        itemSetWidth = firstSet.offsetWidth;
+        document.body.removeChild(tempContainer);
+
+        // Compute step size between items (includes the CSS gap)
+        // Use current DOM positions after layout.
+        setTimeout(() => {
+          requestAnimationFrame(() => {
+            itemStep = computeItemStep();
+            const n = originalItems.length;
+            if (!itemStep || n < 2) return;
+
+            // Make it endless with ONLY 6 items:
+            // Put the carousel in a "neutral" scroll position (away from 0/max) by rotating DOM nodes.
+            // We want item #01 (firstOriginal) centered, while still having room to scroll left/right.
+            // Strategy:
+            // - Move last half items to the front (DOM rotation)
+            // - Set scrollLeft to itemStep * half so we are in the middle of the scroll range
+            // - Center the firstOriginal element (it is still the same DOM node)
+            const half = Math.floor(n / 2); // for 6 => 3
+            for (let i = 0; i < half; i++) {
+              const last = projectsList.lastElementChild;
+              if (!last) break;
+              projectsList.insertBefore(last, projectsList.firstElementChild);
+            }
+
+            // Place scroll in the middle, then center the first item (01)
+            projectsContainer.scrollLeft = itemStep * half;
+            projectsContainer.scrollLeft = getItemCenterPosition(firstOriginal);
+
+            // Finalize visuals
+            requestAnimationFrame(() => {
+              updateItemEffects();
+            });
+          });
+        }, 80);
+      }
+
+      // Infinite scroll loop with GSAP (seamless jump)
+      function handleInfiniteScroll() {
+        // Endless carousel with constant DOM size:
+        // When user approaches either edge, recycle <li> nodes and adjust scrollLeft
+        // so the motion is continuous and direction never flips.
+        if (itemStep === 0) return;
+        if (isScrolling) return; // don't fight GSAP tweens
+
+        const maxScroll = projectsContainer.scrollWidth - projectsContainer.clientWidth;
+        if (maxScroll <= 10) return;
+
+        const scrollLeft = projectsContainer.scrollLeft;
+        // Threshold must be relative to maxScroll, otherwise with short carousels it will
+        // constantly trigger recycling and feel broken.
+        let threshold = Math.max(itemStep * 1.5, 80);
+        threshold = Math.min(threshold, maxScroll * 0.25);
+        threshold = Math.max(threshold, 24);
+        if (threshold * 2 > maxScroll) threshold = maxScroll / 2;
+
+        // Near the right edge: move first item to end, pull scrollLeft back by one step.
+        if (scrollLeft > maxScroll - threshold) {
+          // Do a couple of rotations if needed (fast scroll)
+          let safety = 0;
+          while (projectsContainer.scrollLeft > maxScroll - threshold && safety < 6) {
+            const first = projectsList.firstElementChild;
+            if (!first) break;
+            projectsList.appendChild(first);
+            // Use dynamic step (items may have different widths)
+            const step = computeItemStep();
+            projectsContainer.scrollLeft -= step || 0;
+            safety++;
+          }
+        }
+
+        // Near the left edge: move last item to start, push scrollLeft forward by one step.
+        if (projectsContainer.scrollLeft < threshold) {
+          let safety = 0;
+          while (projectsContainer.scrollLeft < threshold && safety < 6) {
+            const last = projectsList.lastElementChild;
+            if (!last) break;
+            projectsList.insertBefore(last, projectsList.firstElementChild);
+            const step = computeItemStep();
+            projectsContainer.scrollLeft += step || 0;
+            safety++;
+          }
+        }
+      }
+
+      // Keep measurements correct on resize/orientation changes
+      window.addEventListener('resize', () => {
+        // Recompute step after layout settles
+        requestAnimationFrame(() => {
+          itemStep = computeItemStep();
+        });
+      }, { passive: true });
+
+      // Initialize infinite scroll
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          setTimeout(() => {
+            setupInfiniteScroll();
+          }, 100);
+        });
+      } else {
+        setTimeout(() => {
+          setupInfiniteScroll();
+        }, 100);
+      }
+
+      // Handle infinite scroll on scroll event (merged with existing scroll listener)
+      // The scroll listener is already set up above
+    })();
+
+    // Project links interaction - navigation handled by href
+
+    // Hover video previews (desktop only: >=1024px and hover-capable)
+    (function() {
+      const mq = window.matchMedia('(min-width: 1024px) and (hover: hover)');
+      if (!mq.matches) return;
+
+      const list = document.getElementById('projectsList');
+      if (!list) return;
+
+      // Create a single "portal" preview in <body> so it never gets clipped by the slider.
+      const preview = document.createElement('div');
+      preview.className = 'project-preview';
+      const video = document.createElement('video');
+      video.muted = true;
+      video.playsInline = true;
+      video.loop = true;
+      video.preload = 'metadata';
+      preview.appendChild(video);
+      document.body.appendChild(preview);
+
+      let activeItem = null;
+      const PREVIEW_WIDTH = 560;
+      let lastPreviewHeight = (PREVIEW_WIDTH * 9) / 16; // fallback until metadata loads
+
+      function positionPreviewOverName(itemEl) {
+        const nameEl = itemEl.querySelector('.project-name');
+        if (!nameEl) return;
+        const r = nameEl.getBoundingClientRect();
+        const w = PREVIEW_WIDTH;
+        const h = preview.offsetHeight || lastPreviewHeight;
+        const left = Math.round(r.left + r.width / 2 - w / 2);
+        const top = Math.round(r.top + r.height / 2 - h / 2);
+        preview.style.left = `${left}px`;
+        preview.style.top = `${top}px`;
+      }
+
+      function showPreview(itemEl) {
+        const rawSrc = itemEl.getAttribute('data-video');
+        const src = rawSrc ? encodeURI(rawSrc) : '';
+        if (!src) return;
+        activeItem = itemEl;
+        positionPreviewOverName(itemEl);
+
+        if (video.getAttribute('src') !== src) {
+          video.setAttribute('src', src);
+          // load to ensure metadata is ready
+          video.load();
+        }
+
+        preview.classList.add('is-visible');
+        const p = video.play();
+        if (p && typeof p.catch === 'function') p.catch(() => {});
+      }
+
+      // Adjust preview container height based on real video ratio (keep width fixed)
+      video.addEventListener('loadedmetadata', () => {
+        const vw = video.videoWidth || 0;
+        const vh = video.videoHeight || 0;
+        if (vw > 0 && vh > 0) {
+          lastPreviewHeight = Math.round((PREVIEW_WIDTH * vh) / vw);
+          preview.style.height = `${lastPreviewHeight}px`;
+          // Reposition after height changes
+          if (activeItem) positionPreviewOverName(activeItem);
+        }
+      });
+
+      function hidePreview() {
+        activeItem = null;
+        video.pause();
+        video.currentTime = 0;
+        preview.classList.remove('is-visible');
+      }
+
+      // Keep preview aligned if the page moves (rare, but safe)
+      window.addEventListener('scroll', () => {
+        if (activeItem) positionPreviewOverName(activeItem);
+      }, { passive: true });
+      window.addEventListener('resize', () => {
+        if (activeItem) positionPreviewOverName(activeItem);
+      }, { passive: true });
+
+      // Delegated hover so it works even when items are recycled/moved
+      list.addEventListener('mouseover', (e) => {
+        const item = e.target && e.target.closest ? e.target.closest('.project-item') : null;
+        if (!item || !list.contains(item)) return;
+        // Only trigger when entering the item (not moving between children)
+        if (e.relatedTarget && item.contains(e.relatedTarget)) return;
+        showPreview(item);
+      });
+
+      list.addEventListener('mouseout', (e) => {
+        const item = e.target && e.target.closest ? e.target.closest('.project-item') : null;
+        if (!item || !list.contains(item)) return;
+        if (e.relatedTarget && item.contains(e.relatedTarget)) return;
+        hidePreview();
+      });
+    })();
+
+    // showreel demo
+    document.getElementById('btn-showreel').addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('Play show reel… (hook your video player here)');
+    });
+
+    /* -------- Custom cursor logic -------- */
+    (function(){
+      const dot  = document.getElementById('cursorDot');
+      const ring = document.getElementById('cursorRing');
+
+      if (!dot || !ring) return;
+
+      let x = window.innerWidth / 2, y = window.innerHeight / 2;
+      let rx = x, ry = y;
+      const ease = 0.18;
+
+      function move(e){
+        x = e.clientX;
+        y = e.clientY;
+        dot.style.transform  = `translate(${x}px, ${y}px)`;
+      }
+
+      function tick(){
+        rx += (x - rx) * ease;
+        ry += (y - ry) * ease;
+        ring.style.transform = `translate(${rx - 0}px, ${ry - 0}px) translate(-50%, -50%)`;
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
+      window.addEventListener('mousemove', move, {passive:true});
+
+      // coords HUD
+      (function(){
+        const mx = document.getElementById('mx');
+        const my = document.getElementById('my');
+        if (!mx || !my) return;
+        window.addEventListener('mousemove', (e) => {
+          mx.textContent = Math.round(e.clientX);
+          my.textContent = Math.round(e.clientY);
+        }, { passive: true });
+      })();
+
+      function updateHover(e){
+        const target = e.target.closest('a, button, [role="button"], .pill, .showreel, .project-link, input, select, textarea, label');
+        ring.classList.toggle('is-hover', !!target);
+      }
+      window.addEventListener('mousemove', updateHover, {passive:true});
+
+      window.addEventListener('mousedown', ()=> ring.style.opacity = '0.7');
+      window.addEventListener('mouseup',   ()=> ring.style.opacity = '0.9');
+
+      window.addEventListener('mouseleave', ()=> {
+        dot.style.opacity = '0'; ring.style.opacity = '0';
+      });
+      window.addEventListener('mouseenter', ()=> {
+        dot.style.opacity = '1'; ring.style.opacity = '0.9';
+      });
+    })();
+
+    /* Set --vh to innerHeight for older Safari/Chrome on iOS */
+    (function(){
+      function setVh(){
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
+      setVh();
+      window.addEventListener('resize', setVh);
+      window.addEventListener('orientationchange', setVh);
+    })();
+
+    /* Auto-refresh when crossing breakpoints (≤470, 471–520, ≥521) */
+    (function(){
+      const BUCKET_KEY = 'bp-bucket';
+      const getBucket = () => {
+        if (window.matchMedia('(max-width: 470px)').matches) return '≤470';
+        if (window.matchMedia('(max-width: 520px)').matches) return '471-520';
+        return '≥521';
+      };
+
+      // initialize stored bucket on first load
+      const current = getBucket();
+      try { sessionStorage.setItem(BUCKET_KEY, current); } catch(e){}
+
+      let rafId = null;
+      let pending = false;
+
+      const onResize = () => {
+        if (pending) return;
+        pending = true;
+        rafId && cancelAnimationFrame(rafId);
+        // debounce with rAF then small timeout to wait for toolbar/URL bar settle
+        rafId = requestAnimationFrame(() => {
+          setTimeout(() => {
+            pending = false;
+            const now = getBucket();
+            let prev = null;
+            try { prev = sessionStorage.getItem(BUCKET_KEY); } catch(e){}
+            if (now !== prev) {
+              try { sessionStorage.setItem(BUCKET_KEY, now); } catch(e){}
+              location.reload();
+            }
+          }, 180);
+        });
+      };
+
+      // listen to both resize and orientation changes
+      window.addEventListener('resize', onResize, {passive:true});
+      window.addEventListener('orientationchange', onResize);
+    })();
+
+    /* Smooth scroll enhancement for anchor links */
+    (function() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const href = this.getAttribute('href');
+          if (href === '#' || href === '#contact' || href === '#work') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          }
+        });
+      });
+    })();
+
+    /* Cutting-Edge Page Transitions */
+    (function() {
+      const transition = document.getElementById('pageTransition');
+      if (!transition) return;
+
+      // Check if page is loading
+      if (document.readyState === 'loading') {
+        document.body.classList.add('page-loading');
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            document.body.classList.remove('page-loading');
+            transition.classList.remove('is-active');
+          }, 100);
+        });
+      } else {
+        // Page already loaded, fade in transition
+        setTimeout(() => {
+          transition.classList.remove('is-active');
+        }, 100);
+      }
+
+      // Intercept all internal navigation links
+      document.querySelectorAll('a[href$=".html"], a[href*=".html?"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          // Skip if it's an external link or has target="_blank"
+          if (href.startsWith('http') || this.target === '_blank' || href.startsWith('mailto:')) {
+            return;
+          }
+
+          e.preventDefault();
+          
+          // Page color mapping
+          const pageColors = {
+            'work.html': { bg: '#ce4127', text: '#F7E491' }, // Red page
+            'index.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
+            'project.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
+            'About.html': { bg: '#ce4127', text: '#ffffff' },
+            'contact.html': { bg: '#F7E491', text: '#CE4127' },
+            'long-term.html': { bg: '#F7E491', text: '#CE4127' }
+          };
+          
+          // Extract target page name
+          const targetPage = href.split('/').pop().split('?')[0];
+          const targetColor = pageColors[targetPage] || pageColors['index.html'];
+          const isTargetRed = targetColor.bg === '#ce4127';
+          const isTargetDark = targetColor.bg === '#060605';
+          
+          transition.classList.remove('to-red', 'to-yellow', 'to-dark');
+          if (isTargetRed) {
+            transition.classList.add('to-red');
+          } else if (isTargetDark) {
+            transition.classList.add('to-dark');
+          } else {
+            transition.classList.add('to-yellow');
+          }
+          
+          // Add transitioning class
+          document.body.classList.add('transitioning');
+          
+          // Function to update element colors based on overlay position
+          function updateColors() {
+            const overlayRect = transition.getBoundingClientRect();
+            const overlayTop = overlayRect.top;
+            
+            // Elements to update
+            const elements = document.querySelectorAll('.showreel, .center, .bottom-left, .coords, .showreel *, .center *, .bottom-left *, .coords *, svg path, .pill, .pill *, .project-item, .project-item *');
+            
+            elements.forEach(el => {
+              const elRect = el.getBoundingClientRect();
+              const elBottom = elRect.bottom;
+              
+              // If element is covered by overlay
+              if (elBottom <= overlayTop + 5) {
+                const computedStyle = window.getComputedStyle(el);
+                
+                // Change text color to target page's text color
+                if (computedStyle.color && computedStyle.color !== 'rgba(0, 0, 0, 0)' && computedStyle.color !== 'transparent') {
+                  el.style.color = targetColor.text;
+                }
+                
+                // Change SVG fill
+                if (el.tagName === 'path') {
+                  el.style.fill = targetColor.text;
+                }
+                
+                // Change border color
+                if (computedStyle.borderColor && computedStyle.borderColor !== 'rgba(0, 0, 0, 0)' && computedStyle.borderColor !== 'transparent') {
+                  el.style.borderColor = targetColor.text;
+                }
+                
+                // Change outline color
+                if (el.classList.contains('showreel') || el.closest('.showreel')) {
+                  el.style.outlineColor = targetColor.text;
+                }
+              }
+            });
+          }
+          
+          // Update colors as overlay animates
+          let animationFrameId;
+          function animateColors() {
+            if (transition.classList.contains('is-active')) {
+              updateColors();
+              animationFrameId = requestAnimationFrame(animateColors);
+            } else {
+              cancelAnimationFrame(animationFrameId);
+            }
+          }
+          animateColors();
+          
+          // Show transition overlay (slide up from bottom)
+          transition.classList.add('is-active');
+          
+          // Navigate after transition completes
+          setTimeout(() => {
+            window.location.href = href;
+          }, 1000);
+        });
+      });
+
+      // Handle browser back/forward buttons
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted) {
+          // Page was loaded from cache
+          transition.classList.remove('is-active');
+        }
+      });
+
+      window.addEventListener('popstate', () => {
+        transition.classList.add('is-active');
+        setTimeout(() => {
+          transition.classList.remove('is-active');
+        }, 600);
+      });
+    })();
+  </script>
+</body>
+</html>
+</html>

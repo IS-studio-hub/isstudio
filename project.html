@@ -1,0 +1,2827 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IS - Experience House</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/scrollbars.css">
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <style>
+    :root{
+      --bg: #F7E491;
+      --fg: #CE4127;
+      --muted: #CE4127;
+      --border: rgba(206, 65, 39,1);
+      --dot: #CE4127;
+      --dot-glow: rgba(134, 59, 25, 1);
+      --accent-img: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop');
+      --gutter: clamp(16px, 6vw, 140px);
+      --toast-bg: rgba(255,255,255,.08);
+
+      /* vh fallback var for older iOS */
+      --vh: 1vh;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      overflow: clip;
+    }
+
+    .screen {
+      position: relative;
+      width: 100vw;
+
+      /* viewport height fixes */
+      height: 100vh;
+      height: 100svh;
+      height: 100dvh;
+      height: calc(var(--vh) * 100);
+
+      overflow: hidden;
+      background: var(--bg);
+      isolation: isolate;
+    }
+
+    /* CENTERED content area */
+    .center{
+      width: 100vw;
+      position: absolute;
+      inset: 0;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      text-align: center;
+      pointer-events: none;
+    }
+    .stack {
+      display: flex;
+      gap: clamp(1rem, 3vh, 2rem);
+      align-items: stretch;
+      justify-items: center;
+      text-align: center;
+      pointer-events: auto;
+      width: -webkit-fill-available;
+      height: 100%;
+      padding: 140px 32px 32px 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scroll-padding-top: 140px;
+    }
+
+    @media (max-width: 480px) {
+      .stack {
+        padding: 140px 16px 16px 16px;
+      }
+    }
+    
+    .eyebrow {
+      position: relative; z-index: 2;
+      letter-spacing: .18em;
+      font-size: clamp(.7rem, 1.2vw, 1rem);
+      text-transform: uppercase;
+      color: var(--muted);
+      pointer-events: auto;
+    }
+
+    /* Project content area */
+    .project-content {
+      height: fit-content;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      align-items: center;
+      padding-top: 32px;
+      padding-bottom: 120px;
+    }
+
+    .project-video {
+      width: 100%;
+      /* height: 600px; */
+      border-radius: 14px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 10px 24px rgb(0 0 0 / 30%);
+      flex-shrink: 0;
+    }
+
+    .project-video video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .title-p {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      text-align: left;
+      padding: 100px 0 150px 0;
+    }
+    
+    /* Ensure video is visible */
+    .project-video video:not([src]) {
+      /* display: none; */
+    }
+    
+    /* Responsive video height */
+    @media (max-width: 768px) {
+      .project-video {
+        /* height: 400px; */
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .project-video {
+        /* height: 300px; */
+      }
+    }
+
+    .project-title {
+      font-size: clamp(3rem, 8vw, 8rem);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #863B19;
+      margin: 0;
+      text-align: left;
+      align-self: flex-start;
+      width: 100%;
+    }
+
+    .project-number {
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .project-tagline {
+      font-size: clamp(1.25rem, 2vw, 1.75rem);
+      font-weight: 500;
+      line-height: 1.4;
+      color: #863B19;
+      margin: 0.5rem 0 1rem 0;
+      text-align: left;
+      align-self: flex-start;
+      width: 100%;
+      opacity: 0.85;
+      font-style: italic;
+    }
+
+    .project-description {
+      font-size: clamp(1rem, 1.5vw, 1.25rem);
+      line-height: 1.6;
+      color: #863B19;
+      max-width: 600px;
+      opacity: 0.9;
+      text-align: left;
+      align-self: flex-start;
+      width: 100%;
+    }
+
+    /* top-left showreel */
+    .showreel {
+      position: absolute; left: clamp(16px, 2vw, 32px); top: clamp(14px, 2.2vh, 28px);
+      display: inline-flex; align-items: center; gap: .9rem;
+      color: var(--fg);
+      cursor: none !important;
+      pointer-events: auto;
+      user-select: none;
+      text-decoration: none;
+      z-index: 3;
+    }
+    /* Spin animation for icon on page load */
+    @keyframes spin180 {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(180deg);
+      }
+    }
+
+    /* Hover animation for play icon - move right then come back from left */
+    @keyframes playIconHover {
+      0% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(20px);
+      }
+      51% {
+        transform: translateX(-20px);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .showreel .icon {
+      width: 46px; height: 46px; border-radius: 10px;
+      position: relative; display: grid; place-items: center;
+      outline: 1.5px solid var(--border);
+      background-color: #f7e491;
+      transition: transform .15s ease;
+      animation: spin180 0.6s ease-out forwards;
+    }
+    .showreel .icon::before {
+      content: ""; position: absolute; inset: 0;
+      border: 1.5px dashed rgba(206, 65, 39,.25);
+      border-radius: 10px;
+      transform: scale(.86);
+    }
+    .showreel .play {
+      width: 0; height: 0;
+      border-left: 10px solid var(--fg);
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      margin-left: 2px;
+      transition: none;
+    }
+
+    .showreel:hover .play {
+      animation: playIconHover 0.6s ease-out;
+    }
+    .showreel span.label{
+      font-weight: 600;
+      letter-spacing: .06em;
+      font-size: clamp(.75rem, 1.1vw, 1rem);
+      text-transform: uppercase;
+      opacity: .95;
+    }
+    .showreel:hover .icon{ 
+      transform: rotate(180deg) scale(1.04); 
+    }
+
+    /* bottom-left: logo + pills */
+    .bottom-left {
+      margin-bottom: 24px;
+      position: absolute; left: clamp(12px, 2.4vw, 48px); bottom: clamp(14px, 2.2vh, 28px);
+      display: flex; align-items: flex-end; gap: 24px;
+      z-index: 2;
+      pointer-events: auto;
+      cursor: none !important;
+    }
+    .logo-svg { width: 36px; height: auto; display: block; }
+
+    .pills { display: flex; gap: clamp(10px, 1.2vw, 16px); flex-wrap: wrap; }
+    .pill {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .65rem 1.1rem;
+      border: 1.6px solid var(--fg);
+      border-radius: 999px;
+      background: #f7e491;
+      color: var(--fg);
+      font-weight: 600;
+      letter-spacing: .05em;
+      font-size: clamp(.72rem, .95vw, .9rem);
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background .2s ease, color .2s ease, transform .12s ease, border-color .2s ease;
+      cursor: none !important;
+    }
+    .pill .dot{ width: .45rem; height: .45rem; border-radius: 50%; background: var(--fg); }
+    .pill:hover { background: var(--fg); color: var(--bg); transform: translateY(-1px); }
+    .pill:hover .dot{ background: var(--bg); }
+
+    /* bottom-right rock wedge */
+    .wedge {
+      position: absolute; right: -6vw; bottom: -10vh;
+      width: min(64vw, 1100px);
+      height: min(42vh, 480px);
+      background-image: var(--accent-img);
+      background-size: cover; background-position: center;
+      filter: grayscale(1) contrast(1.2) brightness(.9);
+      opacity: .9;
+      clip-path: polygon(22% 0, 100% 0, 100% 100%, 0 100%, 8% 62%);
+      transform: rotate(-2deg);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    :focus-visible { outline: 2px dashed #fff; outline-offset: 3px; }
+
+    /* under 520px tweaks */
+    @media (max-width: 520px){
+      :root{ --gutter: clamp(12px, 5vw, 24px); }
+      .showreel span.label{ display:none; }
+    }
+
+    /* under 470px → stack pills vertically ABOVE the logo */
+    @media (max-width: 470px){
+    	.logo-svg { width: 48px; }
+      .bottom-left{
+        margin-bottom: 0;
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        gap: 44px;
+      }
+      .pills{
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 8px;
+      }
+      .pill{
+        padding: .5rem .8rem;
+        font-size: .8rem;
+        letter-spacing: .03em;
+      }
+    }
+
+    /* Hide the toast completely */
+    .toast { display: none !important; }
+
+    /* ---------- Custom cursor (desktop only) ---------- */
+    html, body, a, button, [role="button"], input, textarea, select, .pill, .showreel {
+      cursor: none !important;
+    }
+
+    .cursor-dot, .cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .cursor-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #CE4127;
+      mix-blend-mode: normal;
+    }
+    .cursor-ring {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid #CE4127;
+      transition: width .15s ease, height .15s ease, opacity .15s ease, transform .15s ease;
+      opacity: .9;
+    }
+    .cursor-ring.is-hover {
+      transform: translate(-50%, -50%) scale(1.15);
+      opacity: 1;
+    }
+    /* top-right coords HUD */
+    .coords{
+      position: fixed;
+      top: 14px;
+      right: 18px;
+      z-index: 9998;
+      pointer-events: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      color: rgba(206,65,39,.75);
+      text-align: right;
+      letter-spacing: .02em;
+    }
+    .coords b{ color: #CE4127; font-weight: 600; }
+    @media (hover: none) {
+      .cursor-dot, .cursor-ring { display: none !important; }
+      html, body { cursor: auto !important; }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .cursor-ring { transition: none; }
+    }
+
+    /* Sticky Stack Component Styles (like creativewebmanual.com) */
+    .examples-section {
+      width: 100%;
+      /* padding: clamp(28px, 6vw, 72px) 0; */
+      /* background: #0b0b0c; */
+      color: #863b19;
+      /* margin-top: 2rem; */
+      border-radius: 0;
+      /* min-height: calc(100vh * 3.2); */
+    }
+
+    .pin-spacer {
+      order: 0;
+      place-self: auto;
+      grid-area: auto;
+      z-index: auto;
+      float: none;
+      flex-shrink: 1;
+      display: grid;
+      margin: 0px;
+      inset: 0px auto auto 0px;
+      position: relative;
+      flex-basis: auto;
+      overflow: visible;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .examples__right-content {
+      padding: 10vw;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+    }
+
+    .examples__grid {
+      display: flex;
+      gap: clamp(24px, 4vw, 56px);
+      align-items: start;
+      translate: none;
+      rotate: none;
+      scale: none;
+      inset: 0px auto auto 0px;
+      margin: 0px;
+      /* max-width: 334px; */
+      /* width: 334px; */
+      /* max-height: 2051.59px; */
+      height: fit-content;
+      padding: 0px;
+      transform: translate(0px, 0px);
+    }
+
+    .examples__left {
+      overflow: hidden;
+      /* border-radius: 14px; */
+      width: 50%;
+      position: sticky;
+      top: 0;
+    }
+
+    .examples__right {
+      height: -webkit-fill-available;
+      width: 50%;
+      position: sticky;
+      top: 0;
+      align-self: start;
+      text-align: left;
+    }
+
+    .examples__right h2 {
+      text-align: left;
+      margin: 0 0 18px;
+      font-size: clamp(42px, 4.5vw, 86px);
+      letter-spacing: -0.02em;
+      line-height: .95;
+      color: #ce4027;
+      font-weight: 700;
+    }
+
+    .examples__right p {
+      text-align: left;
+      margin: 0;
+      max-width: 46ch;
+      font-size: clamp(16px, 1.35vw, 22px);
+      line-height: 1.45;
+      color: rgb(206 64 39);
+    }
+
+    .project-description-text {
+      text-align: left;
+      margin: 0 0 2rem 0;
+      max-width: 46ch;
+      font-size: clamp(16px, 1.35vw, 22px);
+      line-height: 1.6;
+      color: rgb(134 59 25);
+    }
+
+    .project-description-text p {
+      margin: 0 0 1rem 0;
+    }
+
+    .project-description-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .project-tag {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: capitalize;
+      color: rgb(206 64 39);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
+      text-align: left;
+    }
+
+    .project-brand-title {
+      font-size: clamp(32px, 4vw, 64px);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #ce4027;
+      margin: 0 0 1.5rem 0;
+      text-align: left;
+    }
+
+    .project-business-description {
+      font-size: 16px;
+      line-height: 1.7;
+      color: rgb(206 64 39);
+      margin: 0 0 2rem 0;
+      max-width: 100%;
+      text-align: left;
+    }
+
+    .project-view-button {
+      width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: transparent;
+      color: #ce4027;
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border: 2px solid #ce4027;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+    }
+
+    .project-view-button:hover {
+      transform: translateY(-2px);
+      background: #ce4027;
+      color: #F7E491;
+    }
+
+    .project-view-button:active {
+      transform: translateY(0);
+    }
+
+    .project-actions {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem 1.5rem;
+      width: 100%;
+    }
+
+    .project-details-button {
+      width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      padding: 0;
+      background: none;
+      border: 0;
+      color: #ce4027;
+      font-size: 15px;
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0.02em;
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+      cursor: pointer;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .project-details-button:hover {
+      opacity: 0.75;
+      color: #863b19;
+    }
+
+    .project-details-button:focus-visible {
+      outline: 2px solid #ce4027;
+      outline-offset: 4px;
+    }
+
+    body.details-modal-open {
+      overflow: hidden !important;
+    }
+
+    body.details-modal-open .cursor-dot,
+    body.details-modal-open .cursor-ring {
+      z-index: 10001;
+    }
+
+    .details-modal,
+    .details-modal * {
+      cursor: none !important;
+    }
+
+    .details-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(20px, 4vw, 56px);
+      box-sizing: border-box;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.28s ease, visibility 0.28s ease;
+    }
+
+    .details-modal.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .details-modal__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.58);
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .details-modal__dialog {
+      position: relative;
+      z-index: 1;
+      width: min(1180px, 92vw);
+      max-height: min(88vh, 900px);
+      background: var(--bg);
+      color: var(--fg);
+      border: 2px solid var(--fg);
+      border-radius: clamp(14px, 2vw, 22px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.38);
+    }
+
+    .details-modal__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: clamp(1rem, 2.5vw, 1.5rem) clamp(1.25rem, 3vw, 2rem);
+      border-bottom: 1px solid rgba(206, 65, 39, 0.25);
+      flex-shrink: 0;
+    }
+
+    .details-modal__title {
+      margin: 0;
+      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #ce4027;
+    }
+
+    .details-modal__close {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border: 2px solid #ce4027;
+      border-radius: 50%;
+      background: transparent;
+      color: #ce4027;
+      font-size: 1.5rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .details-modal__close:hover {
+      background: #ce4027;
+      color: var(--bg);
+    }
+
+    .details-modal__body {
+      overflow-y: auto;
+      padding: clamp(1rem, 2.5vw, 1.75rem);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .details-modal__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+      gap: clamp(0.75rem, 2vw, 1.25rem);
+    }
+
+    .details-modal__grid .gallery-item {
+      border-radius: clamp(8px, 1.5vw, 12px);
+      aspect-ratio: 4 / 3;
+      min-height: 160px;
+    }
+
+    .details-modal__empty {
+      margin: 0;
+      text-align: center;
+      color: #863b19;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    @media (max-width: 900px), ((max-width: 1100px) and (orientation: portrait)) {
+      .details-modal {
+        padding: 0;
+        align-items: stretch;
+      }
+
+      .details-modal__dialog {
+        width: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        height: 100%;
+        border-radius: 0;
+        border-width: 0;
+        box-shadow: none;
+      }
+
+      .details-modal__header {
+        padding-top: max(1rem, env(safe-area-inset-top));
+      }
+
+      .details-modal__body {
+        flex: 1;
+        min-height: 0;
+      }
+
+      .details-modal__grid {
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr));
+      }
+    }
+
+    @media (max-width: 520px) {
+      .project-actions {
+        gap: 0.65rem 1rem;
+      }
+
+      .project-actions .project-details-button {
+        text-align: left;
+      }
+    }
+
+    .dropdown-container {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .dropdown {
+      border-top: 1px solid rgba(134, 59, 25, 0.2);
+      border-bottom: 1px solid rgba(134, 59, 25, 0.2);
+    }
+
+    .dropdown-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.25rem;
+      cursor: pointer;
+      user-select: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .dropdown-header:hover {
+      opacity: 0.7;
+    }
+
+    .dropdown-title {
+      font-size: clamp(18px, 1.5vw, 24px);
+      font-weight: 600;
+      color: #ce4027;
+      margin: 0;
+    }
+
+    .dropdown-icon {
+      width: 20px;
+      height: 20px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .dropdown-icon::before,
+    .dropdown-icon::after {
+      content: '';
+      position: absolute;
+      background: #ce4027;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      left: 50%;
+      top: 50%;
+    }
+
+    .dropdown-icon::before {
+      width: 2px;
+      height: 12px;
+      transform: translate(-50%, -50%);
+    }
+
+    .dropdown-icon::after {
+      width: 12px;
+      height: 2px;
+      transform: translate(-50%, -50%);
+    }
+
+    .dropdown.active .dropdown-icon::before {
+      opacity: 0;
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    .dropdown-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+      padding: 0;
+    }
+
+    .dropdown.active .dropdown-content {
+      max-height: 1000px;
+      padding: 1.5rem;
+    }
+
+    .dropdown-content p {
+      font-size: clamp(14px, 1.2vw, 18px);
+      line-height: 1.7;
+      color: rgb(206 64 39);
+      margin: 0;
+      opacity: 0.9;
+    }
+
+    .examples__collection {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border-top: 1px solid rgba(242, 242, 242, 0.18);  
+    }
+
+    .examples__item {
+      position: relative;
+      width: 100%;
+      border-bottom: 1px solid rgba(242, 242, 242, 0.18);
+    }
+
+    .eyebrow-wrap {
+      background-color: #ce4027;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1.5rem 1rem;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .examples__item-content {
+      max-height: none;
+      overflow: visible;
+      opacity: 1;
+    }
+
+    .eyebrow-marker {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #f2f2f2;
+      flex-shrink: 0;
+      /* Closing - quick */
+      transition: background 0.25s cubic-bezier(0.55, 0.055, 0.675, 0.19),
+                  border 0.25s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+
+    .eyebrow-marker {
+      background: transparent;
+      border: 1px solid #f7e491;
+    }
+
+    .eyebrow-text {
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #f7e491;
+      font-weight: 600;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    .examples__media {
+      position: relative;
+      width: 100%;
+      border-radius: 0;
+      overflow: hidden;
+      background: #000;
+      /* box-shadow: 0 18px 60px rgba(0, 0, 0, .45); */
+      aspect-ratio: 16 / 9;
+      /* border: 1px solid rgba(242, 242, 242, 0.18); */
+      margin-bottom: 1rem;
+    }
+
+    .examples__media img,
+    .examples__media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .examples__media video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .examples__media img {
+      position: relative;
+      z-index: 0;
+    }
+
+    .examples__item p {
+      margin: 0;
+      font-size: clamp(14px, 1.2vw, 16px);
+      line-height: 1.6;
+      color: #863b19;
+      max-width: 100%;
+      text-align: left;
+    }
+
+    .content-text {
+      padding: 0;
+      text-align: left;
+    }
+
+    .content-text h3 {
+      font-size: clamp(1.25rem, 2vw, 1.75rem);
+      font-weight: 600;
+      line-height: 1.3;
+      color: #863b19;
+      margin: 0 0 1rem 0;
+      text-transform: none;
+      letter-spacing: -0.01em;
+      text-align: left;
+    }
+
+    .content-text p {
+      margin: 0 0 1rem 0;
+      font-size: clamp(14px, 1.2vw, 16px);
+      line-height: 1.7;
+      color: #863b19;
+      max-width: 100%;
+      text-align: left;
+    }
+
+    .content-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .content-text p.lead {
+      font-size: clamp(16px, 1.4vw, 18px);
+      line-height: 1.6;
+      color: #863b19;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+      text-align: left;
+    }
+
+    .examples__media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .examples__media-grid .examples__media {
+      margin-bottom: 0;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .gallery-item {
+      position: relative;
+      width: 100%;
+      border-radius: 0;
+      overflow: hidden;
+      background: #000;
+      aspect-ratio: 16 / 9;
+      min-height: 200px;
+    }
+
+    .gallery-item img,
+    .gallery-item video,
+    .gallery-item iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border: none;
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Ensure images are visible and load properly */
+    .gallery-item img {
+      z-index: 1;
+    }
+
+    /* Ensure GIFs loop naturally and display properly */
+    .gallery-item img.gif-image,
+    .gallery-item img[src$=".gif"],
+    .gallery-item img[src*=".gif"],
+    .gallery-item img[src*="%20V1.gif"],
+    .gallery-item img[src*="%20V2.gif"] {
+      image-rendering: auto;
+      object-fit: contain;
+      background: #000;
+      display: block;
+      visibility: visible;
+      opacity: 1;
+      /* Ensure GIFs animate properly */
+      will-change: auto;
+      transform: none;
+      animation: none;
+      /* Prevent any CSS that might stop GIF animation */
+      pointer-events: auto;
+    }
+
+    .gallery-item video {
+      z-index: 1;
+    }
+
+    .gallery-item iframe {
+      z-index: 1;
+      min-height: 400px;
+    }
+
+    /* Magic Spoon — interactive live site preview (100vh, no page scroll) */
+    body.project-page--live {
+      overflow: hidden;
+      height: 100%;
+    }
+
+    body.project-page--live .screen {
+      height: 100dvh;
+      height: calc(var(--vh) * 100);
+      overflow: hidden;
+    }
+
+    body.project-page--live .center {
+      align-items: stretch;
+      height: 100%;
+    }
+
+    body.project-page--live .stack {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+      padding: clamp(64px, 9vh, 88px) clamp(12px, 2vw, 24px) clamp(88px, 11vh, 108px) 0;
+      box-sizing: border-box;
+    }
+
+    body.project-page--live .project-content {
+      flex: 1;
+      min-height: 0;
+      height: 100%;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    body.project-page--live .examples-section {
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    body.project-page--live .examples__grid:has(.examples__left--embed) {
+      align-items: center;
+      height: 100%;
+      min-height: 0;
+      margin: 0;
+      gap: clamp(16px, 3vw, 48px);
+    }
+
+    .examples__grid:has(.examples__left--embed) {
+      align-items: stretch;
+    }
+
+    body.project-page--live .examples__left--embed {
+      position: relative;
+      top: auto;
+      align-self: center;
+      width: 50%;
+      min-width: 0;
+      max-width: 50%;
+      min-height: 0;
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1 1 50%;
+    }
+
+    .examples__left--embed {
+      position: relative;
+      top: auto;
+      align-self: center;
+      min-height: 0;
+      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    body.project-page--live .examples__right {
+      height: 100%;
+      width: 50%;
+      min-width: 0;
+      flex: 1 1 50%;
+      position: relative;
+      top: auto;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    body.project-page--live .examples__right-content {
+      position: relative;
+      top: auto;
+      padding: clamp(0.5rem, 2vw, 2.5rem);
+      max-height: 100%;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    body.project-page--live .project-brand-title {
+      font-size: clamp(1.75rem, 4vw, 3.5rem);
+      margin-bottom: clamp(0.5rem, 1.5vh, 1rem);
+    }
+
+    body.project-page--live .project-business-description {
+      font-size: clamp(0.8rem, 1.05vw, 0.95rem);
+      line-height: 1.45;
+      margin-bottom: clamp(0.75rem, 1.5vh, 1.25rem);
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .examples__live-site {
+      --live-preview-w: 1280;
+      --live-preview-h: 720;
+      --live-preview-box-w: 704px;
+      --live-preview-box-h: 396px;
+      width: var(--live-preview-box-w);
+      height: var(--live-preview-box-h);
+      max-width: 100%;
+      flex: 0 0 auto;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: clamp(10px, 2vw, 16px);
+      background: #000;
+      box-sizing: border-box;
+    }
+
+    @media (min-width: 901px) {
+      body.project-page--live .examples__grid:has(.examples__left--embed) {
+        flex-direction: row;
+        flex-wrap: nowrap;
+      }
+    }
+
+    .examples__live-site .live-site-frame-scaler {
+      width: calc(var(--live-preview-w) * 1px);
+      height: calc(var(--live-preview-h) * 1px);
+      transform-origin: 0 0;
+      will-change: transform;
+    }
+
+    .examples__live-site .live-site-frame {
+      width: calc(var(--live-preview-w) * 1px);
+      height: calc(var(--live-preview-h) * 1px);
+      border: 0;
+      display: block;
+      background: #000;
+      pointer-events: auto;
+      cursor: auto !important;
+    }
+
+    .examples__live-site .live-site-embed-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 1.5rem;
+      box-sizing: border-box;
+      background: #0a0a0a;
+      color: #f2f2f2;
+      text-align: center;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .examples__live-site .live-site-embed-fallback a {
+      color: #f7e491;
+      border: 1px solid #ce4127;
+      padding: 0.6rem 1rem;
+      border-radius: 999px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.75rem;
+    }
+
+    .examples__live-site,
+    .examples__live-site * {
+      cursor: auto !important;
+    }
+
+    @media (max-width: 768px) {
+      .examples__media-grid,
+      .gallery {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+    }
+
+    .colors-collection {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    .color-item {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      border: 1px solid rgba(242, 242, 242, 0.18);
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 1100px) {
+      body.project-page--live .examples__right-content {
+        padding: clamp(0.5rem, 1.5vw, 1.25rem);
+      }
+      body.project-page--live .project-brand-title {
+        font-size: clamp(1.5rem, 5vw, 2.75rem);
+      }
+      body.project-page--live .project-business-description {
+        -webkit-line-clamp: 4;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .examples__grid {
+        grid-template-columns: 1fr;
+      }
+      body.project-page--live {
+        overflow-x: hidden;
+        overflow-y: auto;
+        height: 100%;
+      }
+      body.project-page--live .screen {
+        height: auto;
+        min-height: 100dvh;
+        min-height: calc(var(--vh) * 100);
+        overflow: visible;
+      }
+      body.project-page--live .stack {
+        height: auto;
+        min-height: calc(var(--vh) * 100);
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: clamp(56px, 8vh, 72px) clamp(16px, 4vw, 24px) clamp(88px, 10vh, 100px);
+      }
+      body.project-page--live .project-content,
+      body.project-page--live .examples-section {
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+      }
+      body.project-page--live .examples__grid:has(.examples__left--embed) {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: stretch;
+        height: auto;
+        min-height: 0;
+        gap: clamp(1rem, 3vh, 1.5rem);
+        padding-top: clamp(0.25rem, 1vh, 0.5rem);
+      }
+      body.project-page--live .examples__left--embed {
+        width: 100%;
+        max-width: 100%;
+        flex: 0 0 auto;
+        justify-content: center;
+        align-items: center;
+      }
+      body.project-page--live .examples__right {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        flex: 0 0 auto;
+        height: auto;
+        align-items: stretch;
+        overflow: visible;
+      }
+      body.project-page--live .examples__right-content {
+        padding: 0;
+        overflow: visible;
+        box-sizing: border-box;
+      }
+      body.project-page--live .examples__live-site {
+        --live-preview-box-w: min(640px, 100%);
+        --live-preview-box-h: auto;
+        width: var(--live-preview-box-w);
+        height: auto;
+        aspect-ratio: 1280 / 720;
+        max-width: 100%;
+        margin: 0 auto;
+      }
+      body.project-page--live .project-business-description {
+        -webkit-line-clamp: unset;
+        display: block;
+      }
+      .examples__left--embed {
+        padding: 0;
+      }
+      .examples__left {
+        position: relative;
+      }
+      .examples__item {
+        position: relative;
+        top: auto !important;
+      }
+      .examples-section {
+        background: transparent;
+        color: inherit;
+      }
+    }
+
+    @media (max-width: 520px) {
+      body.project-page--live .center {
+        width: 100%;
+        max-width: 100%;
+      }
+      body.project-page--live .stack {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 16px;
+        padding-right: 16px;
+        box-sizing: border-box;
+      }
+      body.project-page--live .project-content,
+      body.project-page--live .examples-section,
+      body.project-page--live .examples__grid:has(.examples__left--embed) {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+      }
+      body.project-page--live .examples__live-site {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      body.project-page--live .project-brand-title {
+        font-size: clamp(1.65rem, 9vw, 2.25rem);
+        overflow-wrap: break-word;
+      }
+      body.project-page--live .project-actions {
+        width: 100%;
+        max-width: 100%;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      body.project-page--live .project-view-button {
+        display: inline-flex;
+        width: auto;
+        max-width: 100%;
+        box-sizing: border-box;
+        justify-content: center;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+    }
+
+    @media (max-height: 700px) and (min-width: 901px) {
+      body.project-page--live .examples__live-site {
+        --live-preview-box-w: min(704px, calc((100dvh - 200px) * 1280 / 720));
+        --live-preview-box-h: calc(var(--live-preview-box-w) * 720 / 1280);
+        width: var(--live-preview-box-w);
+        height: var(--live-preview-box-h);
+      }
+      body.project-page--live .project-business-description {
+        -webkit-line-clamp: 3;
+      }
+    }
+
+    /* Page load animations */
+    /* Page load animations - Slide in from different directions */
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100px);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideRight {
+      from {
+        transform: translateX(-100px);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideLeft {
+      from {
+        transform: translateX(100px);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    /* Initially position elements off-screen */
+    .showreel {
+      transform: translateY(-100px);
+    }
+
+    .center {
+      transform: translateX(-100px);
+    }
+
+    .bottom-left {
+      transform: translateX(-100px) translateY(100px);
+    }
+
+    .examples__left {
+      transform: translateX(-150px);
+    }
+
+    .examples__right {
+      transform: translateX(150px);
+    }
+
+    /* Animate in on load */
+    .showreel.animate-in {
+      animation: slideDown 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
+    }
+
+    .center.animate-in {
+      animation: slideRight 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+    }
+
+    .bottom-left.animate-in {
+      animation: slideRight 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+    }
+
+    .examples__left.animate-in {
+      animation: slideRight 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+    }
+
+    .examples__right.animate-in {
+      animation: slideLeft 1s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
+    }
+
+    .div-description-container {
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: row;
+    }
+
+    /* Page Transition Overlay */
+    .page-transition {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg); /* Default to current page background */
+      z-index: 99999;
+      pointer-events: none;
+      transform: translateY(100%);
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1),
+                  background 0.1s ease;
+    }
+    
+    /* Red background when transitioning to work.html */
+    .page-transition.to-red {
+      background: #ce4127;
+    }
+    
+    /* Yellow background when transitioning to yellow pages */
+    .page-transition.to-yellow {
+      background: #F7E491;
+    }
+
+    .page-transition.to-dark {
+      background: #060605;
+    }
+
+    .page-transition.is-active {
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .page-transition.is-exiting {
+      transform: translateY(-100%);
+    }
+
+    /* Elements change color as overlay covers them */
+    body.transitioning .showreel,
+    body.transitioning .center,
+    body.transitioning .bottom-left,
+    body.transitioning .coords,
+    body.transitioning .examples__right,
+    body.transitioning .examples__left {
+      transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  fill 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  stroke 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.transitioning .showreel *,
+    body.transitioning .center *,
+    body.transitioning .bottom-left *,
+    body.transitioning .coords *,
+    body.transitioning .examples__right *,
+    body.transitioning .examples__left * {
+      transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  fill 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  stroke 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Prevent flash of unstyled content */
+    body.page-loading {
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <main class="screen" aria-label="Project Detail">
+
+    <!-- Top-left: show reel -->
+    <a class="showreel" href="work.html" aria-label="Back to projects">
+      <span class="icon" aria-hidden="true"><i class="play"></i></span>
+      <span class="label">Back</span>
+    </a>
+
+    <!-- CENTERED content -->
+    <section class="center">
+      <div class="stack" role="group" aria-label="Project Content">
+        <div class="project-content" id="projectContent">
+          <!-- Content will be dynamically loaded here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom-left: logo + pills -->
+    <div class="bottom-left">
+      <a href="index.html" aria-label="Go to home">
+        <svg class="logo-svg" width="310" height="328" viewBox="0 0 310 328" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M309.689 240.691C309.689 253.905 307.329 265.861 302.61 276.558C298.205 287.256 291.755 296.537 283.26 304.403C274.765 311.954 264.382 317.775 252.112 321.865C240.156 325.955 226.627 328 211.525 328C198.625 328 185.725 326.584 172.825 323.752C160.24 321.235 148.756 317.46 138.374 312.426C128.306 307.392 119.968 301.414 113.361 294.492C107.068 287.256 103.922 279.233 103.922 270.423V219.925H112.417C117.766 251.703 128.148 274.513 143.565 288.357C159.296 302.2 180.534 309.122 207.277 309.122C215.458 309.122 223.166 308.178 230.402 306.291C237.954 304.088 244.561 300.942 250.224 296.852C255.887 292.762 260.449 287.728 263.91 281.75C267.371 275.772 269.102 268.85 269.102 260.984C269.102 247.14 264.697 235.342 255.887 225.588C247.392 215.835 234.493 205.924 217.188 195.856L159.139 161.404C139.003 149.448 124.687 137.335 116.192 125.065C108.012 112.794 103.922 97.8494 103.922 80.2302C103.922 67.9597 106.124 56.9477 110.529 47.1943C114.934 37.4408 121.069 29.1031 128.935 22.1813C137.115 14.9448 146.711 9.43884 157.723 5.66332C169.05 1.88777 181.635 0 195.479 0C207.12 0 218.919 1.25852 230.874 3.77555C243.145 6.29256 254.157 10.0681 263.91 15.1022C273.664 19.8216 281.687 25.7995 287.979 33.036C294.272 39.9578 297.418 47.8235 297.418 56.6331V107.131H288.923C283.575 75.3535 273.349 52.7002 258.247 39.1712C243.145 25.6422 222.222 18.8777 195.479 18.8777C188.557 18.8777 181.792 19.9789 175.185 22.1813C168.578 24.3837 162.757 27.53 157.723 31.6202C152.689 35.7103 148.599 40.7443 145.453 46.7223C142.307 52.7002 140.733 59.3074 140.733 66.5439C140.733 73.4657 141.835 79.6009 144.037 84.9496C146.239 90.2983 149.543 95.3324 153.948 100.052C158.353 104.771 163.859 109.491 170.466 114.21C177.073 118.615 184.624 123.334 193.119 128.368L251.168 162.82C261.236 168.798 269.888 174.619 277.125 180.282C284.676 185.631 290.811 191.451 295.531 197.744C300.25 203.722 303.711 210.172 305.913 217.094C308.43 224.015 309.689 231.881 309.689 240.691Z" fill="#CE4127"/>
+          <path d="M0 8.49512H42.4748V263.344C42.4748 277.502 44.3626 288.986 48.1381 297.796C52.2283 306.291 61.3525 310.538 75.5108 310.538H84.9497V319.977H42.4748C34.2945 319.977 27.3727 319.348 21.7094 318.089C16.3607 316.516 11.9559 313.685 8.49497 309.594C5.34868 305.19 3.14628 299.369 1.88777 292.132C0.629256 284.896 0 275.3 0 263.344V8.49512Z" fill="#CE4127"/>
+        </svg>
+      </a>
+      <nav class="pills" aria-label="Primary">
+        <a class="pill" href="work.html"><i class="dot" aria-hidden="true"></i> Website</a>
+        <a class="pill" href="long-term.html"><i class="dot" aria-hidden="true"></i> Projects</a>
+        <a class="pill" href="About.html"><i class="dot" aria-hidden="true"></i> Our House</a>
+        <a class="pill" href="contact.html"><i class="dot" aria-hidden="true"></i> Let's Talk</a>
+      </nav>
+    </div>
+
+  </main>
+
+  <!-- Page Transition Overlay -->
+  <div class="page-transition is-active" id="pageTransition"></div>
+
+  <!-- God Is in the Small Details — media grid modal -->
+  <div class="details-modal" id="detailsModal" hidden aria-hidden="true">
+    <button type="button" class="details-modal__backdrop" data-details-close aria-label="Close details"></button>
+    <div class="details-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="detailsModalTitle">
+      <div class="details-modal__header">
+        <h3 class="details-modal__title" id="detailsModalTitle">God Is in the Small Details</h3>
+        <button type="button" class="details-modal__close" data-details-close aria-label="Close">×</button>
+      </div>
+      <div class="details-modal__body" id="detailsModalBody"></div>
+    </div>
+  </div>
+
+  <!-- Custom cursor elements -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <!-- Coords HUD -->
+  <div class="coords" aria-hidden="true">
+    <div>[X].<b id="mx">0</b>px</div>
+    <div>[Y].<b id="my">0</b>px</div>
+  </div>
+
+  <script>
+    // Page load animations
+    (function() {
+      const showreel = document.querySelector('.showreel');
+      const center = document.querySelector('.center');
+      const bottomLeft = document.querySelector('.bottom-left');
+      
+      // Trigger animations after page loads
+      window.addEventListener('load', () => {
+        if (showreel) showreel.classList.add('animate-in');
+        if (center) center.classList.add('animate-in');
+        if (bottomLeft) bottomLeft.classList.add('animate-in');
+      });
+    })();
+
+    // Project data
+    const projects = {
+      '01': {
+        name: 'GATORADE',
+        number: '01',
+        liveSiteUrl: 'https://is-studio-hub.github.io/gatorade/',
+        video: '/Users/shamrikin/Desktop/ISstudio/Work/CuttingEdgeSites/Studio Portfolio/Video/Screen Recording 2025-12-05 at 3.02.08 PM.mov',
+        description: 'We created a comprehensive digital experience including website, landing pages, and content strategy for Gatorade\'s new energy drink launch.',
+        tagline: 'Fuel Your Performance',
+        businessDescription: 'Gatorade is a leading sports nutrition brand specializing in hydration and energy products for athletes. Founded in 1965, the brand provides scientifically-formulated beverages that help athletes maintain peak performance through optimal hydration and energy replenishment.',
+        projectDescription: [
+          'From concept to launch, we crafted a digital experience that redefined how Gatorade connects with athletes.',
+          'Through strategic research and innovative design, we created a platform that drives engagement and performance.',
+          'The result: a comprehensive digital ecosystem that successfully launched a new product category and exceeded all metrics.'
+        ],
+        howItStarted: {
+          title: 'How it\'s start',
+          description: 'Gatorade approached us to create a digital experience for their new energy drink launch, targeting professional athletes, fitness enthusiasts, and active individuals who needed a product that combined sports drink benefits with energy boost.',
+          content: [
+            'The Challenge: Gatorade identified a gap in the market—athletes wanted something that combined the electrolyte benefits of sports drinks with the energy boost of caffeine, but without the crash. They needed a digital presence that would launch this new product category.',
+            'Initial Brief: Gatorade\'s marketing team came to us with a clear vision: create a website and landing pages that would appeal to the next generation of athletes while maintaining the brand\'s credibility and performance-focused reputation.',
+            'Our Approach: We began by conducting extensive research into the target audience\'s digital behavior, content consumption patterns, and what messaging would resonate with athletes who push their limits daily. This research informed our entire strategy.',
+            'The Opportunity: This wasn\'t just another product launch—it was an opportunity to redefine how Gatorade communicates with athletes digitally, breaking away from traditional sports drink marketing to something more modern and lifestyle-oriented.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=1800&q=80'
+          ]
+        },
+        process: {
+          title: 'Process',
+          description: 'We worked through a structured process from discovery to launch, ensuring every decision was data-driven and aligned with Gatorade\'s goals and athlete needs.',
+          content: [
+            'Phase 1: Discovery & Research - We conducted interviews with athletes, analyzed competitor digital experiences, and mapped out user journeys. This research phase revealed key insights about how athletes discover and evaluate performance products.',
+            'Phase 2: Strategy & Planning - Developed a comprehensive content strategy, site architecture, and landing page framework. We created user personas and defined messaging for different audience segments—from weekend warriors to professional athletes.',
+            'Phase 3: Design & Wireframing - Created wireframes and visual designs that balanced performance credibility with modern aesthetics. We designed flexible templates that could be customized for different campaigns and seasonal promotions.',
+            'Phase 4: Development & Content - Built responsive websites and landing pages while simultaneously developing all copy, visual content, and interactive features. We ensured the technical foundation supported fast loading and seamless user experiences.',
+            'Phase 5: Testing & Refinement - Conducted user testing, A/B testing, and performance optimization. We refined messaging, design elements, and user flows based on real user feedback and conversion data before launch.',
+            'Phase 6: Launch & Iteration - Launched the website alongside Gatorade\'s product launch, then continuously monitored performance and made iterative improvements based on analytics and user behavior patterns.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1549060279-7e168fcee0c2?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1800&q=80'
+          ]
+        },
+        assets: {
+          title: 'Assets',
+          description: 'We created a comprehensive suite of visual assets, design elements, and content components that brought Gatorade\'s new energy drink to life across all digital touchpoints.',
+          content: [
+            'Visual Identity System: Developed a complete design system with bold gradients, dynamic typography, and color palettes for each flavor. Created style guides and component libraries for consistent application across all digital channels.',
+            'Photography & Video: Art-directed and curated photography featuring real athletes in authentic moments. Produced video content showcasing the product in action, from training sessions to competition moments.',
+            'Illustrations & Icons: Created custom illustrations for ingredients, benefits, and usage scenarios. Designed icon sets for nutrition information, flavor profiles, and interactive features.',
+            'Content Library: Developed extensive copy for product pages, landing pages, blog content, and social media. Created messaging frameworks that could be adapted for different campaigns and audience segments.',
+            'Interactive Components: Built interactive features including flavor finder quizzes, nutrition calculators, athlete spotlights, and product comparison tools. These components engage users beyond basic product information.',
+            'Landing Page Templates: Designed and developed flexible landing page templates that could be quickly customized for different campaigns, seasonal promotions, and targeted audience segments.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1571902943202-507ec2618e8f?auto=format&fit=crop&w=1800&q=80'
+          ]
+        },
+        finalResult: {
+          title: 'Final result',
+          description: 'The final deliverable was a comprehensive digital experience that successfully launched Gatorade\'s new energy drink, driving engagement and conversions while establishing a new visual language for the brand.',
+          content: [
+            'Complete Website: A fully responsive website optimized for all devices, featuring product pages, ingredient information, athlete stories, and interactive tools. The site loads quickly and provides seamless user experiences across desktop, tablet, and mobile.',
+            'Landing Page System: A flexible system of landing pages that can be quickly customized for different campaigns, audience segments, and marketing initiatives. These pages have consistently outperformed industry benchmarks for conversion rates.',
+            'Content Strategy: A comprehensive content library and messaging framework that Gatorade continues to use for ongoing campaigns. The content effectively communicates product benefits while maintaining brand authenticity.',
+            'Design System: A complete design system and component library that ensures brand consistency across all digital touchpoints. This system has been extended to other Gatorade products and initiatives.',
+            'Performance Metrics: The website achieved strong performance metrics including increased engagement time, higher conversion rates, and positive user feedback. The digital experience successfully positioned the product as a premium, athlete-focused energy solution.',
+            'Ongoing Partnership: We continue to work with Gatorade to create new landing pages, update content, and refine the digital experience based on user data and evolving marketing needs.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=1800&q=80'
+          ]
+        }
+      },
+      '02': {
+        name: 'MAGIC SPOON',
+        number: '02',
+        liveSiteUrl: 'https://is-studio-hub.github.io/Magic-Spoon/',
+        video: '/Users/shamrikin/Desktop/ISstudio/Work/CuttingEdgeSites/Studio Portfolio/Video/Screen Recording 2025-12-07 at 10.40.28 AM.mov',
+        description: 'We designed and developed a complete website and digital experience for Magic Spoon, a cereal brand targeting health-conscious younger audiences.',
+        tagline: 'Cereal That\'s Actually Good For You',
+        businessDescription: 'Magic Spoon is a modern cereal brand creating high-protein, low-carb cereals that taste like childhood favorites. Founded in 2019, the brand targets health-conscious millennials and Gen Z with zero-sugar, grain-free options available in flavors like Fruity, Cocoa, and Peanut Butter.',
+        projectDescription: [
+          'We transformed Magic Spoon\'s digital presence to resonate with Gen Z and Millennial audiences.',
+          'Through playful design and community-focused features, we created a platform that drives both engagement and sales.',
+          'The outcome: a complete e-commerce experience that successfully positions Magic Spoon as the cool, healthy cereal alternative.'
+        ],
+        howItStarted: {
+          title: 'How it\'s start',
+          description: 'Magic Spoon approached us to build a digital presence that challenges the breakfast cereal category, targeting health-conscious millennials, parents, and Gen Z consumers who want flavor without compromise.',
+          content: [
+            'The Challenge: Magic Spoon needed a website that would position their cereal as the rebellious alternative to traditional breakfast options—better tasting, better for you, and cooler than anything on the shelf. They wanted to break the paradigm that healthy cereal had to be bland.',
+            'Initial Brief: The brand came to us with a clear vision: create a digital experience that speaks directly to younger audiences using language and visuals that resonate with their values around wellness and authenticity. They needed to stand out in a crowded market.',
+            'Our Approach: We began by researching the target audience\'s breakfast habits, health priorities, and digital behavior patterns. We discovered that Gen Z and Millennials wanted products that aligned with their values without sacrificing enjoyment.',
+            'The Opportunity: This was a chance to redefine how a cereal brand communicates digitally, moving away from traditional marketing to something more modern, playful, and community-focused that would resonate with the next generation.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1526318896980-cf78c088247c?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1485921325833-c519f76c4927?auto=format&fit=crop&w=1800&q=80'
+          ]
+        },
+        process: {
+          title: 'Process',
+          description: 'We developed the website through a youth-focused process, ensuring every decision resonated with Gen Z and Millennial audiences while maintaining brand authenticity.',
+          content: [
+            'Phase 1: User Research - Conducted extensive interviews and surveys with target demographics to understand breakfast habits, health priorities, and digital behavior patterns. This research revealed key insights about how younger audiences discover and evaluate food products.',
+            'Phase 2: Content Strategy - Developed a content strategy and brand voice focused on platforms like TikTok, Instagram, and YouTube where the audience spends time. Created messaging frameworks that work across social media and web.',
+            'Phase 3: Design & Development - Designed a website that balances playful energy with clean, modern aesthetics. Built a fast-loading, mobile-optimized site that prioritizes visual engagement and easy navigation.',
+            'Phase 4: Interactive Features - Developed website features including flavor explorer tools, recipe pages, nutrition calculators, and community sections that foster engagement and create a sense of belonging.',
+            'Phase 5: E-commerce Integration - Built flexible e-commerce functionality and subscription management systems that support regular product launches, limited edition flavors, and seasonal campaigns.',
+            'Phase 6: Testing & Launch - Conducted user testing with target demographics, refined the experience based on feedback, and launched with a content system that allows Magic Spoon to easily update the site with new products and campaigns.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1526318896980-cf78c088247c?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1800&q=80'
+          ]
+        },
+        assets: {
+          title: 'Assets',
+          description: 'We created a comprehensive suite of visual assets, design elements, and interactive components that bring Magic Spoon\'s brand to life across all digital touchpoints.',
+          content: [
+            'Visual Identity: Developed a complete design system with color palettes for each flavor (vibrant pinks for Fruity, rich browns for Cocoa), custom typography that feels both nostalgic and modern, and consistent brand application.',
+            'Illustrations & Characters: Designed hand-drawn illustration style elements and characters that bring each flavor to life. These playful visual elements appear throughout the website, landing pages, and marketing materials.',
+            'Photography & Video: Art-directed bright, colorful food photography that makes the cereal look irresistible. Created lifestyle content showing real people enjoying Magic Spoon in authentic, shareable moments.',
+            'Interactive Components: Built interactive features including flavor explorer tools, recipe generators, nutrition calculators, and social sharing functionality that engage users beyond basic product browsing.',
+            'Content Library: Developed extensive copy for product pages, recipe content, nutrition information, and community sections. Created messaging that speaks directly to younger audiences without feeling condescending.',
+            'E-commerce Assets: Designed product detail pages, subscription flows, and checkout experiences that make purchasing easy and enjoyable. Created visual elements for limited edition flavors and seasonal campaigns.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1526318896980-cf78c088247c?auto=format&fit=crop&w=1800&q=80'
+          ]
+        },
+        finalResult: {
+          title: 'Final result',
+          description: 'The final deliverable was a complete website and digital experience that successfully positions Magic Spoon as the cool, healthy cereal alternative, driving engagement and sales while building a strong community.',
+          content: [
+            'Complete Website: A fully responsive, mobile-first website optimized for all devices. The site features product pages, recipe content, nutrition information, interactive tools, and community sections that engage users throughout their journey.',
+            'E-commerce Platform: A fully functional e-commerce system with subscription management, flexible delivery options, and seamless checkout. The platform supports regular product launches and limited edition flavors.',
+            'Content System: A comprehensive content library and messaging framework that Magic Spoon continues to use for ongoing campaigns. The content effectively communicates brand values while driving conversions.',
+            'Design System: A complete design system and component library ensuring brand consistency across all digital touchpoints. The system has been extended to social media, email campaigns, and other marketing materials.',
+            'Performance Metrics: The website achieved strong performance including increased engagement time, higher conversion rates, and positive user feedback. The digital experience successfully positioned Magic Spoon as a premium, health-focused brand.',
+            'Community Building: The website successfully fostered a community of Magic Spoon fans who share recipes, participate in challenges, and advocate for the brand. This community engagement has become a key differentiator.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1526318896980-cf78c088247c?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1485921325833-c519f76c4927?auto=format&fit=crop&w=1800&q=80'
+          ]
+        }
+      },
+      '03': {
+        name: 'OZINT SECURITY',
+        number: '03',
+        liveSiteUrl: 'https://www.ozintsecurity.com/',
+        liveEmbedScript: 'embeds/ozint-embed.js',
+        liveEmbedPath: 'embeds/ozint-embed.html',
+        video: '/Users/shamrikin/Desktop/ISstudio/Work/CuttingEdgeSites/Studio Portfolio/Video/Screen Recording 2025-12-06 at 5.44.12 PM.mov',
+        description: 'We designed and developed a comprehensive website and digital platform for Ozint Security, a security solutions provider for businesses and individuals.',
+        tagline: 'Protecting What Matters Most',
+        businessDescription: 'Ozint Security provides comprehensive cybersecurity and physical security solutions for businesses. The company offers enterprise-grade services including network protection, threat intelligence, and incident response, serving clients across finance, healthcare, technology, and government sectors.',
+        projectDescription: [
+          'We built a digital platform that communicates complex security solutions in an accessible, trustworthy way.',
+          'Through careful design and clear messaging, we created a site that builds credibility and drives qualified leads.',
+          'The result: a comprehensive website that successfully positions Ozint Security as a trusted security partner.'
+        ],
+        howItStarted: {
+          title: 'How it\'s start',
+          description: 'Ozint Security approached us to build a digital presence that positions them as a trusted security partner for businesses of all sizes, from startups to Fortune 500 companies.',
+          content: [
+            'The Challenge: Ozint Security needed a website that would communicate enterprise-grade security solutions in an accessible way. They wanted to position themselves as trusted partners while explaining complex security concepts to both technical and non-technical audiences.',
+            'Initial Brief: The company came to us with a clear need: create a website that addresses the full spectrum of security needs—network protection, endpoint security, data encryption, threat intelligence, and incident response—while building trust and credibility.',
+            'Our Approach: We began by researching how businesses evaluate security providers, understanding both the technical requirements and the trust-building elements needed. We discovered that potential clients needed clear explanations without being overwhelmed by jargon.',
+            'The Opportunity: This was a chance to create a website that not only explains security services but demonstrates security best practices itself, building credibility through both content and technical execution.'
+          ],
+          media: [
+            { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693b41b8c309d6de772cf5c2_soldeir%20V1.gif', alt: 'Soldier V1' },
+            { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693b41b8c309d6de772cf5c1_CHESS%20V2.gif', alt: 'Chess V2' },
+            { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693b41b8c309d6de772cf5c0_Cam%20v1.gif', alt: 'Cam V1' },
+            { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693b41b8c309d6de772cf5bf_Drone%20V1.gif', alt: 'Drone V1' }
+          ]
+        },
+        process: {
+          title: 'Process',
+          description: 'We developed the website through a security-first process, ensuring every decision prioritized trust, clarity, and professionalism while making complex security concepts accessible.',
+          content: [
+            'Phase 1: Discovery & Research - Worked with Ozint Security to understand their services, target audiences, and messaging needs. Conducted research into how businesses evaluate security providers and what builds trust.',
+            'Phase 2: Strategy & Content Planning - Developed a comprehensive content strategy that positions Ozint Security as a trusted partner. Created messaging frameworks that explain security concepts in accessible language without dumbing them down.',
+            'Phase 3: Design & Development - Created a professional visual identity using restrained colors (deep blues and grays) that convey trustworthiness. Built a secure, fast-loading website that demonstrates security best practices.',
+            'Phase 4: Content Creation - Developed all website copy, service descriptions, and landing page content. Created industry-specific pages for finance, healthcare, technology, and government sectors.',
+            'Phase 5: Testing & Refinement - Conducted user testing with potential clients, refined messaging based on feedback, and ensured the website meets WCAG 2.1 AA accessibility standards.',
+            'Phase 6: Launch & Optimization - Launched the website and began monitoring performance. Created a content system that allows Ozint Security to easily update pages and add new service offerings.'
+          ],
+          media: [
+            { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693c89b718f2df1b25d6abf5_12.png', alt: 'Security Intelligence' },
+            { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693b41b8c309d6de772cf639_Security%20Intelligence.png', alt: 'Security Intelligence' },
+            { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693b41b8c309d6de772cf690_Environmentally%20Responsible%20-%20Low-emission%20fleet%20and%20sustainable%20technology%20practicess%20.png', alt: 'Environmentally Responsible' },
+            { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693c8cfbcf457672ff30e82a_Private%20Intelligence%20.png', alt: 'Private Intelligence' }
+          ]
+        },
+        assets: {
+          title: 'Assets',
+          description: 'We created a comprehensive suite of visual assets, design elements, and content components that communicate Ozint Security\'s expertise and build trust with potential clients.',
+          content: [
+            'Visual Identity System: Developed a complete design system with a restrained color palette (deep blues and grays) that conveys professionalism and trustworthiness. Created style guides ensuring consistent brand application.',
+            'Service Pages & Content: Created dedicated pages explaining real-time threat detection, AI-powered monitoring, encryption methods, SOC services, vulnerability management, and incident response in accessible language.',
+            'Industry-Specific Assets: Developed landing pages and content for different industry verticals (finance, healthcare, technology, government) with messaging that addresses unique security requirements.',
+            'Compliance Content: Created comprehensive content explaining regulatory compliance support including GDPR, HIPAA, SOC 2, and industry-specific standards. Developed visual guides and documentation.',
+            'Trust-Building Elements: Designed case studies, testimonials, certification displays, and security badge sections that build credibility and demonstrate expertise.',
+            'Documentation & Resources: Created help documentation, security guides, whitepapers, and resource libraries that position Ozint Security as thought leaders in the security space.'
+          ],
+          media: [
+            { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693b41b8c309d6de772cf626_Executive%20Protection.png', alt: 'Executive Protection' },
+            { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693b41b8c309d6de772cf624_Community%20Protection1.png', alt: 'Community Protection' },
+            { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693b41b8c309d6de772cf622_Residential%20Protection.png', alt: 'Residential Protection' },
+            { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693b41b8c309d6de772cf628_Protective%20Information%20Analysis.gif', alt: 'Protective Information Analysis' },
+            { type: 'youtube', src: 'https://www.youtube.com/embed/w7Set1ad2pc?autoplay=1&mute=1&loop=1&playlist=w7Set1ad2pc&controls=0&modestbranding=1&playsinline=1&rel=0', alt: 'Security Video 1' },
+            { type: 'youtube', src: 'https://www.youtube.com/embed/NSvsTcZ8bX4?autoplay=1&mute=1&loop=1&playlist=NSvsTcZ8bX4&controls=0&modestbranding=1&playsinline=1&rel=0', alt: 'Security Video 2' }
+          ]
+        },
+        finalResult: {
+          title: 'Final result',
+          description: 'The final deliverable was a comprehensive website that successfully positions Ozint Security as a trusted security partner, driving qualified leads and building credibility in the security industry.',
+          content: [
+            'Complete Website: A fully responsive, secure website optimized for all devices. The site features service pages, industry-specific content, compliance information, and clear calls-to-action that guide potential clients through the evaluation process.',
+            'Content System: A comprehensive content library and messaging framework that Ozint Security continues to use for ongoing marketing efforts. The content effectively communicates expertise while remaining accessible.',
+            'Design System: A complete design system and component library ensuring brand consistency across all digital touchpoints. The system has been extended to presentations, proposals, and other marketing materials.',
+            'Performance Metrics: The website achieved strong performance including increased qualified leads, higher engagement with service pages, and positive feedback from potential clients. The site successfully communicates trust and expertise.',
+            'Industry Recognition: The website has been recognized for its clear communication of complex security concepts and professional design. It serves as a model for how security companies can build trust online.',
+            'Ongoing Partnership: We continue to work with Ozint Security to create new content, update service pages, and refine the website based on client feedback and evolving security industry needs.'
+          ],
+          media: [
+            { type: 'video', src: 'Video/Screen Recording 2025-12-06 at 5.44.12 PM.mov', alt: 'Final Result Video' }
+          ]
+        }
+      },
+      '04': {
+        name: 'SUPERLOCAL',
+        number: '04',
+        liveSiteUrl: 'https://is-studio-hub.github.io/superlocal/',
+        video: '/Users/shamrikin/Desktop/ISstudio/Work/CuttingEdgeSites/Studio Portfolio/Video/Screen Recording 2025-12-25 at 10.14.29 PM.mov',
+        description: 'We created an event mini-site and digital experience for Superlocal, a local pop-up market initiative that brings fresh produce directly to neighborhoods.',
+        tagline: 'Fresh From the Community',
+        businessDescription: 'Superlocal organizes pop-up farmers markets in neighborhoods, connecting local farmers directly with residents. The initiative promotes sustainable agriculture, supports small-scale farmers, and strengthens community bonds through fresh produce, artisanal products, and educational workshops.',
+        projectDescription: [
+          'We designed a warm, community-focused mini-site that celebrates local food and supports small-scale farmers.',
+          'Through authentic visuals and mobile-first design, we created a platform that drives market attendance and engagement.',
+          'The outcome: an inviting digital experience that successfully promotes Superlocal\'s markets and builds community connections.'
+        ],
+        howItStarted: {
+          title: 'How it\'s start',
+          description: 'Superlocal approached us to build a mini-site that promotes their pop-up markets where neighbors connect with local farmers and discover seasonal produce, celebrating community and sustainability.',
+          content: [
+            'The Challenge: Superlocal needed a digital presence that would help them communicate their rotating pop-up market schedule, featured ingredients, and community events to neighborhoods across the city. They wanted something that felt authentic and community-focused.',
+            'Initial Brief: The organization came to us with a vision: create a mini-site that captures the spirit of farmers markets—warm, inviting, and community-centered. They needed to make it easy for people to discover markets, learn about featured ingredients, and connect with local growers.',
+            'Our Approach: We began by understanding Superlocal\'s community partnerships, market locations, and how they coordinate events. We researched how people discover local markets and what information they need to participate.',
+            'The Opportunity: This was a chance to create a digital experience that celebrates local food, supports small-scale farmers, and builds community connections. The site needed to feel like a neighborhood gathering, not a corporate website.'
+          ],
+          media: [
+            { type: 'image', src: 'Peppers/Content/RedPepper.png', alt: 'Red pepper' },
+            { type: 'image', src: 'Peppers/Content/OrangePepper.png', alt: 'Orange pepper' },
+            { type: 'image', src: 'Peppers/Content/greenp.png', alt: 'Green pepper' },
+            { type: 'image', src: 'Peppers/Content/Jalapino.png', alt: 'Jalapeño pepper' }
+          ]
+        },
+        process: {
+          title: 'Process',
+          description: 'We developed the mini-site through a community-focused process, ensuring every decision prioritized accessibility, warmth, and ease of use for market attendees.',
+          content: [
+            'Phase 1: Discovery & Research - Collaborated with Superlocal\'s team to understand their community partnerships, market locations, and event coordination needs. Researched how people discover and attend local markets.',
+            'Phase 2: Content Strategy - Developed content that highlights farmer partnerships, seasonal planning, and community connections. Created messaging that emphasizes local agriculture, sustainability, and community benefits.',
+            'Phase 3: Design & Development - Designed a warm, inviting visual identity using earthy tones and organic shapes. Built a mobile-first mini-site with event calendars, location pages, and featured ingredient sections.',
+            'Phase 4: Content Creation - Created pages for featured ingredients (like peppers), grower profiles, recipes, cooking workshops, and market schedules. Developed content that helps visitors discover markets and seasonal produce.',
+            'Phase 5: User Testing - Tested the site with market attendees to ensure it removes barriers to participation and encourages community engagement. Refined navigation and content based on feedback.',
+            'Phase 6: Launch & Updates - Launched the mini-site and created a content system that allows Superlocal to easily update market dates, featured ingredients, and seasonal information as their program evolves.'
+          ],
+          media: [
+            { type: 'image', src: 'Peppers/Content/yellowp.png', alt: 'Yellow pepper' },
+            { type: 'image', src: 'Peppers/Content/HotRedPeppers.png', alt: 'Hot red peppers' },
+            { type: 'image', src: 'Peppers/Content/Firefly_Gemini Flash_use the green pepper from the reference image on darker red color flat smooth backgro 236760.png', alt: 'Green pepper design' },
+            { type: 'image', src: 'Peppers/Content/repp.png', alt: 'Red pepper variety' }
+          ]
+        },
+        assets: {
+          title: 'Assets',
+          description: 'We created a comprehensive suite of visual assets, design elements, and content components that bring Superlocal\'s community spirit to life across all digital touchpoints.',
+          content: [
+            'Visual Identity: Developed a warm, inviting design system with earthy color palettes (greens, oranges, reds) that reflect fresh produce. Created hand-lettered typography that evokes farmers market signs.',
+            'Photography & Visuals: Art-directed candid, documentary-style photography capturing real moments—farmers setting up stalls, customers selecting produce, authentic community interactions. Created hand-drawn illustrations of vegetables and market scenes.',
+            'Featured Ingredient Pages: Developed pages showcasing seasonal ingredients (like peppers) with variety information, grower profiles, recipes, and interactive guides. Created content that educates and inspires.',
+            'Event & Calendar Assets: Built interactive calendar components showing market dates, locations, and featured ingredients. Created event pages for cooking workshops, demonstrations, and educational programs.',
+            'Content Library: Developed extensive copy for market information, grower stories, recipe collections, and community features. Created messaging that emphasizes sustainability and local agriculture.',
+            'Mobile-Optimized Components: Designed and built mobile-first components including location finders, event reminders, and social sharing features that work seamlessly on phones since many users access the site at markets.'
+          ],
+          media: [
+            { type: 'image', src: 'Peppers/Content/RedPepper.png', alt: 'Red pepper' },
+            { type: 'image', src: 'Peppers/Content/OrangePepper.png', alt: 'Orange pepper' },
+            { type: 'image', src: 'Peppers/Content/Jalapino.png', alt: 'Jalapeño pepper' },
+            { type: 'image', src: 'Peppers/Content/greenp.png', alt: 'Green pepper' },
+            { type: 'image', src: 'Peppers/Content/yellowp.png', alt: 'Yellow pepper' },
+            { type: 'image', src: 'Peppers/Content/HotRedPeppers.png', alt: 'Hot red peppers' },
+            { type: 'image', src: 'Peppers/Content/Firefly_Gemini Flash_use the green pepper from the reference image on darker red color flat smooth backgro 236760.png', alt: 'Green pepper on red background' },
+            { type: 'image', src: 'Peppers/Content/Firefly_Gemini Flash_use the small green peppers from the reference image on darker red color flat smooth  236760.png', alt: 'Small green peppers' },
+            { type: 'image', src: 'Peppers/Content/Firefly_Gemini-Flash_darker-green-color-flat-smooth-background,-realistic-shadows.-and-use-the-peppers-fro-380308.png', alt: 'Peppers with shadows' },
+            { type: 'image', src: 'Peppers/Content/repp.png', alt: 'Red pepper' },
+            { type: 'image', src: 'Peppers/Content/scraping.png', alt: 'Scraping process' },
+            { type: 'video', src: 'Peppers/Content/scraping.mp4', alt: 'Scraping video' }
+          ]
+        },
+        finalResult: {
+          title: 'Final result',
+          description: 'The final deliverable was a warm, inviting mini-site that successfully promotes Superlocal\'s pop-up markets, drives community engagement, and supports local agriculture.',
+          content: [
+            'Complete Mini-Site: A fully responsive, mobile-optimized mini-site featuring event calendars, location pages, featured ingredient showcases, grower profiles, and recipe collections. The site feels like a neighborhood gathering.',
+            'Content System: A flexible content system that allows Superlocal to easily update market dates, featured ingredients, and seasonal information. The system supports their rotating schedule and evolving program.',
+            'Community Engagement: The website successfully drives attendance at markets and encourages community participation. Visitors can easily discover markets, learn about featured ingredients, and connect with local growers.',
+            'Design System: A complete design system with warm, earthy visuals that can be extended to social media, email campaigns, and printed materials. The system maintains consistency while feeling organic and community-focused.',
+            'Performance Metrics: The mini-site achieved strong performance including increased market attendance, higher engagement with featured ingredient content, and positive feedback from both market attendees and farmers.',
+            'Ongoing Support: We continue to work with Superlocal to update content, add new featured ingredients, and refine the site based on community feedback and evolving market needs.'
+          ],
+          media: [
+            { type: 'image', src: 'Peppers/Content/RedPepper.png', alt: 'Red pepper final' },
+            { type: 'image', src: 'Peppers/Content/OrangePepper.png', alt: 'Orange pepper final' },
+            { type: 'image', src: 'Peppers/Content/Jalapino.png', alt: 'Jalapeño pepper final' },
+            { type: 'image', src: 'Peppers/Content/greenp.png', alt: 'Green pepper final' },
+            { type: 'image', src: 'Peppers/Content/yellowp.png', alt: 'Yellow pepper final' },
+            { type: 'image', src: 'Peppers/Content/HotRedPeppers.png', alt: 'Hot red peppers final' },
+            { type: 'image', src: 'Peppers/Content/Firefly_Gemini Flash_use the green pepper from the reference image on darker red color flat smooth backgro 236760.png', alt: 'Green pepper design' },
+            { type: 'image', src: 'Peppers/Content/Firefly_Gemini-Flash_darker-green-color-flat-smooth-background,-realistic-shadows.-and-use-the-peppers-fro-380308.png', alt: 'Pepper design with shadows' },
+            { type: 'video', src: 'Peppers/Content/scraping.mp4', alt: 'Final scraping video' }
+          ]
+        }
+      },
+      '05': {
+        name: 'BRGP',
+        number: '05',
+        video: 'Video/Screen Recording 2026-06-03 at 1.40.59 PM.mov',
+        description: 'We designed and developed a comprehensive digital platform for BRGP, creating an innovative web experience that showcases their services and connects with their target audience.',
+        tagline: 'Innovation Through Design',
+        businessDescription: 'BRGP is an innovative business solutions company providing strategic consulting, technology integration, and creative services. The company helps businesses transform and grow through digital transformation, process optimization, and brand development across various sectors.',
+        projectDescription: [
+          'We crafted a modern digital platform that reflects BRGP\'s innovative approach and positions them as industry leaders.',
+          'Through strategic design and robust development, we created a scalable platform that supports their business objectives.',
+          'The result: a comprehensive digital presence that drives engagement and serves as a strategic asset for growth.'
+        ],
+        howItStarted: {
+          title: 'How it\'s start',
+          description: 'BRGP approached us to build a modern digital presence that reflects their innovative approach and positions them as a leader in their industry. They needed a platform that would effectively communicate their value proposition and engage their audience.',
+          content: [
+            'The Challenge: BRGP needed a digital platform that would stand out in a competitive market while clearly communicating their unique services and approach. They wanted something that felt modern, professional, and aligned with their innovative brand identity.',
+            'Initial Brief: The client came to us with a vision for a digital experience that would showcase their capabilities, tell their story, and provide an intuitive way for potential clients to understand and engage with their services.',
+            'Our Approach: We began by conducting thorough research into BRGP\'s industry, competitors, and target audience. We analyzed user behavior patterns and identified key opportunities to create a differentiated digital experience.',
+            'The Opportunity: This project presented an opportunity to create a digital platform that not only serves as a marketing tool but also as a strategic asset that supports BRGP\'s business objectives and growth.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1800&q=80'
+          ]
+        },
+        process: {
+          title: 'Process',
+          description: 'We developed the platform through a collaborative process, ensuring every decision aligned with BRGP\'s goals and user needs while maintaining high standards for design and functionality.',
+          content: [
+            'Phase 1: Discovery & Strategy - Conducted stakeholder interviews, competitive analysis, and user research to understand BRGP\'s unique position in the market and identify key opportunities for differentiation.',
+            'Phase 2: Information Architecture - Designed a clear site structure and navigation system that makes it easy for users to find information and understand BRGP\'s services and approach.',
+            'Phase 3: Design & Visual Identity - Created a cohesive visual design system that reflects BRGP\'s brand values while ensuring excellent usability and accessibility across all devices.',
+            'Phase 4: Development & Integration - Built a robust, scalable platform using modern web technologies. Integrated necessary third-party services and ensured optimal performance and security.',
+            'Phase 5: Content Development - Collaborated with BRGP to develop compelling content that effectively communicates their story, services, and value proposition to their target audience.',
+            'Phase 6: Testing & Launch - Conducted thorough testing across devices and browsers, refined based on feedback, and launched the platform with a comprehensive content management system for ongoing updates.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1800&q=80'
+          ]
+        },
+        assets: {
+          title: 'Assets',
+          description: 'We created a comprehensive suite of digital assets, design components, and content that brings BRGP\'s brand to life and supports their digital presence.',
+          content: [
+            'Visual Design System: Developed a complete design system with custom color palettes, typography, and component library that ensures brand consistency across all digital touchpoints.',
+            'Custom Illustrations & Graphics: Created unique visual elements and illustrations that communicate BRGP\'s services and values in an engaging, memorable way.',
+            'Photography & Media: Art-directed and curated photography that showcases BRGP\'s work, team, and culture. Produced video content that tells their story effectively.',
+            'Interactive Components: Built engaging interactive elements including animated sections, interactive galleries, and dynamic content displays that enhance user engagement.',
+            'Content Strategy: Developed a comprehensive content framework with messaging guidelines, tone of voice, and content templates that BRGP can use for ongoing updates.',
+            'Responsive Components: Designed and developed mobile-first components that provide an excellent experience across all devices and screen sizes.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1800&q=80'
+          ]
+        },
+        finalResult: {
+          title: 'Final result',
+          description: 'The final deliverable was a comprehensive digital platform that successfully positions BRGP as an innovative leader, drives engagement, and supports their business objectives.',
+          content: [
+            'Complete Digital Platform: A fully responsive, modern website optimized for all devices. The platform features intuitive navigation, compelling content, and engaging interactive elements that effectively communicate BRGP\'s value proposition.',
+            'Content Management System: A flexible CMS that allows BRGP to easily update content, add new pages, and manage their digital presence without technical expertise.',
+            'Performance Optimization: The platform loads quickly, performs well across all devices, and provides an excellent user experience that supports BRGP\'s business goals.',
+            'Design System: A comprehensive design system and component library that ensures brand consistency and makes it easy to extend the platform with new features and content.',
+            'Analytics & Insights: Integrated analytics and tracking that provide BRGP with valuable insights into user behavior and platform performance.',
+            'Ongoing Support: We continue to work with BRGP to refine the platform, add new features, and optimize performance based on user feedback and business needs.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1800&q=80'
+          ]
+        }
+      },
+      '06': {
+        name: 'QUBEX',
+        number: '06',
+        video: 'media/06-qubex.mp4',
+        description: 'We created an innovative digital platform for QUBEX, designing and developing a cutting-edge web experience that showcases their technology and connects with users.',
+        tagline: 'Next-Generation Solutions',
+        businessDescription: 'QUBEX develops innovative software solutions and platforms that solve complex business challenges. The company creates scalable systems leveraging AI, cloud computing, and data analytics to enhance operational efficiency and drive competitive advantage across various industries.',
+        projectDescription: [
+          'We built a platform that bridges complex technology with user-friendly design, making QUBEX\'s solutions accessible.',
+          'Through interactive demos and clear visualizations, we created an engaging experience that showcases their innovation.',
+          'The outcome: an innovative digital platform that successfully communicates QUBEX\'s technology and drives business growth.'
+        ],
+        howItStarted: {
+          title: 'How it\'s start',
+          description: 'QUBEX came to us with a vision for a digital platform that would showcase their innovative technology solutions and provide an exceptional user experience for their clients and partners.',
+          content: [
+            'The Challenge: QUBEX needed a digital platform that would effectively communicate complex technological concepts while maintaining an approachable, user-friendly experience. They wanted something that reflected their cutting-edge approach and technical expertise.',
+            'Initial Brief: The team approached us with a clear need: create a platform that demonstrates QUBEX\'s capabilities, explains their solutions in accessible terms, and provides an intuitive way for potential clients to engage with their technology.',
+            'Our Approach: We began by deeply understanding QUBEX\'s technology, target audience, and competitive landscape. We researched how users interact with technical platforms and identified opportunities to create a differentiated experience.',
+            'The Opportunity: This project offered a chance to create a platform that bridges the gap between complex technology and user-friendly design, making QUBEX\'s innovative solutions accessible to a broader audience.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1800&q=80'
+          ]
+        },
+        process: {
+          title: 'Process',
+          description: 'We developed the platform through a technology-focused process, ensuring the design and functionality effectively communicate QUBEX\'s solutions while providing an excellent user experience.',
+          content: [
+            'Phase 1: Technical Discovery - Worked closely with QUBEX\'s technical team to understand their solutions, architecture, and unique value propositions. Conducted user research to understand how different audiences interact with technical platforms.',
+            'Phase 2: User Experience Design - Designed intuitive user flows and information architecture that make complex technical concepts accessible. Created wireframes and prototypes that balance technical accuracy with user-friendly design.',
+            'Phase 3: Visual Design & Branding - Developed a modern visual identity that reflects QUBEX\'s innovative approach. Created a design system that works across all touchpoints while maintaining technical credibility.',
+            'Phase 4: Development & Implementation - Built a robust platform using modern web technologies. Implemented interactive elements, animations, and features that showcase QUBEX\'s technology effectively.',
+            'Phase 5: Content Strategy - Developed clear, compelling content that explains QUBEX\'s solutions in accessible language. Created technical documentation and resources that support different user needs.',
+            'Phase 6: Testing & Optimization - Conducted comprehensive testing across devices and browsers. Optimized performance, refined user flows based on feedback, and launched with a scalable architecture for future growth.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1800&q=80'
+          ]
+        },
+        assets: {
+          title: 'Assets',
+          description: 'We created a comprehensive suite of digital assets, technical documentation, and design components that effectively communicate QUBEX\'s technology and brand.',
+          content: [
+            'Technical Visualizations: Created custom diagrams, infographics, and interactive visualizations that explain QUBEX\'s complex technology in an accessible, engaging way.',
+            'Design System: Developed a complete design system with custom components, typography, and color palettes that reflect QUBEX\'s innovative brand while ensuring excellent usability.',
+            'Interactive Demos: Built interactive demonstrations and prototypes that allow users to experience QUBEX\'s technology firsthand, making complex concepts tangible.',
+            'Documentation & Resources: Created comprehensive technical documentation, case studies, and resource libraries that support different user needs and levels of technical expertise.',
+            'Video Content: Produced video content including product demonstrations, explainer videos, and testimonials that effectively communicate QUBEX\'s value proposition.',
+            'Responsive Components: Designed and developed mobile-first components that provide an excellent experience across all devices while maintaining technical accuracy and visual appeal.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1800&q=80'
+          ]
+        },
+        finalResult: {
+          title: 'Final result',
+          description: 'The final deliverable was an innovative digital platform that successfully showcases QUBEX\'s technology, drives engagement, and supports their business growth.',
+          content: [
+            'Complete Digital Platform: A fully responsive, high-performance platform optimized for all devices. The platform effectively communicates QUBEX\'s technology while providing an intuitive, engaging user experience.',
+            'Technical Documentation: Comprehensive documentation and resources that support users at different levels, from high-level overviews to detailed technical specifications.',
+            'Interactive Features: Engaging interactive elements including demos, visualizations, and tools that allow users to explore and understand QUBEX\'s solutions effectively.',
+            'Performance & Scalability: A robust, scalable architecture that performs well under load and can grow with QUBEX\'s business needs.',
+            'User Engagement: The platform successfully drives user engagement with increased time on site, higher conversion rates, and positive feedback from users and stakeholders.',
+            'Ongoing Evolution: We continue to work with QUBEX to refine the platform, add new features, and optimize based on user feedback and evolving business requirements.'
+          ],
+          images: [
+            'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1800&q=80'
+          ]
+        }
+      }
+    };
+
+    // Get project ID from URL (set by work.html when user clicks a project title)
+    // Example: work.html links to "project.html?project=01" for GATORADE
+    // This matches the data-video attribute from work.html's project-item
+    const urlParams = new URLSearchParams(window.location.search);
+    const projectId = urlParams.get('project') || '01';
+    const project = projects[projectId] || projects['01'];
+    
+    // The project.video now contains the same video path as the data-video from work.html
+    // This video will be used in all accordion items
+
+    const DETAIL_SECTIONS = ['howItStarted', 'process', 'assets', 'finalResult'];
+
+    function collectProjectMedia(project) {
+      const seen = new Set();
+      const items = [];
+
+      const add = (item) => {
+        if (!item || !item.src) return;
+        const key = item.src;
+        if (seen.has(key)) return;
+        seen.add(key);
+        items.push(item);
+      };
+
+      if (project.video) {
+        const src = project.video;
+        const isVideo = /\.(mp4|mov|webm)(\?|$)/i.test(src);
+        add({
+          type: isVideo ? 'video' : 'image',
+          src,
+          alt: `${project.name} showreel`
+        });
+      }
+
+      DETAIL_SECTIONS.forEach((sectionKey) => {
+        const data = project[sectionKey];
+        if (!data) return;
+        if (data.media && data.media.length) {
+          data.media.forEach(add);
+        }
+        if (data.images && data.images.length) {
+          data.images.forEach((src, index) => {
+            add({
+              type: 'image',
+              src,
+              alt: `${data.title || sectionKey} ${index + 1}`
+            });
+          });
+        }
+      });
+
+      return items;
+    }
+
+    function renderDetailsGridItem(item, fallbackAlt) {
+      const alt = (item.alt || fallbackAlt || 'Project detail').replace(/"/g, '&quot;');
+      const src = encodeURI(item.src);
+
+      if (item.type === 'youtube' || (item.src && item.src.includes('youtube.com/embed'))) {
+        return `
+          <div class="gallery-item">
+            <iframe src="${src}" title="${alt}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          </div>
+        `;
+      }
+
+      if (item.type === 'video' || /\.(mp4|mov|webm)(\?|$)/i.test(item.src)) {
+        return `
+          <div class="gallery-item">
+            <video autoplay loop muted playsinline preload="metadata">
+              <source src="${src}" type="video/mp4">
+              <source src="${src}" type="video/quicktime">
+              <source src="${src}" type="video/webm">
+            </video>
+          </div>
+        `;
+      }
+
+      const isGif = item.src && (item.src.toLowerCase().endsWith('.gif') || item.src.toLowerCase().includes('.gif'));
+      return `
+        <div class="gallery-item">
+          <img src="${src}" alt="${alt}" loading="lazy"${isGif ? ' class="gif-image"' : ''} />
+        </div>
+      `;
+    }
+
+    function generateDetailsGrid(mediaArray, fallbackAlt) {
+      if (!mediaArray || !mediaArray.length) {
+        return '<p class="details-modal__empty">Detail media coming soon for this project.</p>';
+      }
+      return `
+        <div class="details-modal__grid">
+          ${mediaArray.map((item) => renderDetailsGridItem(item, fallbackAlt)).join('')}
+        </div>
+      `;
+    }
+
+    function initDetailsModal() {
+      const modal = document.getElementById('detailsModal');
+      if (!modal || modal.dataset.bound === '1') return;
+      modal.dataset.bound = '1';
+
+      const closeModal = () => {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        modal.hidden = true;
+        document.body.classList.remove('details-modal-open');
+      };
+
+      modal.querySelectorAll('[data-details-close]').forEach((el) => {
+        el.addEventListener('click', closeModal);
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+          closeModal();
+        }
+      });
+
+      window.closeDetailsModal = closeModal;
+      window.openDetailsModal = (project) => {
+        const body = document.getElementById('detailsModalBody');
+        if (!body) return;
+        const media = collectProjectMedia(project);
+        body.innerHTML = generateDetailsGrid(media, project.name);
+        body.querySelectorAll('video').forEach((video) => {
+          video.load();
+          video.play().catch(() => {});
+        });
+        modal.hidden = false;
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('details-modal-open');
+        modal.querySelector('.details-modal__close')?.focus();
+      };
+    }
+
+    initDetailsModal();
+
+    // Helper function to generate single large image HTML from media array (only first item)
+    const generateGallery = (mediaArray, altText) => {
+      // Use placeholder if no media array or empty
+      const placeholderImage = 'https://via.placeholder.com/1200x800/863B19/F7E491?text=Project+Image';
+      
+      // Get first item or use placeholder
+      let item = null;
+      if (mediaArray && mediaArray.length > 0) {
+        item = mediaArray[0];
+      } else {
+        item = { type: 'image', src: placeholderImage, alt: altText || 'Project image' };
+      }
+      
+      return `
+        <div class="gallery">
+          ${(() => {
+            // Handle YouTube videos
+            if (item.type === 'youtube' || (item.src && item.src.includes('youtube.com/embed'))) {
+              return `
+                <div class="gallery-item">
+                  <iframe src="${encodeURI(item.src)}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+                </div>
+              `;
+            } 
+            // Handle local video files (will loop automatically)
+            else if (item.type === 'video' || (item.src && (item.src.endsWith('.mp4') || item.src.endsWith('.mov') || item.src.endsWith('.webm')))) {
+              return `
+                <div class="gallery-item">
+                  <video autoplay loop muted playsinline preload="auto">
+                    <source src="${encodeURI(item.src)}" type="video/mp4">
+                    <source src="${encodeURI(item.src)}" type="video/quicktime">
+                    <source src="${encodeURI(item.src)}" type="video/webm">
+                  </video>
+                </div>
+              `;
+            } 
+            // Handle images and GIFs (GIFs loop automatically by nature)
+            else {
+              const isGif = item.src && (item.src.toLowerCase().endsWith('.gif') || item.src.toLowerCase().includes('.gif'));
+              return `
+                <div class="gallery-item">
+                  <img src="${encodeURI(item.src)}" alt="${item.alt || altText || 'Project image'}" loading="lazy" ${isGif ? 'class="gif-image"' : ''} />
+                </div>
+              `;
+            }
+          })()}
+        </div>
+      `;
+    };
+
+    function resolveLiveEmbedUrl(project) {
+      if (project.liveEmbedUrl) return project.liveEmbedUrl;
+      if (project.liveEmbedPath) {
+        return new URL(project.liveEmbedPath, document.baseURI || window.location.href).href;
+      }
+      return project.liveSiteUrl;
+    }
+
+    function generateLiveSiteEmbed(project) {
+      const safeTitle = (project.name + ' — live site preview').replace(/"/g, '&quot;');
+      const srcdocAttr = project.liveEmbedScript ? ' data-live-srcdoc="1"' : '';
+      const srcAttr = project.liveEmbedScript
+        ? ''
+        : ` src="${resolveLiveEmbedUrl(project)}"`;
+      return `
+        <div class="live-site-frame-scaler">
+          <iframe
+            class="live-site-frame"
+            ${srcdocAttr}${srcAttr}
+            title="${safeTitle}"
+            width="1280"
+            height="720"
+            loading="lazy"
+            allow="fullscreen"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      `;
+    }
+
+    function fitLivePreview(root) {
+      const wrap = root.querySelector('.examples__live-site');
+      const scaler = root.querySelector('.live-site-frame-scaler');
+      if (!wrap || !scaler) return;
+      const w = wrap.clientWidth;
+      if (w < 1) return;
+      const scale = w / 1280;
+      scaler.dataset.fitScale = '1';
+      scaler.style.transform = 'scale(' + scale + ')';
+      wrap.style.height = (w * 720 / 1280) + 'px';
+    }
+
+    function mountSrcdocEmbed(project, root) {
+      const iframe = root.querySelector('.live-site-frame[data-live-srcdoc]');
+      if (!iframe || !project.liveEmbedScript) return;
+
+      const applyHtml = (html) => {
+        if (!html) return;
+        const desktopHtml = html.replace(
+          /content="width=device-width,\s*initial-scale=1"/i,
+          'content="width=1280, initial-scale=1"'
+        );
+        iframe.srcdoc = desktopHtml;
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => fitLivePreview(root));
+        });
+      };
+
+      const useIframeFile = () => {
+        if (!project.liveEmbedPath) return false;
+        iframe.removeAttribute('data-live-srcdoc');
+        iframe.src = new URL(project.liveEmbedPath, document.baseURI || window.location.href).href;
+        return true;
+      };
+
+      if (window.OZINT_EMBED_HTML) {
+        applyHtml(window.OZINT_EMBED_HTML);
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = new URL(project.liveEmbedScript, document.baseURI || window.location.href).href;
+      script.onload = () => applyHtml(window.OZINT_EMBED_HTML);
+      script.onerror = () => {
+        if (!useIframeFile()) {
+          iframe.srcdoc = '<!DOCTYPE html><html><body style="margin:0;background:#0a0a0a;color:#f2f2f2;font:14px/1.5 system-ui,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;padding:1.5rem;text-align:center"><p>Preview unavailable. <a href="' + project.liveSiteUrl + '" target="_blank" rel="noopener" style="color:#f7e491">Open live site</a></p></body></html>';
+        }
+      };
+      document.head.appendChild(script);
+    }
+
+    function generateSectionGallery(project, section) {
+      if (project.liveSiteUrl) return '';
+      const data = project[section];
+      if (!data) return '';
+      if (data.media && data.media.length > 0) {
+        return generateGallery(data.media, data.title);
+      }
+      if (data.images && data.images.length > 0) {
+        return generateGallery(
+          data.images.map((img) => ({ type: 'image', src: img, alt: data.title })),
+          data.title
+        );
+      }
+      return '';
+    }
+
+    // Load project content
+    const contentEl = document.getElementById('projectContent');
+    if (contentEl && project) {
+      document.body.classList.toggle('project-page--live', !!project.liveSiteUrl);
+
+      contentEl.innerHTML = `
+        <!-- Sticky Stack Component -->
+        <section class="examples-section" id="examples">
+          <div class="examples__grid">
+            <!-- LEFT COLUMN (sticky items) -->
+            <div class="examples__left${project.liveSiteUrl ? ' examples__left--embed' : ''}">
+              ${project.liveSiteUrl ? `
+              <div class="examples__live-site">
+                ${generateLiveSiteEmbed(project)}
+              </div>
+              ` : `
+              <div class="examples__collection">
+                <div class="examples__item" data-item-index="0">
+                  <div class="examples__item-content">${generateSectionGallery(project, 'howItStarted')}</div>
+                </div>
+                <div class="examples__item" data-item-index="1">
+                  <div class="examples__item-content">${generateSectionGallery(project, 'process')}</div>
+                </div>
+                <div class="examples__item" data-item-index="2">
+                  <div class="examples__item-content">${generateSectionGallery(project, 'assets')}</div>
+                </div>
+                <div class="examples__item" data-item-index="3">
+                  <div class="examples__item-content">${generateSectionGallery(project, 'finalResult')}</div>
+                </div>
+              </div>
+              `}
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="examples__right">
+              <div class="examples__right-content">
+              <div class="project-tag">Campaign Site</div>
+              <h2 class="project-brand-title">${project.name}</h2>
+              <div class="project-business-description">
+                ${project.businessDescription || 'A comprehensive digital platform designed to elevate brand presence and drive meaningful engagement. Through innovative design and strategic development, we created a solution that connects with audiences and delivers measurable results.'}
+              </div>
+              <div class="project-actions">
+                <a href="${project.liveSiteUrl || '#'}" class="project-view-button"${project.liveSiteUrl ? ' target="_blank" rel="noopener noreferrer"' : ''}>View the Result</a>
+                <button type="button" class="project-details-button" data-details-modal-open>God Is in the Small Details</button>
+              </div>
+            </div>
+            </div>
+          </div>
+        </section>
+      `;
+
+      // Update page title
+      document.title = `${project.name} - IS Experience House`;
+
+      const detailsBtn = contentEl.querySelector('[data-details-modal-open]');
+      if (detailsBtn) {
+        detailsBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (typeof window.openDetailsModal === 'function') {
+            window.openDetailsModal(project);
+          }
+        });
+      }
+
+      if (project.liveEmbedScript) {
+        mountSrcdocEmbed(project, contentEl);
+      }
+      if (project.liveSiteUrl) {
+        const scheduleFit = () => {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => fitLivePreview(contentEl));
+          });
+        };
+        scheduleFit();
+        window.addEventListener('resize', scheduleFit);
+        if (typeof ResizeObserver !== 'undefined') {
+          const wrap = contentEl.querySelector('.examples__live-site');
+          if (wrap) new ResizeObserver(scheduleFit).observe(wrap);
+        }
+      }
+
+      // Animate examples sections after content loads
+      setTimeout(() => {
+        const examplesLeft = document.querySelector('.examples__left');
+        const examplesRight = document.querySelector('.examples__right');
+        if (examplesLeft) examplesLeft.classList.add('animate-in');
+        if (examplesRight) examplesRight.classList.add('animate-in');
+      }, 100);
+      
+      // Initialize scroll-based accordion functionality with scroll pinning
+      setTimeout(() => {
+        const examplesSection = contentEl.querySelector('.examples-section');
+        const examplesGrid = contentEl.querySelector('.examples__grid');
+        const accordionItems = Array.from(contentEl.querySelectorAll('.examples__item'));
+        const totalItems = accordionItems.length;
+        
+        if (!examplesSection || !examplesGrid || totalItems === 0) return;
+        
+        // Ensure all videos are loaded and ready
+        const videos = contentEl.querySelectorAll('.examples__item video');
+        videos.forEach(video => {
+          video.load();
+          video.play().catch(() => {});
+        });
+      }, 300);
+
+    }
+    
+    // Trigger animations after content is loaded
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        const showreel = document.querySelector('.showreel');
+        const center = document.querySelector('.center');
+        const bottomLeft = document.querySelector('.bottom-left');
+        
+        if (showreel) showreel.classList.add('animate-in');
+        if (center) center.classList.add('animate-in');
+        if (bottomLeft) bottomLeft.classList.add('animate-in');
+        
+        // Animate examples sections
+        const examplesLeft = document.querySelector('.examples__left');
+        const examplesRight = document.querySelector('.examples__right');
+        if (examplesLeft) examplesLeft.classList.add('animate-in');
+        if (examplesRight) examplesRight.classList.add('animate-in');
+      }, 100);
+    });
+
+    // Back button navigation handled by href
+
+    /* -------- Custom cursor logic -------- */
+    (function(){
+      const dot  = document.getElementById('cursorDot');
+      const ring = document.getElementById('cursorRing');
+
+      if (!dot || !ring) return;
+
+      let x = window.innerWidth / 2, y = window.innerHeight / 2;
+      let rx = x, ry = y;
+      const ease = 0.18;
+
+      function move(e){
+        x = e.clientX;
+        y = e.clientY;
+        dot.style.transform  = `translate(${x}px, ${y}px)`;
+      }
+
+      function tick(){
+        rx += (x - rx) * ease;
+        ry += (y - ry) * ease;
+        ring.style.transform = `translate(${rx - 0}px, ${ry - 0}px) translate(-50%, -50%)`;
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
+      window.addEventListener('mousemove', move, {passive:true});
+      // coords HUD
+      (function(){
+        const mx = document.getElementById('mx');
+        const my = document.getElementById('my');
+        if (!mx || !my) return;
+        window.addEventListener('mousemove', (e) => {
+          mx.textContent = Math.round(e.clientX);
+          my.textContent = Math.round(e.clientY);
+        }, { passive: true });
+      })();
+
+      function updateHover(e){
+        const target = e.target.closest('a, button, [role="button"], .pill, .showreel, input, select, textarea, label');
+        ring.classList.toggle('is-hover', !!target);
+      }
+      window.addEventListener('mousemove', updateHover, {passive:true});
+
+      window.addEventListener('mousedown', ()=> ring.style.opacity = '0.7');
+      window.addEventListener('mouseup',   ()=> ring.style.opacity = '0.9');
+
+      window.addEventListener('mouseleave', ()=> {
+        dot.style.opacity = '0'; ring.style.opacity = '0';
+      });
+      window.addEventListener('mouseenter', ()=> {
+        dot.style.opacity = '1'; ring.style.opacity = '0.9';
+      });
+    })();
+
+    /* Set --vh to innerHeight for older Safari/Chrome on iOS */
+    (function(){
+      function setVh(){
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
+      setVh();
+      window.addEventListener('resize', setVh);
+      window.addEventListener('orientationchange', setVh);
+    })();
+
+    /* Smooth scroll enhancement for anchor links */
+    (function() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const href = this.getAttribute('href');
+          if (href === '#' || href === '#contact' || href === '#work') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          }
+        });
+      });
+    })();
+
+    /* Cutting-Edge Page Transitions */
+    (function() {
+      const transition = document.getElementById('pageTransition');
+      if (!transition) return;
+
+      // Check if page is loading
+      if (document.readyState === 'loading') {
+        document.body.classList.add('page-loading');
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            document.body.classList.remove('page-loading');
+            transition.classList.remove('is-active');
+          }, 100);
+        });
+      } else {
+        // Page already loaded, fade in transition
+        setTimeout(() => {
+          transition.classList.remove('is-active');
+        }, 100);
+      }
+
+      // Page color mapping
+      const pageColors = {
+        'work.html': { bg: '#ce4127', text: '#F7E491' }, // Red page
+        'index.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
+        'project.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
+        'About.html': { bg: '#ce4127', text: '#ffffff' },
+        'contact.html': { bg: '#F7E491', text: '#CE4127' },
+        'long-term.html': { bg: '#F7E491', text: '#CE4127' }
+      };
+
+      // Intercept all internal navigation links
+      document.querySelectorAll('a[href$=".html"], a[href*=".html?"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          // Skip if it's an external link or has target="_blank"
+          if (href.startsWith('http') || this.target === '_blank' || href.startsWith('mailto:')) {
+            return;
+          }
+
+          e.preventDefault();
+          
+          // Extract target page name
+          const targetPage = href.split('/').pop().split('?')[0];
+          const targetColor = pageColors[targetPage] || pageColors['index.html'];
+          const currentBg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+          const isCurrentRed = currentBg === '#ce4127' || currentBg === 'rgb(206, 65, 39)';
+          const isTargetRed = targetColor.bg === '#ce4127';
+          const isTargetDark = targetColor.bg === '#060605';
+          
+          transition.classList.remove('to-red', 'to-yellow', 'to-dark');
+          if (isTargetRed) {
+            transition.classList.add('to-red');
+          } else if (isTargetDark) {
+            transition.classList.add('to-dark');
+          } else {
+            transition.classList.add('to-yellow');
+          }
+          
+          // Add transitioning class
+          document.body.classList.add('transitioning');
+          
+          // Function to update element colors based on overlay position
+          function updateColors() {
+            const overlayRect = transition.getBoundingClientRect();
+            const overlayTop = overlayRect.top;
+            
+            // Elements to update
+            const elements = document.querySelectorAll('.showreel, .center, .bottom-left, .coords, .examples__right, .examples__left, .showreel *, .center *, .bottom-left *, .coords *, .examples__right *, .examples__left *, svg path, .pill, .pill *');
+            
+            elements.forEach(el => {
+              const elRect = el.getBoundingClientRect();
+              const elBottom = elRect.bottom;
+              
+              // If element is covered by overlay
+              if (elBottom <= overlayTop + 5) {
+                const computedStyle = window.getComputedStyle(el);
+                
+                // Change text color to target page's text color
+                if (computedStyle.color && computedStyle.color !== 'rgba(0, 0, 0, 0)' && computedStyle.color !== 'transparent') {
+                  el.style.color = targetColor.text;
+                }
+                
+                // Change SVG fill
+                if (el.tagName === 'path') {
+                  el.style.fill = targetColor.text;
+                }
+                
+                // Change border color
+                if (computedStyle.borderColor && computedStyle.borderColor !== 'rgba(0, 0, 0, 0)' && computedStyle.borderColor !== 'transparent') {
+                  el.style.borderColor = targetColor.text;
+                }
+                
+                // Change outline color
+                if (el.classList.contains('showreel') || el.closest('.showreel')) {
+                  el.style.outlineColor = targetColor.text;
+                }
+              }
+            });
+          }
+          
+          // Update colors as overlay animates
+          let animationFrameId;
+          function animateColors() {
+            if (transition.classList.contains('is-active')) {
+              updateColors();
+              animationFrameId = requestAnimationFrame(animateColors);
+            } else {
+              cancelAnimationFrame(animationFrameId);
+            }
+          }
+          animateColors();
+          
+          // Show transition overlay (slide up from bottom)
+          transition.classList.add('is-active');
+          
+          // Navigate after transition completes
+          setTimeout(() => {
+            window.location.href = href;
+          }, 1000);
+        });
+      });
+
+      // Handle browser back/forward buttons
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted) {
+          // Page was loaded from cache
+          transition.classList.remove('is-active');
+        }
+      });
+
+      window.addEventListener('popstate', () => {
+        transition.classList.add('is-active');
+        setTimeout(() => {
+          transition.classList.remove('is-active');
+        }, 600);
+      });
+    })();
+  </script>
+</body>
+</html>
+

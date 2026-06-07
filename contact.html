@@ -1,0 +1,781 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Let's Talk — Experience House</title>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✉️</text></svg>" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/scrollbars.css">
+
+  <style>
+    :root{
+      --bg: #F7E491;
+      --fg: #CE4127;
+      --muted: #CE4127;
+      --border: rgba(206, 65, 39, 1);
+      --dot: #CE4127;
+      --gutter: clamp(16px, 6vw, 140px);
+      --vh: 1vh;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      max-width: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      margin: 0;
+      overflow-x: clip;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .screen {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      min-height: 100vh;
+      min-height: 100svh;
+      min-height: 100dvh;
+      min-height: calc(var(--vh) * 100);
+      overflow-x: clip;
+      overflow-y: auto;
+      background: var(--bg);
+      isolation: isolate;
+    }
+
+    .center {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      padding: 5vh var(--gutter) 40vh;
+      box-sizing: border-box;
+      pointer-events: auto;
+    }
+
+    .contact-eyebrow {
+      letter-spacing: .18em;
+      font-size: clamp(.7rem, 1.2vw, .85rem);
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 .75rem;
+    }
+
+    .contact-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, min(42vw, 540px));
+      gap: clamp(1.5rem, 4vw, 3rem);
+      align-items: center;
+      margin-bottom: clamp(2rem, 4vh, 3rem);
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    .contact-hero-copy {
+      min-width: 0;
+      display: grid;
+      gap: 0;
+    }
+
+    .contact-title {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(2.75rem, 8vw, 4.5rem);
+      line-height: .95;
+      letter-spacing: .02em;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .contact-embed-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      aspect-ratio: 1440 / 900;
+      max-height: min(58vh, 480px);
+      justify-self: end;
+      align-self: center;
+      pointer-events: auto;
+      overflow: hidden;
+    }
+
+    .contact-embed-wrap [data-us-project] {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      max-width: 100%;
+      height: 100%;
+      display: block;
+      overflow: hidden;
+    }
+
+    .contact-embed-wrap canvas,
+    .contact-embed-wrap iframe {
+      max-width: 100% !important;
+    }
+
+    @media (max-width: 900px) {
+      .contact-hero {
+        grid-template-columns: 1fr;
+      }
+      .contact-embed-wrap {
+        max-height: none;
+        max-width: 100%;
+        justify-self: stretch;
+      }
+    }
+
+    .contact-lead {
+      font-size: clamp(1rem, 1.4vw, 1.125rem);
+      line-height: 1.6;
+      max-width: 42ch;
+      margin: clamp(1rem, 2vh, 1.5rem) 0;
+      opacity: .92;
+    }
+
+    .contact-direct {
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+      margin: 0;
+      font-size: 1rem;
+    }
+    .contact-direct .dot {
+      width: .42rem; height: .42rem; border-radius: 999px; background: var(--dot);
+    }
+    .contact-direct a {
+      color: var(--fg);
+      text-decoration: none;
+      border-bottom: 1px solid var(--fg);
+      padding-bottom: 2px;
+      transition: opacity .2s ease;
+    }
+    .contact-direct a:hover { opacity: .75; }
+
+    .contact-form {
+      display: grid;
+      gap: 1.25rem;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+    }
+
+    .field { display: grid; gap: .4rem; }
+
+    .field label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: .85rem 1rem;
+      border: 1.6px solid var(--fg);
+      border-radius: 10px;
+      background: transparent;
+      color: var(--fg);
+      font: inherit;
+      transition: background .2s ease, box-shadow .2s ease;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: rgba(206, 65, 39, .45);
+    }
+
+    .field select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23CE4127' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      padding-right: 2.5rem;
+    }
+
+    .field textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: none;
+      background: rgba(206, 65, 39, .06);
+      box-shadow: 0 0 0 2px rgba(206, 65, 39, .15);
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+
+    @media (max-width: 560px) {
+      .field-row { grid-template-columns: 1fr; }
+    }
+
+    .submit-btn {
+      justify-self: start;
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .85rem 1.5rem;
+      border: 1.6px solid var(--fg);
+      border-radius: 999px;
+      background: var(--fg);
+      color: var(--bg);
+      font-weight: 600;
+      letter-spacing: .08em;
+      font-size: clamp(.72rem, .95vw, .9rem);
+      text-transform: uppercase;
+      cursor: none !important;
+      transition: transform .12s ease, opacity .2s ease;
+    }
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      opacity: .92;
+    }
+    .submit-btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+    .submit-btn .dot {
+      width: .45rem; height: .45rem;
+      border-radius: 50%;
+      background: var(--bg);
+    }
+
+    .form-note {
+      font-size: .8rem;
+      opacity: .7;
+      margin: .5rem 0 0;
+      max-width: 36ch;
+    }
+
+    .contact-honey {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* bottom-left: logo + pills */
+    .bottom-left {
+      margin-bottom: 24px;
+      position: fixed;
+      left: clamp(12px, 2.4vw, 48px);
+      right: clamp(12px, 2.4vw, 48px);
+      bottom: clamp(14px, 2.2vh, 28px);
+      max-width: calc(100% - clamp(24px, 4.8vw, 96px));
+      display: flex;
+      align-items: flex-end;
+      gap: 24px;
+      z-index: 2;
+      pointer-events: auto;
+      cursor: none !important;
+    }
+    .logo-svg { width: 36px; height: auto; display: block; }
+
+    .pills { display: flex; gap: clamp(10px, 1.2vw, 16px); flex-wrap: wrap; }
+    .pill {
+      pointer-events: auto;
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .65rem 1.1rem;
+      border: 1.6px solid var(--fg);
+      border-radius: 999px;
+      background: #f7e491;
+      color: var(--fg);
+      font-weight: 600;
+      letter-spacing: .05em;
+      font-size: clamp(.72rem, .95vw, .9rem);
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background .2s ease, color .2s ease, transform .12s ease;
+      cursor: none !important;
+    }
+    .pill .dot{ width: .45rem; height: .45rem; border-radius: 50%; background: var(--fg); }
+    .pill:hover { background: var(--fg); color: var(--bg); transform: translateY(-1px); }
+    .pill:hover .dot{ background: var(--bg); }
+    .pill.is-active {
+      background: var(--fg);
+      color: var(--bg);
+    }
+    .pill.is-active .dot { background: var(--bg); }
+
+    :focus-visible { outline: 2px dashed var(--fg); outline-offset: 3px; }
+
+    @media (max-width: 470px) {
+      .logo-svg { width: 48px; }
+      .bottom-left{
+        margin-bottom: 0;
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        gap: 44px;
+      }
+      .pills{
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 8px;
+      }
+      .pill{
+        padding: .5rem .8rem;
+        font-size: .8rem;
+      }
+    }
+
+    html, body, a, button, [role="button"], input, textarea, select, .pill, .submit-btn {
+      cursor: none !important;
+    }
+
+    .cursor-dot, .cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .cursor-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #CE4127;
+    }
+    .cursor-ring {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid #CE4127;
+      transition: width .15s ease, height .15s ease, opacity .15s ease, transform .15s ease;
+      opacity: .9;
+    }
+    .cursor-ring.is-hover {
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+
+    .coords{
+      position: fixed;
+      top: 14px;
+      right: 18px;
+      z-index: 9998;
+      pointer-events: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      color: rgba(206,65,39,.75);
+      text-align: right;
+    }
+    .coords b{ color: #CE4127; font-weight: 600; }
+
+    @media (hover: none) {
+      .cursor-dot, .cursor-ring { display: none !important; }
+      html, body { cursor: auto !important; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(60px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slideRight {
+      from { transform: translateX(-60px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .center { opacity: 0; }
+    .bottom-left { opacity: 0; }
+    .center.animate-in { animation: slideUp .9s cubic-bezier(.4,0,.2,1) .15s forwards; }
+    .bottom-left.animate-in { animation: slideRight .8s cubic-bezier(.4,0,.2,1) .35s forwards; }
+
+    .page-transition {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 99999;
+      pointer-events: none;
+      transform: translateY(100%);
+      transition: transform 1s cubic-bezier(.4,0,.2,1), background .1s ease;
+    }
+    .page-transition.to-red { background: #ce4127; }
+    .page-transition.to-yellow { background: #F7E491; }
+    .page-transition.to-dark { background: #060605; }
+    .page-transition.is-active {
+      transform: translateY(0);
+      pointer-events: all;
+    }
+    body.transitioning .center,
+    body.transitioning .bottom-left,
+    body.transitioning .coords {
+      transition: color .3s ease, fill .3s ease, border-color .3s ease;
+    }
+    body.transitioning .center *,
+    body.transitioning .bottom-left * {
+      transition: color .3s ease, fill .3s ease, border-color .3s ease;
+    }
+    body.page-loading { overflow: hidden; }
+
+    .toast {
+      position: fixed;
+      bottom: clamp(80px, 10vh, 120px);
+      left: clamp(16px, 2vw, 32px);
+      background: var(--fg);
+      color: var(--bg);
+      padding: .75rem 1.25rem;
+      border-radius: 8px;
+      font-size: .875rem;
+      z-index: 10000;
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity .3s ease, transform .3s ease;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+  <main class="screen" aria-label="Contact Experience House">
+
+    <section class="center" id="contact">
+      <div class="contact-hero">
+        <div class="contact-hero-copy">
+          <p class="contact-eyebrow">IS Studio® — Experience House</p>
+          <h1 class="contact-title">Let's build<br>an interface.</h1>
+          <p class="contact-lead">
+            Experience House is an interfaces creation studio. We design and craft digital experiences websites, products, and long-term brand worlds for teams who care how things feel.
+          </p>
+          <p class="contact-direct">
+            <i class="dot" aria-hidden="true"></i>
+            <a href="mailto:hello@isexperience.house">hello@isexperience.house</a>
+          </p>
+        </div>
+        <div class="contact-embed-wrap" aria-hidden="true">
+          <div data-us-project="4sMBu9xavZDlurc9LfDW"></div>
+        </div>
+      </div>
+
+      <form
+        class="contact-form"
+        id="contactForm"
+        action="https://formsubmit.co/hello@isexperience.house"
+        method="POST"
+      >
+        <input type="hidden" name="_subject" id="formSubject" value="New message — Experience House" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="access_key" id="web3formsAccessKey" value="" disabled />
+        <input type="hidden" name="subject" id="web3formsSubject" value="" disabled />
+        <input type="checkbox" name="botcheck" id="web3formsBotcheck" class="contact-honey" tabindex="-1" autocomplete="off" aria-hidden="true" disabled />
+        <input type="text" name="_honey" id="formHoney" class="contact-honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        <div class="field-row">
+          <div class="field">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@company.com" required autocomplete="email" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="company">Studio / Company</label>
+          <input type="text" id="company" name="company" placeholder="Optional" autocomplete="organization" />
+        </div>
+
+        <div class="field">
+          <label for="interest">What are you exploring?</label>
+          <select id="interest" name="interest" required>
+            <option value="" disabled selected>Select a focus</option>
+            <option value="Website & digital presence">Website & digital presence</option>
+            <option value="Product interface">Product interface</option>
+            <option value="Brand experience">Brand experience</option>
+            <option value="Long-term partnership">Long-term partnership</option>
+            <option value="Something else">Something else</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="message">Tell us about the project</label>
+          <textarea id="message" name="message" placeholder="Timeline, goals, links—whatever helps us understand the work." required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <i class="dot" aria-hidden="true"></i>
+          Send message
+        </button>
+        <p class="form-note">We typically reply within two business days.</p>
+      </form>
+    </section>
+
+    <div class="bottom-left">
+      <a href="index.html" aria-label="Go to home">
+        <svg class="logo-svg" width="310" height="328" viewBox="0 0 310 328" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M309.689 240.691C309.689 253.905 307.329 265.861 302.61 276.558C298.205 287.256 291.755 296.537 283.26 304.403C274.765 311.954 264.382 317.775 252.112 321.865C240.156 325.955 226.627 328 211.525 328C198.625 328 185.725 326.584 172.825 323.752C160.24 321.235 148.756 317.46 138.374 312.426C128.306 307.392 119.968 301.414 113.361 294.492C107.068 287.256 103.922 279.233 103.922 270.423V219.925H112.417C117.766 251.703 128.148 274.513 143.565 288.357C159.296 302.2 180.534 309.122 207.277 309.122C215.458 309.122 223.166 308.178 230.402 306.291C237.954 304.088 244.561 300.942 250.224 296.852C255.887 292.762 260.449 287.728 263.91 281.75C267.371 275.772 269.102 268.85 269.102 260.984C269.102 247.14 264.697 235.342 255.887 225.588C247.392 215.835 234.493 205.924 217.188 195.856L159.139 161.404C139.003 149.448 124.687 137.335 116.192 125.065C108.012 112.794 103.922 97.8494 103.922 80.2302C103.922 67.9597 106.124 56.9477 110.529 47.1943C114.934 37.4408 121.069 29.1031 128.935 22.1813C137.115 14.9448 146.711 9.43884 157.723 5.66332C169.05 1.88777 181.635 0 195.479 0C207.12 0 218.919 1.25852 230.874 3.77555C243.145 6.29256 254.157 10.0681 263.91 15.1022C273.664 19.8216 281.687 25.7995 287.979 33.036C294.272 39.9578 297.418 47.8235 297.418 56.6331V107.131H288.923C283.575 75.3535 273.349 52.7002 258.247 39.1712C243.145 25.6422 222.222 18.8777 195.479 18.8777C188.557 18.8777 181.792 19.9789 175.185 22.1813C168.578 24.3837 162.757 27.53 157.723 31.6202C152.689 35.7103 148.599 40.7443 145.453 46.7223C142.307 52.7002 140.733 59.3074 140.733 66.5439C140.733 73.4657 141.835 79.6009 144.037 84.9496C146.239 90.2983 149.543 95.3324 153.948 100.052C158.353 104.771 163.859 109.491 170.466 114.21C177.073 118.615 184.624 123.334 193.119 128.368L251.168 162.82C261.236 168.798 269.888 174.619 277.125 180.282C284.676 185.631 290.811 191.451 295.531 197.744C300.25 203.722 303.711 210.172 305.913 217.094C308.43 224.015 309.689 231.881 309.689 240.691Z" fill="#CE4127"/>
+          <path d="M0 8.49512H42.4748V263.344C42.4748 277.502 44.3626 288.986 48.1381 297.796C52.2283 306.291 61.3525 310.538 75.5108 310.538H84.9497V319.977H42.4748C34.2945 319.977 27.3727 319.348 21.7094 318.089C16.3607 316.516 11.9559 313.685 8.49497 309.594C5.34868 305.19 3.14628 299.369 1.88777 292.132C0.629256 284.896 0 275.3 0 263.344V8.49512Z" fill="#CE4127"/>
+        </svg>
+      </a>
+      <nav class="pills" aria-label="Primary">
+        <a class="pill" href="work.html"><i class="dot" aria-hidden="true"></i> Website</a>
+        <a class="pill" href="long-term.html"><i class="dot" aria-hidden="true"></i> Projects</a>
+        <a class="pill" href="About.html"><i class="dot" aria-hidden="true"></i> Our House</a>
+        <a class="pill is-active" href="contact.html" aria-current="page"><i class="dot" aria-hidden="true"></i> Let's Talk</a>
+      </nav>
+    </div>
+
+  </main>
+
+  <div class="page-transition is-active" id="pageTransition"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="coords" aria-hidden="true">
+    <div>[X].<b id="mx">0</b>px</div>
+    <div>[Y].<b id="my">0</b>px</div>
+  </div>
+
+  <script type="text/javascript">!function(){var u=window.UnicornStudio;if(u&&u.init){if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){u.init()})}else{u.init()}}else{window.UnicornStudio={isInitialized:!1};var i=document.createElement("script");i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.12/dist/unicornStudio.umd.js",i.onload=function(){if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",function(){UnicornStudio.init()})}else{UnicornStudio.init()}},(document.head||document.body).appendChild(i)}}();</script>
+
+  <script>
+    (function() {
+      const center = document.querySelector('.center');
+      const bottomLeft = document.querySelector('.bottom-left');
+      window.addEventListener('load', () => {
+        if (center) center.classList.add('animate-in');
+        if (bottomLeft) bottomLeft.classList.add('animate-in');
+      });
+    })();
+
+    (function() {
+      // Optional: paste a Web3Forms key from https://web3forms.com to use that instead of FormSubmit
+      const WEB3FORMS_ACCESS_KEY = '';
+      const FORM_EMAIL = 'hello@isexperience.house';
+
+      const form = document.getElementById('contactForm');
+      const toast = document.getElementById('toast');
+      const submitBtn = form?.querySelector('[type="submit"]');
+      const accessKeyInput = document.getElementById('web3formsAccessKey');
+      const web3Subject = document.getElementById('web3formsSubject');
+      const web3Botcheck = document.getElementById('web3formsBotcheck');
+      const formHoney = document.getElementById('formHoney');
+      if (!form) return;
+
+      if (accessKeyInput && WEB3FORMS_ACCESS_KEY) {
+        accessKeyInput.value = WEB3FORMS_ACCESS_KEY;
+      }
+
+      function showToast(message) {
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+          toast.textContent = '';
+        }, 4500);
+      }
+
+      if (new URLSearchParams(window.location.search).get('sent') === '1') {
+        showToast('Message sent! We\'ll be in touch soon.');
+        window.history.replaceState({}, '', window.location.pathname);
+      }
+
+      form.addEventListener('submit', (e) => {
+        if (formHoney && formHoney.value) {
+          e.preventDefault();
+          return;
+        }
+
+        if (!form.checkValidity()) {
+          e.preventDefault();
+          form.reportValidity();
+          return;
+        }
+
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const interest = document.getElementById('interest').value;
+        const subject = `Experience House — ${interest}`;
+        const key = accessKeyInput?.value?.trim() || WEB3FORMS_ACCESS_KEY;
+        const useWeb3 = Boolean(key);
+
+        if (useWeb3) {
+          form.action = 'https://api.web3forms.com/submit';
+          if (accessKeyInput) {
+            accessKeyInput.disabled = false;
+            accessKeyInput.value = key;
+          }
+          if (web3Subject) {
+            web3Subject.disabled = false;
+            web3Subject.value = subject;
+          }
+          if (web3Botcheck) web3Botcheck.disabled = false;
+          if (formHoney) formHoney.disabled = true;
+          const fsSubject = document.getElementById('formSubject');
+          if (fsSubject) fsSubject.disabled = true;
+
+          let fromName = form.querySelector('[name="from_name"]');
+          if (!fromName) {
+            fromName = document.createElement('input');
+            fromName.type = 'hidden';
+            fromName.name = 'from_name';
+            form.appendChild(fromName);
+          }
+          fromName.value = name;
+
+          if (window.location.protocol.startsWith('http')) {
+            let redirect = form.querySelector('[name="redirect"]');
+            if (!redirect) {
+              redirect = document.createElement('input');
+              redirect.type = 'hidden';
+              redirect.name = 'redirect';
+              form.appendChild(redirect);
+            }
+            redirect.value = `${window.location.href.split('?')[0].split('#')[0]}?sent=1`;
+          }
+        } else {
+          form.action = `https://formsubmit.co/${FORM_EMAIL}`;
+          if (accessKeyInput) accessKeyInput.disabled = true;
+          if (web3Subject) web3Subject.disabled = true;
+          if (web3Botcheck) web3Botcheck.disabled = true;
+          if (formHoney) formHoney.disabled = false;
+
+          const fsSubject = document.getElementById('formSubject');
+          if (fsSubject) {
+            fsSubject.disabled = false;
+            fsSubject.value = subject;
+          }
+
+          let replyto = form.querySelector('[name="_replyto"]');
+          if (!replyto) {
+            replyto = document.createElement('input');
+            replyto.type = 'hidden';
+            replyto.name = '_replyto';
+            form.appendChild(replyto);
+          }
+          replyto.value = email;
+
+          if (window.location.protocol.startsWith('http')) {
+            let next = form.querySelector('[name="_next"]');
+            if (!next) {
+              next = document.createElement('input');
+              next.type = 'hidden';
+              next.name = '_next';
+              form.appendChild(next);
+            }
+            next.value = `${window.location.href.split('?')[0].split('#')[0]}?sent=1`;
+          }
+        }
+
+        if (submitBtn) submitBtn.disabled = true;
+        showToast('Sending…');
+        // Native POST — browser navigates to FormSubmit / Web3Forms
+      });
+    })();
+
+    (function(){
+      const dot = document.getElementById('cursorDot');
+      const ring = document.getElementById('cursorRing');
+      if (!dot || !ring) return;
+
+      let x = innerWidth / 2, y = innerHeight / 2, rx = x, ry = y;
+      const ease = 0.18;
+
+      window.addEventListener('mousemove', (e) => {
+        x = e.clientX; y = e.clientY;
+        dot.style.transform = `translate(${x}px, ${y}px)`;
+        const target = e.target.closest('a, button, input, select, textarea, .pill, .submit-btn, label');
+        ring.classList.toggle('is-hover', !!target);
+      }, { passive: true });
+
+      (function tick(){
+        rx += (x - rx) * ease;
+        ry += (y - ry) * ease;
+        ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+        requestAnimationFrame(tick);
+      })();
+
+      const mx = document.getElementById('mx');
+      const my = document.getElementById('my');
+      if (mx && my) {
+        window.addEventListener('mousemove', (e) => {
+          mx.textContent = Math.round(e.clientX);
+          my.textContent = Math.round(e.clientY);
+        }, { passive: true });
+      }
+    })();
+
+    (function(){
+      function setVh(){
+        document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+      }
+      setVh();
+      window.addEventListener('resize', setVh);
+      window.addEventListener('orientationchange', setVh);
+    })();
+
+    (function() {
+      const transition = document.getElementById('pageTransition');
+      if (!transition) return;
+
+      if (document.readyState === 'loading') {
+        document.body.classList.add('page-loading');
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            document.body.classList.remove('page-loading');
+            transition.classList.remove('is-active');
+          }, 100);
+        });
+      } else {
+        setTimeout(() => transition.classList.remove('is-active'), 100);
+      }
+
+      const pageColors = {
+        'work.html': { bg: '#ce4127', text: '#F7E491' },
+        'index.html': { bg: '#F7E491', text: '#CE4127' },
+        'project.html': { bg: '#F7E491', text: '#CE4127' },
+        'About.html': { bg: '#ce4127', text: '#ffffff' },
+        'contact.html': { bg: '#F7E491', text: '#CE4127' },
+        'long-term.html': { bg: '#F7E491', text: '#CE4127' }
+      };
+
+      document.querySelectorAll('a[href$=".html"], a[href*=".html?"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href.startsWith('http') || this.target === '_blank' || href.startsWith('mailto:')) return;
+          if (href === 'contact.html' && window.location.pathname.endsWith('contact.html')) return;
+
+          e.preventDefault();
+          const targetPage = href.split('/').pop().split('?')[0];
+          const targetColor = pageColors[targetPage] || pageColors['index.html'];
+          const isTargetRed = targetColor.bg === '#ce4127';
+          const isTargetDark = targetColor.bg === '#060605';
+
+          transition.classList.remove('to-red', 'to-yellow', 'to-dark');
+          if (isTargetRed) {
+            transition.classList.add('to-red');
+          } else if (isTargetDark) {
+            transition.classList.add('to-dark');
+          } else {
+            transition.classList.add('to-yellow');
+          }
+
+          document.body.classList.add('transitioning');
+          transition.classList.add('is-active');
+          setTimeout(() => { window.location.href = href; }, 1000);
+        });
+      });
+
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted) transition.classList.remove('is-active');
+      });
+    })();
+  </script>
+</body>
+</html>

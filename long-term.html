@@ -1,0 +1,1148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IS - Experience House</title>
+
+  <!-- Favicon with magnet emoji -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧲</text></svg>" />
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/scrollbars.css">
+
+  <!-- GSAP (Simon Holm–style slide transitions) -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+  <style>
+    :root{
+      --bg: #F7E491;
+      --fg: #CE4127;
+      --muted: #CE4127;
+      --border: rgba(206, 65, 39,1);
+      --dot: #CE4127;
+      --dot-glow: rgba(134, 59, 25, 1);
+      --accent-img: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop');
+      --gutter: clamp(16px, 6vw, 140px);
+      --toast-bg: rgba(255,255,255,.08);
+
+      /* Embed sizing caps */
+      --embed-w-cap: 2400px;
+      --embed-h-cap: 78vh;
+      --embed-pad: 24px;
+
+      /* vh fallback var for older iOS */
+      --vh: 1vh;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      overflow: clip;
+    }
+
+    body.long-term-hero {
+      background: #0a0a0a;
+    }
+    body.long-term-hero .page-transition,
+    body.long-term-hero .page-transition.to-yellow {
+      background: #0a0a0a;
+    }
+
+    .screen {
+      position: relative;
+      width: 100vw;
+
+      /* viewport height fixes */
+      height: 100vh;
+      height: 100svh;
+      height: 100dvh;
+      height: calc(var(--vh) * 100);
+
+      overflow: hidden;
+      background: var(--bg);
+      isolation: isolate;
+    }
+
+    body.long-term-hero .screen {
+      overflow-x: clip;
+      overflow-y: hidden;
+    }
+
+    /* LEFT-ALIGNED content area */
+    .center{
+      width: 100vw;
+      position: absolute;
+      inset: 0;
+      display: grid;
+      align-items: stretch;
+      justify-items: stretch;
+      text-align: left;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .stack{
+      display: grid;
+      gap: clamp(.5rem, 1.5vh, 1rem);
+      align-items: start;
+      justify-items: start;
+      text-align: left;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* —— Simon Holm–style full-bleed hero slider —— */
+    .long-term-hero .screen { background: #0a0a0a; }
+    .long-term-hero .center { z-index: 3; pointer-events: none; transform: none !important; }
+    .long-term-hero .center.animate-in { animation: none !important; }
+
+    /* Full-viewport background slides */
+    .lt-slider__backdrop {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .lt-slider__slides {
+      position: absolute;
+      inset: 0;
+      margin: 0;
+      padding: 0;
+    }
+    .lt-slider__slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      margin: 0;
+    }
+    .lt-slider__slide.is-active { display: block; }
+
+    .lt-slider__img-wrap {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+    .lt-slider__img {
+      width: 120%;
+      height: 120%;
+      object-fit: cover;
+      display: block;
+      margin: -10% 0 0 -10%;
+    }
+
+    /* UI overlay */
+    .lt-slider {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      color: #fff;
+    }
+    .lt-slider > * { pointer-events: auto; }
+
+    .lt-slider__featured {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .lt-slider__featured > * { pointer-events: auto; }
+
+    .lt-slider__grid-line {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: rgba(255, 255, 255, .22);
+      pointer-events: none;
+    }
+    .lt-slider__grid-line--top { top: clamp(56px, 9vh, 88px); }
+    .lt-slider__grid-line--mid { top: 50%; }
+    .lt-slider__grid-line--bottom { bottom: clamp(72px, 11vh, 108px); }
+
+    .lt-slider__btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      padding: 0;
+      font: 600 clamp(.68rem, 1vw, .82rem) Inter, sans-serif;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #fff;
+      cursor: none !important;
+      transition: opacity .2s ease;
+      z-index: 4;
+    }
+    .lt-slider__btn:hover { opacity: .65; }
+    .lt-slider__btn--prev { left: var(--gutter); }
+    .lt-slider__btn--next { right: var(--gutter); }
+
+    .lt-slider__nav-band {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      z-index: 3;
+    }
+    .lt-slider__nav-line {
+      display: block;
+      height: 1px;
+      background: rgba(255, 255, 255, .22);
+      transform: scaleX(0);
+      transform-origin: left center;
+    }
+
+    .long-term-bottom {
+      position: absolute;
+      left: clamp(12px, 2.4vw, 48px);
+      right: clamp(12px, 2.4vw, 48px);
+      bottom: clamp(14px, 2.2vh, 28px);
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: clamp(.65rem, 1.5vh, 1rem);
+      pointer-events: none;
+      overflow: visible;
+    }
+    .long-term-bottom > * { pointer-events: auto; }
+
+    .long-term-bottom .bottom-left {
+      position: static;
+      margin: 0;
+      left: auto;
+      bottom: auto;
+    }
+
+    .lt-slider__title-block {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: last baseline;
+      gap: clamp(.5rem, 1.2vw, 1rem);
+      width: 100%;
+      max-width: 100%;
+      overflow: visible;
+    }
+
+    .lt-slider__numbers {
+      flex: 0 0 auto;
+      align-self: auto;
+      --lt-num-height: clamp(1rem, 1.35vw, 1.25rem);
+      height: var(--lt-num-height);
+      overflow: hidden;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: clamp(.65rem, 0.95vw, .8rem);
+      letter-spacing: .06em;
+      line-height: 1;
+      color: rgba(255, 255, 255, .85);
+      margin: 0;
+      padding: 0 0 0.12em;
+    }
+    .lt-slider__numbers-inner {
+      display: flex;
+      flex-direction: column;
+      will-change: transform;
+    }
+    .lt-slider__number-row {
+      height: var(--lt-num-height);
+      min-height: var(--lt-num-height);
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      gap: 0;
+      flex: none;
+    }
+    .lt-slider__number-static,
+    .lt-slider__number-digit {
+      line-height: 1;
+    }
+    .lt-slider__number-digit {
+      font-weight: 600;
+      min-width: 0.55em;
+      text-align: center;
+    }
+
+    .lt-slider__title {
+      position: relative;
+      flex: 1 1 auto;
+      margin: 0;
+      min-height: clamp(3.5rem, 11vw, 8.5rem);
+      overflow: hidden;
+      text-align: left;
+      width: auto;
+      min-width: 0;
+      max-width: none;
+    }
+    .lt-slider__title-item {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      margin: 0;
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(2.75rem, 10vw, 6.5rem);
+      font-weight: 400;
+      letter-spacing: .02em;
+      line-height: 1;
+      color: #fff;
+      opacity: 0;
+      visibility: hidden;
+      z-index: 0;
+      pointer-events: none;
+      white-space: normal;
+      overflow: visible;
+      max-width: 100%;
+    }
+    .lt-slider__title-item.is-animating {
+      opacity: 1;
+      visibility: visible;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .lt-slider__title-item.is-active {
+      opacity: 1;
+      visibility: visible;
+      z-index: 2;
+      pointer-events: auto;
+    }
+    .lt-slider__title-item a,
+    .lt-slider__title-link {
+      color: inherit;
+      text-decoration: none;
+    }
+    .lt-slider__title-text {
+      display: inline-block;
+      max-width: 100%;
+      overflow: hidden;
+      vertical-align: bottom;
+    }
+    .lt-slider__title-word {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+      line-height: 1.05;
+      padding-bottom: 0.06em;
+    }
+
+    /* Chrome on top of hero image */
+    .long-term-hero .showreel { color: #fff; z-index: 5; }
+    .long-term-hero .showreel .icon { outline-color: rgba(255,255,255,.45); }
+    .long-term-hero .showreel .icon::before { border-color: rgba(255,255,255,.2); }
+    .long-term-hero .showreel .play { border-left-color: #fff; }
+    .long-term-hero .showreel .label { color: #fff; }
+    .long-term-hero .long-term-bottom .bottom-left {
+      align-items: flex-end;
+    }
+    @media (min-width: 521px) {
+      .long-term-hero .long-term-bottom .pills {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+    }
+    .long-term-hero .logo-svg path { fill: #fff; }
+    .long-term-hero .pill {
+      border-color: rgba(255,255,255,.85);
+      color: #fff;
+      background: transparent;
+    }
+    .long-term-hero .pill .dot { background: #fff; }
+    .long-term-hero .pill:hover { background: #fff; color: #111; }
+    .long-term-hero .pill:hover .dot { background: #111; }
+    .long-term-hero .coords { color: rgba(255,255,255,.65); z-index: 5; }
+    .long-term-hero .coords b { color: #fff; }
+    .long-term-hero .cursor-dot { background: #fff; }
+    .long-term-hero .cursor-ring { border-color: #fff; }
+
+    @media (max-width: 767px) {
+      .lt-slider__btn--prev { left: clamp(12px, 4vw, 20px); }
+      .lt-slider__btn--next { right: clamp(12px, 4vw, 20px); }
+      .lt-slider__title { max-width: calc(100% - 2.75rem); }
+    }
+
+    @media (max-width: 470px) {
+      .lt-slider__btn { font-size: .68rem; }
+      .lt-slider__title {
+        min-height: clamp(2.75rem, 11vw, 4.5rem);
+      }
+      .lt-slider__title-item { font-size: clamp(2.2rem, 11vw, 3.25rem); }
+    }
+
+    .eyebrow {
+      position: relative; z-index: 2;
+      padding-left: var(--gutter);
+      letter-spacing: .18em;
+      font-size: clamp(.7rem, 1.2vw, 1rem);
+      text-transform: uppercase;
+      color: var(--muted);
+      pointer-events: auto;
+    }
+
+    /* UNICORN EMBED: responsive in both orientations */
+    .embed-wrap{
+      pointer-events: auto;
+      position: relative;
+      z-index: 1;
+      aspect-ratio: 3 / 1.5;
+      width: min(
+        calc(min(100vw - var(--gutter) - var(--embed-pad), var(--embed-w-cap))),
+        calc(var(--embed-h-cap) * 3)
+      );
+      max-width: 1000px;
+    }
+    .embed-wrap [data-us-project]{
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      display: block;
+    }
+
+    /* EMAIL micro-interaction */
+    .email {
+      position: relative; z-index: 2;
+      padding-left: var(--gutter);
+      display: inline-flex;
+      align-items: center;
+      gap: .65rem;
+      font-size: 1rem;
+      color: var(--muted);
+      pointer-events: auto;
+      user-select: none;
+    }
+    .email .dot {
+      width: .42rem; height: .42rem; border-radius: 999px; background: var(--dot);
+      display: inline-block;
+      box-shadow: 0 0 0 0 var(--dot-glow);
+      animation: dotPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes dotPulse {
+      0%,100% { transform: scale(1); box-shadow: 0 0 0 0 var(--dot-glow); }
+      50%     { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(206,65,39,0); }
+    }
+
+    .email a {
+      position: relative;
+      color: var(--fg);
+      text-decoration: none;
+      padding-bottom: 1px;
+      opacity: .9;
+      transition: opacity .25s ease, transform .25s ease;
+      outline: none;
+    }
+    .email a::after{
+      content: "";
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--dot);
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+      transition: transform .45s cubic-bezier(.22,1,.36,1);
+    }
+    .email a:hover { opacity: 1; transform: translateX(2px); }
+    .email a:hover::after { transform: scaleX(1); }
+    .email:hover .dot { animation-play-state: paused; }
+
+    /* top-left showreel */
+    .showreel {
+      position: absolute; left: clamp(16px, 2vw, 32px); top: clamp(14px, 2.2vh, 28px);
+      display: inline-flex; align-items: center; gap: .9rem;
+      color: var(--fg);
+      cursor: none !important;
+      pointer-events: auto;
+      user-select: none;
+      text-decoration: none;
+      z-index: 3;
+    }
+    .showreel .icon {
+      width: 46px; height: 46px; border-radius: 10px;
+      position: relative; display: grid; place-items: center;
+      outline: 1.5px solid var(--border);
+      transition: transform .15s ease;
+    }
+    .showreel .icon::before {
+      content: ""; position: absolute; inset: 0;
+      border: 1.5px dashed rgba(206, 65, 39,.25);
+      border-radius: 10px;
+      transform: scale(.86);
+    }
+    .showreel .play {
+      width: 0; height: 0;
+      border-left: 10px solid var(--fg);
+      border-top: 7px solid transparent;
+      border-bottom: 7px solid transparent;
+      margin-left: 2px;
+    }
+    .showreel span.label{
+      font-weight: 600;
+      letter-spacing: .06em;
+      font-size: clamp(.75rem, 1.1vw, 1rem);
+      text-transform: uppercase;
+      opacity: .95;
+    }
+    .showreel:hover .icon{ transform: scale(1.04); }
+
+    /* bottom-left: logo + pills */
+    .bottom-left {
+      margin-bottom: 24px;
+      position: absolute; left: clamp(12px, 2.4vw, 48px); bottom: clamp(14px, 2.2vh, 28px);
+      display: flex; align-items: flex-end; gap: 24px;
+      z-index: 2;
+      pointer-events: auto;
+      cursor: none !important;
+    }
+    .logo-svg { width: 36px; height: auto; display: block; }
+
+    .pills { display: flex; gap: clamp(10px, 1.2vw, 16px); flex-wrap: wrap; }
+    .pill {
+      pointer-events: auto;
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .65rem 1.1rem;
+      border: 1.6px solid var(--fg);
+      border-radius: 999px;
+      background: #f7e491;
+      color: var(--fg);
+      font-weight: 600;
+      letter-spacing: .05em;
+      font-size: clamp(.72rem, .95vw, .9rem);
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background .2s ease, color .2s ease, transform .12s ease, border-color .2s ease;
+      cursor: none !important;
+    }
+    .pill .dot{ width: .45rem; height: .45rem; border-radius: 50%; background: var(--fg); }
+    .pill:hover { background: var(--fg); color: var(--bg); transform: translateY(-1px); }
+    .pill:hover .dot{ background: var(--bg); }
+
+    /* bottom-right rock wedge */
+    .wedge {
+      position: absolute; right: -6vw; bottom: -10vh;
+      width: min(64vw, 1100px);
+      height: min(42vh, 480px);
+      background-image: var(--accent-img);
+      background-size: cover; background-position: center;
+      filter: grayscale(1) contrast(1.2) brightness(.9);
+      opacity: .9;
+      clip-path: polygon(22% 0, 100% 0, 100% 100%, 0 100%, 8% 62%);
+      transform: rotate(-2deg);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    :focus-visible { outline: 2px dashed #fff; outline-offset: 3px; }
+
+    /* under 520px tweaks */
+    @media (max-width: 520px){
+      .email { font-size: 1rem; }
+      :root{ --gutter: clamp(12px, 5vw, 24px); }
+      .showreel span.label{ display:none; }
+      :root{ --embed-h-cap: 84vh; }
+    }
+
+    /* under 470px → stack pills vertically ABOVE the logo */
+    @media (max-width: 470px){
+    	.email { font-size: 1rem; }
+      .logo-svg { width: 48px; }
+      .bottom-left{
+        margin-bottom: 0;
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        gap: 44px;
+      }
+      .pills{
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 8px;
+      }
+      .pill{
+        padding: .5rem .8rem;
+        font-size: .8rem;
+        letter-spacing: .03em;
+      }
+      .center {
+        align-items: start;
+        margin-top: 100px;
+      }
+    }
+
+    /* Hide the toast completely */
+    .toast { display: none !important; }
+
+    /* ---------- Custom cursor (desktop only) ---------- */
+    html, body, a, button, [role="button"], input, textarea, select, .pill, .showreel,
+    .lt-slider__btn {
+      cursor: none !important;
+    }
+
+    .cursor-dot, .cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .cursor-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #CE4127;
+      mix-blend-mode: normal;
+    }
+    .cursor-ring {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid #CE4127;
+      transition: width .15s ease, height .15s ease, opacity .15s ease, transform .15s ease;
+      opacity: .9;
+    }
+    .cursor-ring.is-hover {
+      transform: translate(-50%, -50%) scale(1.15);
+      opacity: 1;
+    }
+    /* top-right coords HUD */
+    .coords{
+      position: fixed;
+      top: 14px;
+      right: 18px;
+      z-index: 9998;
+      pointer-events: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      color: rgba(206,65,39,.75);
+      text-align: right;
+      letter-spacing: .02em;
+    }
+    .coords b{ color: #CE4127; font-weight: 600; }
+    @media (hover: none) {
+      .cursor-dot, .cursor-ring { display: none !important; }
+      html, body { cursor: auto !important; }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .cursor-ring { transition: none; }
+      .lt-slider__numbers-inner { transition: none !important; }
+      .lt-slider__nav-line { transform: scaleX(1); }
+    }
+
+    /* Page load animations */
+    /* Page load animations - Slide in from different directions */
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100px);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(100px);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideRight {
+      from {
+        transform: translateX(-100px);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideLeft {
+      from {
+        transform: translateX(100px);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
+    /* Initially position elements off-screen */
+    .showreel {
+      transform: translateY(-100px);
+    }
+
+    .center {
+      transform: translateX(-100px);
+    }
+
+    .bottom-left {
+      transform: translateX(-100px) translateY(100px);
+    }
+
+    /* Animate in on load */
+    .showreel.animate-in {
+      animation: slideDown 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
+    }
+
+    .center.animate-in {
+      animation: slideRight 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+    }
+
+    .bottom-left.animate-in {
+      animation: slideRight 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+    }
+
+    /* Page Transition Overlay */
+    .page-transition {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg); /* Default to current page background */
+      z-index: 99999;
+      pointer-events: none;
+      transform: translateY(100%);
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1),
+                  background 0.1s ease;
+    }
+    
+    /* Red background when transitioning to work.html */
+    .page-transition.to-red {
+      background: #ce4127;
+    }
+    
+    /* Yellow background when transitioning to yellow pages */
+    .page-transition.to-yellow {
+      background: #F7E491;
+    }
+
+    .page-transition.to-dark {
+      background: #060605;
+    }
+
+    .page-transition.is-active {
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .page-transition.is-exiting {
+      transform: translateY(-100%);
+    }
+
+    /* Elements change color as overlay covers them */
+    body.transitioning .showreel,
+    body.transitioning .center,
+    body.transitioning .bottom-left,
+    body.transitioning .coords {
+      transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  fill 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  stroke 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.transitioning .showreel *,
+    body.transitioning .center *,
+    body.transitioning .bottom-left *,
+    body.transitioning .coords * {
+      transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  fill 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  stroke 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Prevent flash of unstyled content */
+    body.page-loading {
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="long-term-hero">
+  <main class="screen" aria-label="Experience Studio Hero">
+
+    <!-- Full-screen slide backgrounds -->
+    <div class="lt-slider__backdrop" id="ltBackdrop" aria-hidden="true">
+      <div class="lt-slider__slides" id="ltSlides" role="list"></div>
+    </div>
+
+    <!-- Top-left: show reel -->
+    <a class="showreel" href="#" id="btn-showreel" aria-label="Play show reel">
+      <span class="icon" aria-hidden="true"><i class="play"></i></span>
+      <span class="label">Play show reel</span>
+    </a>
+
+    <!-- Project slider UI (Simon Holm–style overlay) -->
+    <section class="center">
+      <div class="lt-slider" id="ltSlider" data-mode="featured" data-slide="1" aria-label="Long-term projects">
+        <div class="lt-slider__featured">
+          <div class="lt-slider__grid-line lt-slider__grid-line--top" aria-hidden="true"></div>
+          <div class="lt-slider__grid-line lt-slider__grid-line--mid" aria-hidden="true"></div>
+          <div class="lt-slider__grid-line lt-slider__grid-line--bottom" aria-hidden="true"></div>
+
+          <button type="button" class="lt-slider__btn lt-slider__btn--prev">[←] Prev</button>
+          <button type="button" class="lt-slider__btn lt-slider__btn--next">Next [→]</button>
+
+          <div class="lt-slider__nav-band" aria-hidden="true">
+            <span class="lt-slider__nav-line"></span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="long-term-bottom">
+      <div class="lt-slider__title-block">
+        <div class="lt-slider__numbers" aria-live="polite">
+          <div class="lt-slider__numbers-inner"></div>
+        </div>
+        <div class="lt-slider__title" aria-live="polite"></div>
+      </div>
+
+      <!-- Bottom-left: logo + pills -->
+      <div class="bottom-left">
+      <a href="index.html" aria-label="Go to home">
+        <svg class="logo-svg" width="310" height="328" viewBox="0 0 310 328" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M309.689 240.691C309.689 253.905 307.329 265.861 302.61 276.558C298.205 287.256 291.755 296.537 283.26 304.403C274.765 311.954 264.382 317.775 252.112 321.865C240.156 325.955 226.627 328 211.525 328C198.625 328 185.725 326.584 172.825 323.752C160.24 321.235 148.756 317.46 138.374 312.426C128.306 307.392 119.968 301.414 113.361 294.492C107.068 287.256 103.922 279.233 103.922 270.423V219.925H112.417C117.766 251.703 128.148 274.513 143.565 288.357C159.296 302.2 180.534 309.122 207.277 309.122C215.458 309.122 223.166 308.178 230.402 306.291C237.954 304.088 244.561 300.942 250.224 296.852C255.887 292.762 260.449 287.728 263.91 281.75C267.371 275.772 269.102 268.85 269.102 260.984C269.102 247.14 264.697 235.342 255.887 225.588C247.392 215.835 234.493 205.924 217.188 195.856L159.139 161.404C139.003 149.448 124.687 137.335 116.192 125.065C108.012 112.794 103.922 97.8494 103.922 80.2302C103.922 67.9597 106.124 56.9477 110.529 47.1943C114.934 37.4408 121.069 29.1031 128.935 22.1813C137.115 14.9448 146.711 9.43884 157.723 5.66332C169.05 1.88777 181.635 0 195.479 0C207.12 0 218.919 1.25852 230.874 3.77555C243.145 6.29256 254.157 10.0681 263.91 15.1022C273.664 19.8216 281.687 25.7995 287.979 33.036C294.272 39.9578 297.418 47.8235 297.418 56.6331V107.131H288.923C283.575 75.3535 273.349 52.7002 258.247 39.1712C243.145 25.6422 222.222 18.8777 195.479 18.8777C188.557 18.8777 181.792 19.9789 175.185 22.1813C168.578 24.3837 162.757 27.53 157.723 31.6202C152.689 35.7103 148.599 40.7443 145.453 46.7223C142.307 52.7002 140.733 59.3074 140.733 66.5439C140.733 73.4657 141.835 79.6009 144.037 84.9496C146.239 90.2983 149.543 95.3324 153.948 100.052C158.353 104.771 163.859 109.491 170.466 114.21C177.073 118.615 184.624 123.334 193.119 128.368L251.168 162.82C261.236 168.798 269.888 174.619 277.125 180.282C284.676 185.631 290.811 191.451 295.531 197.744C300.25 203.722 303.711 210.172 305.913 217.094C308.43 224.015 309.689 231.881 309.689 240.691Z" fill="#CE4127"/>
+          <path d="M0 8.49512H42.4748V263.344C42.4748 277.502 44.3626 288.986 48.1381 297.796C52.2283 306.291 61.3525 310.538 75.5108 310.538H84.9497V319.977H42.4748C34.2945 319.977 27.3727 319.348 21.7094 318.089C16.3607 316.516 11.9559 313.685 8.49497 309.594C5.34868 305.19 3.14628 299.369 1.88777 292.132C0.629256 284.896 0 275.3 0 263.344V8.49512Z" fill="#CE4127"/>
+        </svg>
+      </a>
+      <nav class="pills" aria-label="Primary">
+        <a class="pill" href="work.html"><i class="dot" aria-hidden="true"></i> Website</a>
+        <a class="pill" href="long-term.html"><i class="dot" aria-hidden="true"></i> Projects</a>
+        <a class="pill" href="About.html"><i class="dot" aria-hidden="true"></i> Our House</a>
+        <a class="pill" href="contact.html"><i class="dot" aria-hidden="true"></i> Let's Talk</a>
+      </nav>
+    </div>
+    </div>
+
+  </main>
+
+  <!-- Page Transition Overlay -->
+  <div class="page-transition is-active" id="pageTransition"></div>
+
+  <!-- toast (hidden via CSS) -->
+  <div class="toast" id="toast">Copied to clipboard</div>
+
+  <!-- Custom cursor elements -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <!-- Coords HUD -->
+  <div class="coords" aria-hidden="true">
+    <div>[X].<b id="mx">0</b>px</div>
+    <div>[Y].<b id="my">0</b>px</div>
+  </div>
+
+  <script>
+    // Page load animations
+    (function() {
+      const showreel = document.querySelector('.showreel');
+      const center = document.querySelector('.center');
+      const bottomLeft = document.querySelector('.bottom-left');
+      
+      // Trigger animations after page loads
+      window.addEventListener('load', () => {
+        if (showreel) showreel.classList.add('animate-in');
+        if (center) center.classList.add('animate-in');
+        if (bottomLeft) bottomLeft.classList.add('animate-in');
+      });
+    })();
+
+    /* Load Unicorn Studio once, then init */
+    (function(){
+      if(!window.UnicornStudio){
+        window.UnicornStudio = { isInitialized:false };
+        var i=document.createElement("script");
+        i.src="https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v1.4.33/dist/unicornStudio.umd.js";
+        i.onload=function(){
+          if(!window.UnicornStudio.isInitialized){
+            UnicornStudio.init();
+            window.UnicornStudio.isInitialized = true;
+          }
+        };
+        (document.head || document.body).appendChild(i);
+      } else if (!window.UnicornStudio.isInitialized) {
+        UnicornStudio.init();
+        window.UnicornStudio.isInitialized = true;
+      }
+    })();
+
+    // showreel demo
+    document.getElementById('btn-showreel').addEventListener('click', (e) => {
+      e.preventDefault();
+      alert('Play show reel… (hook your video player here)');
+    });
+
+    // email interaction (removed - email element no longer exists)
+
+    /* -------- Custom cursor logic -------- */
+    (function(){
+      const dot  = document.getElementById('cursorDot');
+      const ring = document.getElementById('cursorRing');
+
+      if (!dot || !ring) return;
+
+      let x = window.innerWidth / 2, y = window.innerHeight / 2;
+      let rx = x, ry = y;
+      const ease = 0.18;
+
+      function move(e){
+        x = e.clientX;
+        y = e.clientY;
+        dot.style.transform  = `translate(${x}px, ${y}px)`;
+      }
+
+      function tick(){
+        rx += (x - rx) * ease;
+        ry += (y - ry) * ease;
+        ring.style.transform = `translate(${rx - 0}px, ${ry - 0}px) translate(-50%, -50%)`;
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
+      window.addEventListener('mousemove', move, {passive:true});
+      // coords HUD
+      (function(){
+        const mx = document.getElementById('mx');
+        const my = document.getElementById('my');
+        if (!mx || !my) return;
+        window.addEventListener('mousemove', (e) => {
+          mx.textContent = Math.round(e.clientX);
+          my.textContent = Math.round(e.clientY);
+        }, { passive: true });
+      })();
+
+      function updateHover(e){
+        const target = e.target.closest('a, button, [role="button"], .pill, .showreel, .lt-slider__btn, input, select, textarea, label');
+        ring.classList.toggle('is-hover', !!target);
+      }
+      window.addEventListener('mousemove', updateHover, {passive:true});
+
+      window.addEventListener('mousedown', ()=> ring.style.opacity = '0.7');
+      window.addEventListener('mouseup',   ()=> ring.style.opacity = '0.9');
+
+      window.addEventListener('mouseleave', ()=> {
+        dot.style.opacity = '0'; ring.style.opacity = '0';
+      });
+      window.addEventListener('mouseenter', ()=> {
+        dot.style.opacity = '1'; ring.style.opacity = '0.9';
+      });
+    })();
+
+    /* Set --vh to innerHeight for older Safari/Chrome on iOS */
+    (function(){
+      function setVh(){
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
+      setVh();
+      window.addEventListener('resize', setVh);
+      window.addEventListener('orientationchange', setVh);
+    })();
+
+    /* Auto-refresh when crossing breakpoints (≤470, 471–520, ≥521) */
+    (function(){
+      const BUCKET_KEY = 'bp-bucket';
+      const getBucket = () => {
+        if (window.matchMedia('(max-width: 470px)').matches) return '≤470';
+        if (window.matchMedia('(max-width: 520px)').matches) return '471-520';
+        return '≥521';
+      };
+
+      // initialize stored bucket on first load
+      const current = getBucket();
+      try { sessionStorage.setItem(BUCKET_KEY, current); } catch(e){}
+
+      let rafId = null;
+      let pending = false;
+
+      const onResize = () => {
+        if (pending) return;
+        pending = true;
+        rafId && cancelAnimationFrame(rafId);
+        // debounce with rAF then small timeout to wait for toolbar/URL bar settle
+        rafId = requestAnimationFrame(() => {
+          setTimeout(() => {
+            pending = false;
+            const now = getBucket();
+            let prev = null;
+            try { prev = sessionStorage.getItem(BUCKET_KEY); } catch(e){}
+            if (now !== prev) {
+              try { sessionStorage.setItem(BUCKET_KEY, now); } catch(e){}
+              location.reload();
+            }
+          }, 180);
+        });
+      };
+
+      // listen to both resize and orientation changes
+      window.addEventListener('resize', onResize, {passive:true});
+      window.addEventListener('orientationchange', onResize);
+    })();
+
+    /* Smooth scroll enhancement for anchor links */
+    (function() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const href = this.getAttribute('href');
+          if (href === '#' || href === '#contact' || href === '#work') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          }
+        });
+      });
+    })();
+
+    /* Cutting-Edge Page Transitions */
+    (function() {
+      const transition = document.getElementById('pageTransition');
+      if (!transition) return;
+
+      // Check if page is loading
+      if (document.readyState === 'loading') {
+        document.body.classList.add('page-loading');
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            document.body.classList.remove('page-loading');
+            transition.classList.remove('is-active');
+          }, 100);
+        });
+      } else {
+        // Page already loaded, fade in transition
+        setTimeout(() => {
+          transition.classList.remove('is-active');
+        }, 100);
+      }
+
+      // Page color mapping
+      const pageColors = {
+        'work.html': { bg: '#ce4127', text: '#F7E491' }, // Red page
+        'index.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
+        'project.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
+        'About.html': { bg: '#ce4127', text: '#ffffff' },
+        'contact.html': { bg: '#F7E491', text: '#CE4127' },
+        'long-term.html': { bg: '#F7E491', text: '#CE4127' }
+      };
+
+      // Intercept all internal navigation links
+      document.querySelectorAll('a[href$=".html"], a[href*=".html?"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          // Skip if it's an external link or has target="_blank"
+          if (href.startsWith('http') || this.target === '_blank' || href.startsWith('mailto:')) {
+            return;
+          }
+
+          e.preventDefault();
+          
+          // Extract target page name
+          const targetPage = href.split('/').pop().split('?')[0];
+          const targetColor = pageColors[targetPage] || pageColors['index.html'];
+          const currentBg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+          const isCurrentRed = currentBg === '#ce4127' || currentBg === 'rgb(206, 65, 39)';
+          const isTargetRed = targetColor.bg === '#ce4127';
+          const isTargetDark = targetColor.bg === '#060605';
+          
+          transition.classList.remove('to-red', 'to-yellow', 'to-dark');
+          if (isTargetRed) {
+            transition.classList.add('to-red');
+          } else if (isTargetDark) {
+            transition.classList.add('to-dark');
+          } else {
+            transition.classList.add('to-yellow');
+          }
+          
+          // Add transitioning class
+          document.body.classList.add('transitioning');
+          
+          // Function to update element colors based on overlay position
+          function updateColors() {
+            const overlayRect = transition.getBoundingClientRect();
+            const overlayTop = overlayRect.top;
+            
+            // Elements to update
+            const elements = document.querySelectorAll('.showreel, .center, .bottom-left, .coords, .showreel *, .center *, .bottom-left *, .coords *, svg path, .pill, .pill *');
+            
+            elements.forEach(el => {
+              const elRect = el.getBoundingClientRect();
+              const elBottom = elRect.bottom;
+              
+              // If element is covered by overlay
+              if (elBottom <= overlayTop + 5) {
+                const computedStyle = window.getComputedStyle(el);
+                
+                // Change text color to target page's text color
+                if (computedStyle.color && computedStyle.color !== 'rgba(0, 0, 0, 0)' && computedStyle.color !== 'transparent') {
+                  el.style.color = targetColor.text;
+                }
+                
+                // Change SVG fill
+                if (el.tagName === 'path') {
+                  el.style.fill = targetColor.text;
+                }
+                
+                // Change border color
+                if (computedStyle.borderColor && computedStyle.borderColor !== 'rgba(0, 0, 0, 0)' && computedStyle.borderColor !== 'transparent') {
+                  el.style.borderColor = targetColor.text;
+                }
+                
+                // Change outline color
+                if (el.classList.contains('showreel') || el.closest('.showreel')) {
+                  el.style.outlineColor = targetColor.text;
+                }
+              }
+            });
+          }
+          
+          // Update colors as overlay animates
+          let animationFrameId;
+          function animateColors() {
+            if (transition.classList.contains('is-active')) {
+              updateColors();
+              animationFrameId = requestAnimationFrame(animateColors);
+            } else {
+              cancelAnimationFrame(animationFrameId);
+            }
+          }
+          animateColors();
+          
+          // Show transition overlay (slide up from bottom)
+          transition.classList.add('is-active');
+          
+          // Navigate after transition completes
+          setTimeout(() => {
+            window.location.href = href;
+          }, 1000);
+        });
+      });
+
+      // Handle browser back/forward buttons
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted) {
+          // Page was loaded from cache
+          transition.classList.remove('is-active');
+        }
+      });
+
+      window.addEventListener('popstate', () => {
+        transition.classList.add('is-active');
+        setTimeout(() => {
+          transition.classList.remove('is-active');
+        }, 600);
+      });
+    })();
+  </script>
+  <script src="js/long-term-slider.js"></script>
+</body>
+</html>
