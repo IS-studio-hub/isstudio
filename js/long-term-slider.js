@@ -3,37 +3,38 @@
   const SLIDES = [
     {
       id: '01',
-      name: 'HAVEN HOTELS',
+      name: 'eLicensing Site',
       href: 'contact.html',
-      img: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=2000&q=80'
+      img: 'Assets/Firefly_gpt-image_mac screen with this website-https---www.manitobaelicensing.ca-public-home can you us 222026.png',
+      imgFit: 'contain'
     },
     {
       id: '02',
-      name: 'FIELD & CO',
+      name: 'Virtual Dress Up',
       href: 'contact.html',
       img: 'https://images.unsplash.com/photo-1441984904996-e0b495a8b8a1?auto=format&fit=crop&w=2000&q=80'
     },
     {
       id: '03',
-      name: 'SONIC ARTS',
+      name: 'PPJV',
       href: 'contact.html',
       img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=2000&q=80'
     },
     {
       id: '04',
-      name: 'MERIDIAN HEALTH',
+      name: 'CSC',
       href: 'contact.html',
       img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=2000&q=80'
     },
     {
       id: '05',
-      name: 'ATLAS WORKS',
+      name: 'ANOVA',
       href: 'contact.html',
       img: 'https://images.unsplash.com/photo-1497360404758-f9ca24cfb4d4?auto=format&fit=crop&w=2000&q=80'
     },
     {
       id: '06',
-      name: 'LUMINA BEAUTY',
+      name: 'YMCA',
       href: 'contact.html',
       img: 'https://images.unsplash.com/photo-1522338242992-e1a54906a8f0?auto=format&fit=crop&w=2000&q=80'
     }
@@ -76,6 +77,7 @@
       item.className = 'lt-slider__slide';
       item.dataset.index = String(i);
       if (i === 0) item.classList.add('is-active');
+      if (s.imgFit === 'contain') item.classList.add('lt-slider__slide--contain');
       item.innerHTML =
         '<div class="lt-slider__img-wrap">' +
           '<img class="lt-slider__img" src="' + s.img + '" alt="' + s.name + '" loading="' + (i ? 'lazy' : 'eager') + '">' +
