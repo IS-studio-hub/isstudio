@@ -1849,32 +1849,21 @@
 
     /* Unicorn Studio — intro 3D background (ruhkfDBZQc8ZllOQ4Fr8) */
     (function(){
-      function initUS(){
-        if (window.UnicornStudio && typeof window.UnicornStudio.init === 'function') {
-          window.UnicornStudio.init();
-          window.UnicornStudio.isInitialized = true;
-          requestAnimationFrame(function () {
-            if (typeof window.refreshCcIntro === 'function') {
-              window.refreshCcIntro();
-            } else if (window.ScrollTrigger) {
-              ScrollTrigger.refresh();
-            }
-          });
-        }
-      }
-      if (window.UnicornStudio && window.UnicornStudio.init) {
-        initUS();
-        return;
-      }
-      window.UnicornStudio = window.UnicornStudio || { isInitialized: false };
       var s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.1.12/dist/unicornStudio.umd.js';
+      s.src = 'js/unicorn-init.js';
       s.onload = function () {
-        if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', initUS);
-        } else {
-          initUS();
-        }
+        loadUnicornStudio({
+          version: 'v2.1.12',
+          onReady: function () {
+            requestAnimationFrame(function () {
+              if (typeof window.refreshCcIntro === 'function') {
+                window.refreshCcIntro();
+              } else if (window.ScrollTrigger) {
+                ScrollTrigger.refresh();
+              }
+            });
+          }
+        });
       };
       (document.head || document.body).appendChild(s);
     })();
