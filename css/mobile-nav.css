@@ -26,6 +26,38 @@
     align-items: center;
   }
 
+  .long-term-bottom:has(.bottom-left.is-nav-open) {
+    z-index: 50;
+  }
+
+  .long-term-bottom .bottom-left {
+    position: relative;
+    z-index: 10;
+  }
+
+  .long-term-bottom .bottom-left.is-nav-open {
+    z-index: 60;
+  }
+
+  .long-term-bottom .bottom-left .pills {
+    z-index: 70;
+  }
+
+  .long-term-bottom .bottom-left.is-nav-open .pills {
+    bottom: calc(
+      100% + clamp(.65rem, 1.5vh, 1rem) + clamp(3.5rem, 11vw, 8.5rem) + 12px
+    );
+  }
+
+  .long-term-bottom:has(.bottom-left.is-nav-open) .lt-slider__title-block {
+    position: relative;
+    z-index: 1;
+  }
+
+  .long-term-hero:has(.bottom-left.is-nav-open) .lt-slider__nav-band {
+    z-index: 2;
+  }
+
   .logo-svg {
     width: 48px;
   }
