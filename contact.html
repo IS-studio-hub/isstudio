@@ -443,17 +443,7 @@
         </div>
       </div>
 
-      <form
-        class="contact-form"
-        id="contactForm"
-        action="https://formsubmit.co/hello@isexperience.house"
-        method="POST"
-      >
-        <input type="hidden" name="_subject" id="formSubject" value="New message — Experience House" />
-        <input type="hidden" name="_template" value="table" />
-        <input type="hidden" name="access_key" id="web3formsAccessKey" value="" disabled />
-        <input type="hidden" name="subject" id="web3formsSubject" value="" disabled />
-        <input type="checkbox" name="botcheck" id="web3formsBotcheck" class="contact-honey" tabindex="-1" autocomplete="off" aria-hidden="true" disabled />
+      <form class="contact-form" id="contactForm" novalidate>
         <input type="text" name="_honey" id="formHoney" class="contact-honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
         <div class="field-row">
           <div class="field">
@@ -542,22 +532,14 @@
     })();
 
     (function() {
-      // Optional: paste a Web3Forms key from https://web3forms.com to use that instead of FormSubmit
-      const WEB3FORMS_ACCESS_KEY = '';
       const FORM_EMAIL = 'hello@isexperience.house';
+      const FORM_ENDPOINT = `https://formsubmit.co/ajax/${encodeURIComponent(FORM_EMAIL)}`;
 
       const form = document.getElementById('contactForm');
       const toast = document.getElementById('toast');
       const submitBtn = form?.querySelector('[type="submit"]');
-      const accessKeyInput = document.getElementById('web3formsAccessKey');
-      const web3Subject = document.getElementById('web3formsSubject');
-      const web3Botcheck = document.getElementById('web3formsBotcheck');
       const formHoney = document.getElementById('formHoney');
       if (!form) return;
-
-      if (accessKeyInput && WEB3FORMS_ACCESS_KEY) {
-        accessKeyInput.value = WEB3FORMS_ACCESS_KEY;
-      }
 
       function showToast(message) {
         if (!toast) return;
@@ -569,101 +551,54 @@
         }, 4500);
       }
 
-      if (new URLSearchParams(window.location.search).get('sent') === '1') {
-        showToast('Message sent! We\'ll be in touch soon.');
-        window.history.replaceState({}, '', window.location.pathname);
-      }
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-      form.addEventListener('submit', (e) => {
-        if (formHoney && formHoney.value) {
-          e.preventDefault();
-          return;
-        }
+        if (formHoney?.value) return;
 
         if (!form.checkValidity()) {
-          e.preventDefault();
           form.reportValidity();
           return;
         }
 
         const name = document.getElementById('name').value.trim();
         const email = document.getElementById('email').value.trim();
+        const company = document.getElementById('company').value.trim();
         const interest = document.getElementById('interest').value;
+        const message = document.getElementById('message').value.trim();
         const subject = `Experience House — ${interest}`;
-        const key = accessKeyInput?.value?.trim() || WEB3FORMS_ACCESS_KEY;
-        const useWeb3 = Boolean(key);
-
-        if (useWeb3) {
-          form.action = 'https://api.web3forms.com/submit';
-          if (accessKeyInput) {
-            accessKeyInput.disabled = false;
-            accessKeyInput.value = key;
-          }
-          if (web3Subject) {
-            web3Subject.disabled = false;
-            web3Subject.value = subject;
-          }
-          if (web3Botcheck) web3Botcheck.disabled = false;
-          if (formHoney) formHoney.disabled = true;
-          const fsSubject = document.getElementById('formSubject');
-          if (fsSubject) fsSubject.disabled = true;
-
-          let fromName = form.querySelector('[name="from_name"]');
-          if (!fromName) {
-            fromName = document.createElement('input');
-            fromName.type = 'hidden';
-            fromName.name = 'from_name';
-            form.appendChild(fromName);
-          }
-          fromName.value = name;
-
-          if (window.location.protocol.startsWith('http')) {
-            let redirect = form.querySelector('[name="redirect"]');
-            if (!redirect) {
-              redirect = document.createElement('input');
-              redirect.type = 'hidden';
-              redirect.name = 'redirect';
-              form.appendChild(redirect);
-            }
-            redirect.value = `${window.location.href.split('?')[0].split('#')[0]}?sent=1`;
-          }
-        } else {
-          form.action = `https://formsubmit.co/${FORM_EMAIL}`;
-          if (accessKeyInput) accessKeyInput.disabled = true;
-          if (web3Subject) web3Subject.disabled = true;
-          if (web3Botcheck) web3Botcheck.disabled = true;
-          if (formHoney) formHoney.disabled = false;
-
-          const fsSubject = document.getElementById('formSubject');
-          if (fsSubject) {
-            fsSubject.disabled = false;
-            fsSubject.value = subject;
-          }
-
-          let replyto = form.querySelector('[name="_replyto"]');
-          if (!replyto) {
-            replyto = document.createElement('input');
-            replyto.type = 'hidden';
-            replyto.name = '_replyto';
-            form.appendChild(replyto);
-          }
-          replyto.value = email;
-
-          if (window.location.protocol.startsWith('http')) {
-            let next = form.querySelector('[name="_next"]');
-            if (!next) {
-              next = document.createElement('input');
-              next.type = 'hidden';
-              next.name = '_next';
-              form.appendChild(next);
-            }
-            next.value = `${window.location.href.split('?')[0].split('#')[0]}?sent=1`;
-          }
-        }
 
         if (submitBtn) submitBtn.disabled = true;
         showToast('Sending…');
-        // Native POST — browser navigates to FormSubmit / Web3Forms
+
+        try {
+          const response = await fetch(FORM_ENDPOINT, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: 'application/json',
+            },
+            body: JSON.stringify({
+              name,
+              email,
+              company: company || '—',
+              interest,
+              message,
+              _subject: subject,
+              _template: 'table',
+              _captcha: 'false',
+            }),
+          });
+
+          if (!response.ok) throw new Error('Form submit failed');
+
+          showToast('Message sent! We\'ll be in touch soon.');
+          form.reset();
+        } catch {
+          showToast('Could not send. Please email hello@isexperience.house directly.');
+        } finally {
+          if (submitBtn) submitBtn.disabled = false;
+        }
       });
     })();
 
