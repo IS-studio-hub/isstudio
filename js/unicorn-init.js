@@ -10,7 +10,7 @@
     }
 
     const rect = el.getBoundingClientRect();
-    return rect.width > 0 && rect.height > 0;
+    return rect.width >= 2 && rect.height >= 2;
   }
 
   function disableHiddenScenes() {
@@ -25,9 +25,24 @@
     return document.querySelectorAll('[data-us-project]').length > 0;
   }
 
+  function whenLayoutReady(fn) {
+    function run() {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(fn);
+      });
+    }
+
+    if (document.readyState === 'complete') {
+      run();
+    } else {
+      window.addEventListener('load', run, { once: true });
+    }
+  }
+
   window.loadUnicornStudio = function (options) {
     options = options || {};
     const version = options.version || 'v2.1.12';
+    const skipBelow = options.skipBelow || null;
     const onReady = typeof options.onReady === 'function' ? options.onReady : null;
 
     function init() {
@@ -40,6 +55,11 @@
     }
 
     function boot() {
+      if (skipBelow && window.matchMedia('(max-width: ' + skipBelow + 'px)').matches) {
+        disableHiddenScenes();
+        return;
+      }
+
       disableHiddenScenes();
       if (!hasVisibleScenes()) return;
 
@@ -55,10 +75,6 @@
       (document.head || document.body).appendChild(script);
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', boot, { once: true });
-    } else {
-      boot();
-    }
+    whenLayoutReady(boot);
   };
 })();

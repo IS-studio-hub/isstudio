@@ -1850,10 +1850,11 @@
     /* Unicorn Studio — intro 3D background (ruhkfDBZQc8ZllOQ4Fr8) */
     (function(){
       var s = document.createElement('script');
-      s.src = 'js/unicorn-init.js';
+      s.src = 'js/unicorn-init.js?v=2';
       s.onload = function () {
         loadUnicornStudio({
           version: 'v2.1.12',
+          skipBelow: 470,
           onReady: function () {
             requestAnimationFrame(function () {
               if (typeof window.refreshCcIntro === 'function') {
