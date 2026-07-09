@@ -1,0 +1,4 @@
+.DS_Store
+node_modules/
+scripts/.mockup-tmp/
+scripts/.mockup-tmp-anova/

@@ -213,26 +213,16 @@
       text-decoration: none;
       z-index: 3;
     }
-    /* Spin animation for icon on page load */
-    @keyframes spin180 {
-      from {
-        transform: rotate(0deg);
-      }
-      to {
-        transform: rotate(180deg);
-      }
-    }
-
-    /* Hover animation for play icon - move right then come back from left */
+    /* Hover animation for back icon - move left then return */
     @keyframes playIconHover {
       0% {
         transform: translateX(0);
       }
       50% {
-        transform: translateX(20px);
+        transform: translateX(-20px);
       }
       51% {
-        transform: translateX(-20px);
+        transform: translateX(20px);
       }
       100% {
         transform: translateX(0);
@@ -245,7 +235,6 @@
       outline: 1.5px solid var(--border);
       background-color: #f7e491;
       transition: transform .15s ease;
-      animation: spin180 0.6s ease-out forwards;
     }
     .showreel .icon::before {
       content: ""; position: absolute; inset: 0;
@@ -255,10 +244,10 @@
     }
     .showreel .play {
       width: 0; height: 0;
-      border-left: 10px solid var(--fg);
+      border-right: 10px solid var(--fg);
       border-top: 7px solid transparent;
       border-bottom: 7px solid transparent;
-      margin-left: 2px;
+      margin-right: 2px;
       transition: none;
     }
 
@@ -273,7 +262,7 @@
       opacity: .95;
     }
     .showreel:hover .icon{ 
-      transform: rotate(180deg) scale(1.04); 
+      transform: scale(1.04); 
     }
 
     /* bottom-left: logo + pills */
@@ -333,27 +322,7 @@
       .showreel span.label{ display:none; }
     }
 
-    /* under 470px → stack pills vertically ABOVE the logo */
-    @media (max-width: 470px){
-    	.logo-svg { width: 48px; }
-      .bottom-left{
-        margin-bottom: 0;
-        flex-direction: column-reverse;
-        align-items: flex-start;
-        gap: 44px;
-      }
-      .pills{
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        gap: 8px;
-      }
-      .pill{
-        padding: .5rem .8rem;
-        font-size: .8rem;
-        letter-spacing: .03em;
-      }
-    }
+    /* under 470px → mobile hamburger nav (see css/mobile-nav.css) */
 
     /* Hide the toast completely */
     .toast { display: none !important; }
@@ -1432,6 +1401,63 @@
       }
     }
 
+    @media (max-width: 470px) {
+      .examples__left--embed {
+        display: none !important;
+      }
+
+      body.project-page--live .center {
+        align-items: center;
+        justify-content: center;
+      }
+
+      body.project-page--live .stack {
+        justify-content: center;
+        min-height: calc(100dvh - clamp(56px, 10vh, 72px) - clamp(72px, 14vh, 96px));
+        height: auto;
+        overflow: visible;
+        padding-top: clamp(56px, 10vh, 72px);
+        padding-bottom: clamp(72px, 14vh, 96px);
+        box-sizing: border-box;
+      }
+
+      body.project-page--live .project-content {
+        flex: 0 0 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-top: 0;
+        padding-bottom: 0;
+        width: 100%;
+      }
+
+      body.project-page--live .examples-section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+      }
+
+      body.project-page--live .examples__grid:has(.examples__left--embed) {
+        justify-content: center;
+        align-items: center;
+        padding-top: 0;
+      }
+
+      body.project-page--live .examples__right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+
+      body.project-page--live .examples__right-content {
+        padding: clamp(1rem, 4vw, 2rem);
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+
     @media (max-height: 700px) and (min-width: 901px) {
       body.project-page--live .examples__live-site {
         --live-preview-box-w: min(704px, calc((100dvh - 200px) * 1280 / 720));
@@ -1600,6 +1626,7 @@
       overflow: hidden;
     }
   </style>
+  <link rel="stylesheet" href="css/mobile-nav.css">
 </head>
 <body>
   <main class="screen" aria-label="Project Detail">
@@ -1627,12 +1654,17 @@
           <path d="M0 8.49512H42.4748V263.344C42.4748 277.502 44.3626 288.986 48.1381 297.796C52.2283 306.291 61.3525 310.538 75.5108 310.538H84.9497V319.977H42.4748C34.2945 319.977 27.3727 319.348 21.7094 318.089C16.3607 316.516 11.9559 313.685 8.49497 309.594C5.34868 305.19 3.14628 299.369 1.88777 292.132C0.629256 284.896 0 275.3 0 263.344V8.49512Z" fill="#CE4127"/>
         </svg>
       </a>
-      <nav class="pills" aria-label="Primary">
+      <nav class="pills" id="primary-nav" aria-label="Primary">
         <a class="pill" href="work.html"><i class="dot" aria-hidden="true"></i> Website</a>
         <a class="pill" href="long-term.html"><i class="dot" aria-hidden="true"></i> Projects</a>
         <a class="pill" href="About.html"><i class="dot" aria-hidden="true"></i> Our House</a>
         <a class="pill" href="contact.html"><i class="dot" aria-hidden="true"></i> Let's Talk</a>
       </nav>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+      </button>
     </div>
 
   </main>
@@ -2104,82 +2136,83 @@
         }
       },
       '06': {
-        name: 'QUBEX',
+        name: 'SORRY.',
         number: '06',
-        video: 'media/06-qubex.mp4',
-        description: 'We created an innovative digital platform for QUBEX, designing and developing a cutting-edge web experience that showcases their technology and connects with users.',
-        tagline: 'Next-Generation Solutions',
-        businessDescription: 'QUBEX develops innovative software solutions and platforms that solve complex business challenges. The company creates scalable systems leveraging AI, cloud computing, and data analytics to enhance operational efficiency and drive competitive advantage across various industries.',
+        liveSiteUrl: 'https://is-studio-hub.github.io/sorry/',
+        video: 'Video/sorry.mp4',
+        description: 'We designed and developed a complete e-commerce experience for SORRY.—a Canadian apparel brand built on honest fabric, heavyweight construction, and unapologetic attitude.',
+        tagline: 'Unapologetically Canadian',
+        businessDescription: 'SORRY. is a Canadian-made apparel brand offering a curated collection of eight essential pieces—designed and produced without fast-fashion filler. Born from a very Canadian contradiction, the brand celebrates quality staples with deep dyes, heavy builds, and cuts that don\'t chase trends. The digital experience includes shop, story, cart, and Stripe checkout.',
         projectDescription: [
-          'We built a platform that bridges complex technology with user-friendly design, making QUBEX\'s solutions accessible.',
-          'Through interactive demos and clear visualizations, we created an engaging experience that showcases their innovation.',
-          'The outcome: an innovative digital platform that successfully communicates QUBEX\'s technology and drives business growth.'
+          'We built a brand-forward e-commerce site that matches SORRY.\'s no-apology attitude.',
+          'Through editorial storytelling and a streamlined shop flow, we created a platform that sells eight pieces with the confidence of eighty.',
+          'The result: a complete Canadian apparel experience with cart, shipping, and Stripe-powered checkout.'
         ],
         howItStarted: {
           title: 'How it\'s start',
-          description: 'QUBEX came to us with a vision for a digital platform that would showcase their innovative technology solutions and provide an exceptional user experience for their clients and partners.',
+          description: 'SORRY. came to us with a sharp point of view: Canadian-made apparel that doesn\'t apologize for being good. They needed a digital home that could tell the brand story, showcase eight intentional pieces, and convert browsers into buyers.',
           content: [
-            'The Challenge: QUBEX needed a digital platform that would effectively communicate complex technological concepts while maintaining an approachable, user-friendly experience. They wanted something that reflected their cutting-edge approach and technical expertise.',
-            'Initial Brief: The team approached us with a clear need: create a platform that demonstrates QUBEX\'s capabilities, explains their solutions in accessible terms, and provides an intuitive way for potential clients to engage with their technology.',
-            'Our Approach: We began by deeply understanding QUBEX\'s technology, target audience, and competitive landscape. We researched how users interact with technical platforms and identified opportunities to create a differentiated experience.',
-            'The Opportunity: This project offered a chance to create a platform that bridges the gap between complex technology and user-friendly design, making QUBEX\'s innovative solutions accessible to a broader audience.'
+            'The Challenge: Launch a small-line apparel brand online without the clutter of typical fashion e-commerce—no endless SKUs, no trend-chasing noise, just eight pieces and one clear statement.',
+            'Initial Brief: Build a site with shop, story, and contact sections; support cart functionality, international shipping selection, and secure Stripe checkout.',
+            'Our Approach: We leaned into editorial typography, warm photography, and direct copy that embraces the brand\'s Canadian irony—apologizing for everything except making the good stuff.',
+            'The Opportunity: Create a digital experience as confident and minimal as the collection itself.'
           ],
           images: [
-            'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=80',
-            'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1800&q=80',
-            'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1800&q=80'
+            'https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1489987707024-afc232f7ea0f?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1556905055-8bf35821c0e0?auto=format&fit=crop&w=1800&q=80'
           ]
         },
         process: {
           title: 'Process',
-          description: 'We developed the platform through a technology-focused process, ensuring the design and functionality effectively communicate QUBEX\'s solutions while providing an excellent user experience.',
+          description: 'We developed the SORRY. website through a focused process—from brand immersion to launch—ensuring every screen reinforced quality, honesty, and ease of purchase.',
           content: [
-            'Phase 1: Technical Discovery - Worked closely with QUBEX\'s technical team to understand their solutions, architecture, and unique value propositions. Conducted user research to understand how different audiences interact with technical platforms.',
-            'Phase 2: User Experience Design - Designed intuitive user flows and information architecture that make complex technical concepts accessible. Created wireframes and prototypes that balance technical accuracy with user-friendly design.',
-            'Phase 3: Visual Design & Branding - Developed a modern visual identity that reflects QUBEX\'s innovative approach. Created a design system that works across all touchpoints while maintaining technical credibility.',
-            'Phase 4: Development & Implementation - Built a robust platform using modern web technologies. Implemented interactive elements, animations, and features that showcase QUBEX\'s technology effectively.',
-            'Phase 5: Content Strategy - Developed clear, compelling content that explains QUBEX\'s solutions in accessible language. Created technical documentation and resources that support different user needs.',
-            'Phase 6: Testing & Optimization - Conducted comprehensive testing across devices and browsers. Optimized performance, refined user flows based on feedback, and launched with a scalable architecture for future growth.'
+            'Phase 1: Brand & Story - Immersed in SORRY.\'s voice, Canadian identity, and anti-fast-fashion positioning. Defined how "sorry, not sorry" translates visually and in UX.',
+            'Phase 2: Commerce Architecture - Mapped shop flows, product detail patterns, size guides, cart behavior, and shipping country selection.',
+            'Phase 3: Design & Development - Built a warm, editorial layout with collection grids, story sections, email capture, and Stripe checkout integration.',
+            'Phase 4: Product Experience - Designed product modals with size guides, add-to-cart interactions, and clear pricing with shipping and tax messaging.',
+            'Phase 5: Testing & Refinement - Tested checkout paths, mobile shopping, and cart edge cases across devices.',
+            'Phase 6: Launch - Delivered the live site at is-studio-hub.github.io/sorry/ ready for collection drops and ongoing updates.'
           ],
           images: [
-            'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=80',
-            'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1800&q=80',
-            'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1800&q=80'
+            'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1558171813-4c088753af8f?auto=format&fit=crop&w=1800&q=80'
           ]
         },
         assets: {
           title: 'Assets',
-          description: 'We created a comprehensive suite of digital assets, technical documentation, and design components that effectively communicate QUBEX\'s technology and brand.',
+          description: 'We created a complete suite of visual and interactive assets that bring SORRY.\'s Canadian apparel brand to life across shop, story, and checkout.',
           content: [
-            'Technical Visualizations: Created custom diagrams, infographics, and interactive visualizations that explain QUBEX\'s complex technology in an accessible, engaging way.',
-            'Design System: Developed a complete design system with custom components, typography, and color palettes that reflect QUBEX\'s innovative brand while ensuring excellent usability.',
-            'Interactive Demos: Built interactive demonstrations and prototypes that allow users to experience QUBEX\'s technology firsthand, making complex concepts tangible.',
-            'Documentation & Resources: Created comprehensive technical documentation, case studies, and resource libraries that support different user needs and levels of technical expertise.',
-            'Video Content: Produced video content including product demonstrations, explainer videos, and testimonials that effectively communicate QUBEX\'s value proposition.',
-            'Responsive Components: Designed and developed mobile-first components that provide an excellent experience across all devices while maintaining technical accuracy and visual appeal.'
+            'Editorial Homepage: Hero photography, bold typography, and scroll-driven storytelling that introduces the eight-piece collection.',
+            'Shop & Collection Grid: Clean product presentation with focused copy—no filler, no noise.',
+            'Product Modals: Size guides, add-to-cart flows, and detail views optimized for quick decisions.',
+            'Cart & Checkout: Country-based shipping, subtotal calculations, and Stripe-powered secure payments.',
+            'Story Section: Brand narrative celebrating Canadian-made quality and the culture of saying sorry for everything—except this.',
+            'Email Capture: Newsletter signup for collection drops and community connection.'
           ],
           images: [
-            'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=80',
-            'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1800&q=80',
-            'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1800&q=80',
-            'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1800&q=80'
+            'https://images.unsplash.com/photo-1441984904996-e0b495a8b8a1?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&fit=crop&w=1800&q=80'
           ]
         },
         finalResult: {
           title: 'Final result',
-          description: 'The final deliverable was an innovative digital platform that successfully showcases QUBEX\'s technology, drives engagement, and supports their business growth.',
+          description: 'The final deliverable was a complete e-commerce website that positions SORRY. as unapologetically Canadian—eight pieces, one statement, and a shopping experience built to last.',
           content: [
-            'Complete Digital Platform: A fully responsive, high-performance platform optimized for all devices. The platform effectively communicates QUBEX\'s technology while providing an intuitive, engaging user experience.',
-            'Technical Documentation: Comprehensive documentation and resources that support users at different levels, from high-level overviews to detailed technical specifications.',
-            'Interactive Features: Engaging interactive elements including demos, visualizations, and tools that allow users to explore and understand QUBEX\'s solutions effectively.',
-            'Performance & Scalability: A robust, scalable architecture that performs well under load and can grow with QUBEX\'s business needs.',
-            'User Engagement: The platform successfully drives user engagement with increased time on site, higher conversion rates, and positive feedback from users and stakeholders.',
-            'Ongoing Evolution: We continue to work with QUBEX to refine the platform, add new features, and optimize based on user feedback and evolving business requirements.'
+            'Complete Website: A fully responsive site at is-studio-hub.github.io/sorry/ featuring shop, story, contact, cart, and Stripe checkout.',
+            'Brand Experience: Editorial design and copy that capture SORRY.\'s voice—honest fabric, heavyweight builds, made in Canada.',
+            'Commerce Ready: Functional cart with shipping calculation, product modals, and secure payment flow.',
+            'Collection Focus: Eight intentional SKUs presented with clarity and confidence—no fast fashion, no filler.',
+            'Community Building: Email capture and story content that connect customers to the brand beyond the transaction.',
+            'Ongoing Partnership: We continue to support SORRY. with site updates, collection launches, and commerce refinements.'
           ],
           images: [
-            'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1800&q=80',
-            'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1800&q=80',
-            'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1800&q=80'
+            'https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1489987707024-afc232f7ea0f?auto=format&fit=crop&w=1800&q=80',
+            'https://images.unsplash.com/photo-1556905055-8bf35821c0e0?auto=format&fit=crop&w=1800&q=80'
           ]
         }
       }
@@ -2712,7 +2745,8 @@
         'project.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
         'About.html': { bg: '#ce4127', text: '#ffffff' },
         'contact.html': { bg: '#F7E491', text: '#CE4127' },
-        'long-term.html': { bg: '#F7E491', text: '#CE4127' }
+        'long-term.html': { bg: '#F7E491', text: '#CE4127' },
+        'long-term-project.html': { bg: '#F7E491', text: '#CE4127' }
       };
 
       // Intercept all internal navigation links
@@ -2823,6 +2857,7 @@
       });
     })();
   </script>
+  <script src="js/mobile-nav.js"></script>
 </body>
 </html>
 

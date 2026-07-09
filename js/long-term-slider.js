@@ -1,48 +1,10 @@
 (function () {
   /* Long-term brand partnerships — separate from website projects on work.html */
-  const SLIDES = [
-    {
-      id: '01',
-      name: 'eLicensing Site',
-      href: 'contact.html',
-      img: 'Assets/Firefly_gpt-image_mac screen with this website-https---www.manitobaelicensing.ca-public-home can you us 222026.png',
-      imgFit: 'contain'
-    },
-    {
-      id: '02',
-      name: 'Virtual Dress Up',
-      href: 'contact.html',
-      img: 'https://images.unsplash.com/photo-1441984904996-e0b495a8b8a1?auto=format&fit=crop&w=2000&q=80'
-    },
-    {
-      id: '03',
-      name: 'PPJV',
-      href: 'contact.html',
-      img: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=2000&q=80'
-    },
-    {
-      id: '04',
-      name: 'CSC',
-      href: 'contact.html',
-      img: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=2000&q=80'
-    },
-    {
-      id: '05',
-      name: 'ANOVA',
-      href: 'contact.html',
-      img: 'https://images.unsplash.com/photo-1497360404758-f9ca24cfb4d4?auto=format&fit=crop&w=2000&q=80'
-    },
-    {
-      id: '06',
-      name: 'YMCA',
-      href: 'contact.html',
-      img: 'https://images.unsplash.com/photo-1522338242992-e1a54906a8f0?auto=format&fit=crop&w=2000&q=80'
-    }
-  ];
+  const SLIDES = (window.LONG_TERM_PROJECTS_LIST || []).slice();
 
   const root = document.getElementById('ltSlider');
   const slidesEl = document.getElementById('ltSlides');
-  if (!root || !slidesEl || typeof gsap === 'undefined') return;
+  if (!root || !slidesEl || !SLIDES.length || typeof gsap === 'undefined') return;
 
   const ease = 'power2.inOut';
   const titleEase = 'power2.inOut';
@@ -77,10 +39,11 @@
       item.className = 'lt-slider__slide';
       item.dataset.index = String(i);
       if (i === 0) item.classList.add('is-active');
-      if (s.imgFit === 'contain') item.classList.add('lt-slider__slide--contain');
       item.innerHTML =
         '<div class="lt-slider__img-wrap">' +
-          '<img class="lt-slider__img" src="' + s.img + '" alt="' + s.name + '" loading="' + (i ? 'lazy' : 'eager') + '">' +
+          '<a class="lt-slider__img-link" href="' + s.href + '" aria-label="View ' + s.name.replace(/"/g, '&quot;') + ' project">' +
+            '<img class="lt-slider__img" src="' + encodeURI(s.img) + '" alt="' + s.name.replace(/"/g, '&quot;') + '" loading="' + (i ? 'lazy' : 'eager') + '">' +
+          '</a>' +
         '</div>';
       slidesEl.appendChild(item);
       slideNodes.push(item);

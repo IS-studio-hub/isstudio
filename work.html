@@ -220,6 +220,52 @@
       color: var(--fg);
     }
 
+    /* Slider navigation arrows */
+    .projects-nav {
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(1rem, 3vw, 2rem);
+      width: 100%;
+      margin-top: clamp(1.5rem, 3vh, 2.5rem);
+      padding-left: var(--gutter);
+      padding-right: var(--gutter);
+      box-sizing: border-box;
+    }
+
+    .projects-nav-btn {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: clamp(44px, 5vw, 52px);
+      height: clamp(44px, 5vw, 52px);
+      border: 1.6px solid var(--fg);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--fg);
+      padding: 0;
+      cursor: none !important;
+      transition: background 0.2s ease, color 0.2s ease, transform 0.12s ease;
+    }
+
+    .projects-nav-btn:hover {
+      background: var(--fg);
+      color: var(--bg);
+      transform: translateY(-1px);
+    }
+
+    .projects-nav-btn:active {
+      transform: translateY(0);
+    }
+
+    .projects-nav-btn svg {
+      width: clamp(14px, 1.5vw, 18px);
+      height: clamp(14px, 1.5vw, 18px);
+      display: block;
+    }
+
     /* top-left showreel */
     .showreel {
       position: absolute; left: clamp(16px, 2vw, 32px); top: clamp(14px, 2.2vh, 28px);
@@ -367,26 +413,8 @@
       }
     }
 
-    /* under 470px → stack pills vertically ABOVE the logo */
+    /* under 470px → mobile hamburger nav (see css/mobile-nav.css) */
     @media (max-width: 470px){
-    	.logo-svg { width: 48px; }
-      .bottom-left{
-        margin-bottom: 0;
-        flex-direction: column-reverse;
-        align-items: flex-start;
-        gap: 44px;
-      }
-      .pills{
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        gap: 8px;
-      }
-      .pill{
-        padding: .5rem .8rem;
-        font-size: .8rem;
-        letter-spacing: .03em;
-      }
       .center {
         align-items: center;
         justify-items: center;
@@ -405,13 +433,17 @@
       .project-item {
         min-width: 250px;
       }
+
+      .projects-nav {
+        margin-top: calc(clamp(1.5rem, 3vh, 2.5rem) + 150px);
+      }
     }
 
     /* Hide the toast completely */
     .toast { display: none !important; }
 
     /* ---------- Custom cursor (desktop only) ---------- */
-    html, body, a, button, [role="button"], input, textarea, select, .pill, .showreel {
+    html, body, a, button, [role="button"], input, textarea, select, .pill, .showreel, .projects-nav-btn {
       cursor: none !important;
     }
 
@@ -588,6 +620,7 @@
       overflow: hidden;
     }
   </style>
+  <link rel="stylesheet" href="css/mobile-nav.css">
 </head>
 <body>
   <main class="screen" aria-label="Experience Studio Hero">
@@ -634,7 +667,26 @@
                 <div class="project-name">DAHARI</div>
               </a>
             </li>
+            <li class="project-item" data-video="Video/sorry.mp4">
+              <a href="project.html?project=06" class="project-link">
+                <div class="project-number">06</div>
+                <div class="project-name">SORRY.</div>
+              </a>
+            </li>
           </ul>
+        </div>
+
+        <div class="projects-nav" aria-label="Project navigation">
+          <button type="button" class="projects-nav-btn projects-nav-prev" aria-label="Previous project">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+          <button type="button" class="projects-nav-btn projects-nav-next" aria-label="Next project">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </button>
         </div>
 
       </div>
@@ -648,12 +700,17 @@
           <path d="M0 8.49506H42.4748V263.344C42.4748 277.502 44.3626 288.986 48.1381 297.796C52.2283 306.291 61.3525 310.538 75.5108 310.538H84.9497V319.977H42.4748C34.2945 319.977 27.3727 319.348 21.7094 318.089C16.3607 316.516 11.9559 313.684 8.49497 309.594C5.34868 305.189 3.14628 299.369 1.88777 292.132C0.629256 284.896 0 275.3 0 263.344V8.49506Z" fill="#F7E491"/>
         </svg>
       </a>
-      <nav class="pills" aria-label="Primary">
+      <nav class="pills" id="primary-nav" aria-label="Primary">
         <a class="pill" href="work.html"><i class="dot" aria-hidden="true"></i> Website</a>
         <a class="pill" href="long-term.html"><i class="dot" aria-hidden="true"></i> Projects</a>
         <a class="pill" href="About.html"><i class="dot" aria-hidden="true"></i> Our House</a>
         <a class="pill" href="contact.html"><i class="dot" aria-hidden="true"></i> Let's Talk</a>
       </nav>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+      </button>
     </div>
   </main>
 
@@ -1105,6 +1162,11 @@
         }
       });
 
+      const prevBtn = document.querySelector('.projects-nav-prev');
+      const nextBtn = document.querySelector('.projects-nav-next');
+      if (prevBtn) prevBtn.addEventListener('click', () => stepCarousel(-1));
+      if (nextBtn) nextBtn.addEventListener('click', () => stepCarousel(1));
+
       // Desktop: Drag-to-scroll (carousel feel) + snap on release
       let dragStartX = 0;
       let dragStartScrollLeft = 0;
@@ -1551,7 +1613,7 @@
       })();
 
       function updateHover(e){
-        const target = e.target.closest('a, button, [role="button"], .pill, .showreel, .project-link, input, select, textarea, label');
+        const target = e.target.closest('a, button, [role="button"], .pill, .showreel, .project-link, .projects-nav-btn, input, select, textarea, label');
         ring.classList.toggle('is-hover', !!target);
       }
       window.addEventListener('mousemove', updateHover, {passive:true});
@@ -1676,7 +1738,8 @@
             'project.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
             'About.html': { bg: '#ce4127', text: '#ffffff' },
             'contact.html': { bg: '#F7E491', text: '#CE4127' },
-            'long-term.html': { bg: '#F7E491', text: '#CE4127' }
+            'long-term.html': { bg: '#F7E491', text: '#CE4127' },
+            'long-term-project.html': { bg: '#F7E491', text: '#CE4127' }
           };
           
           // Extract target page name
@@ -1774,6 +1837,7 @@
       });
     })();
   </script>
+  <script src="js/mobile-nav.js"></script>
 </body>
 </html>
 </html>
