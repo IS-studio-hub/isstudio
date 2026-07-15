@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Privacy Policy — Sentinel · Experience House</title>
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧲</text></svg>" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/scrollbars.css">
+
+  <style>
+    :root{
+      --bg: #F7E491;
+      --fg: #CE4127;
+      --muted: rgba(206, 65, 39, .72);
+      --border: rgba(206, 65, 39, 1);
+      --gutter: clamp(16px, 6vw, 140px);
+      --vh: 1vh;
+    }
+
+    html { scroll-behavior: smooth; }
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      min-height: 100%;
+      max-width: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      margin: 0;
+      overflow-x: clip;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .screen {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      min-height: 100vh;
+      min-height: 100svh;
+      min-height: 100dvh;
+      min-height: calc(var(--vh) * 100);
+      overflow-x: clip;
+      overflow-y: auto;
+      background: var(--bg);
+      isolation: isolate;
+      padding-bottom: clamp(140px, 20vh, 200px);
+    }
+
+    .center {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      padding: clamp(72px, 11vh, 100px) var(--gutter) clamp(4rem, 8vh, 6rem);
+      box-sizing: border-box;
+      pointer-events: auto;
+    }
+
+    .policy-back {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      color: var(--fg);
+      text-decoration: none;
+      font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
+      font-size: .72rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: clamp(1.5rem, 3vh, 2.25rem);
+    }
+    .policy-back:hover { opacity: .7; }
+
+    .policy-eyebrow {
+      letter-spacing: .18em;
+      font-size: clamp(.7rem, 1.2vw, .85rem);
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 .75rem;
+    }
+
+    .policy-title {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(2.75rem, 8vw, 4.75rem);
+      line-height: .95;
+      letter-spacing: .02em;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .policy-meta {
+      margin: 1rem 0 0;
+      font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
+      font-size: .72rem;
+      letter-spacing: .06em;
+      color: var(--muted);
+    }
+
+    .policy-intro {
+      margin: clamp(1.5rem, 3vh, 2.25rem) 0 0;
+      max-width: 62ch;
+      font-size: clamp(.95rem, 1.2vw, 1.05rem);
+      line-height: 1.7;
+      color: rgba(206, 65, 39, .88);
+    }
+
+    .policy-body {
+      margin-top: clamp(2rem, 5vh, 3.5rem);
+      max-width: 68ch;
+      display: grid;
+      gap: clamp(1.5rem, 3vh, 2.25rem);
+    }
+
+    .policy-section h2 {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(1.35rem, 2.8vw, 1.85rem);
+      line-height: 1;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      margin: 0 0 .75rem;
+    }
+
+    .policy-section h3 {
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin: 1.1rem 0 .55rem;
+      color: var(--fg);
+    }
+
+    .policy-section p {
+      margin: 0 0 .85rem;
+      font-size: clamp(.9rem, 1.1vw, 1rem);
+      line-height: 1.7;
+      color: rgba(206, 65, 39, .88);
+    }
+
+    .policy-section p:last-child { margin-bottom: 0; }
+
+    .policy-section ul {
+      margin: 0 0 .85rem;
+      padding-left: 1.15rem;
+      display: grid;
+      gap: .35rem;
+    }
+
+    .policy-section li {
+      font-size: clamp(.9rem, 1.1vw, 1rem);
+      line-height: 1.65;
+      color: rgba(206, 65, 39, .88);
+    }
+
+    .bottom-left {
+      position: fixed;
+      left: clamp(16px, 2vw, 32px);
+      bottom: clamp(16px, 2.5vh, 28px);
+      z-index: 50;
+      display: flex;
+      align-items: flex-end;
+      gap: clamp(12px, 1.5vw, 20px);
+      pointer-events: auto;
+    }
+    .logo-svg {
+      width: clamp(42px, 5vw, 58px);
+      height: auto;
+      display: block;
+    }
+    .pills { display: flex; gap: clamp(10px, 1.2vw, 16px); flex-wrap: wrap; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .55rem .9rem;
+      border: 1px solid var(--fg);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--fg);
+      font-weight: 600;
+      letter-spacing: .05em;
+      font-size: clamp(.72rem, .95vw, .9rem);
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background .2s ease, color .2s ease, transform .12s ease;
+      cursor: none !important;
+    }
+    .pill .dot{ width: .45rem; height: .45rem; border-radius: 50%; background: var(--fg); }
+    .pill:hover { background: var(--fg); color: var(--bg); transform: translateY(-1px); }
+    .pill:hover .dot{ background: var(--bg); }
+    .pill.is-active {
+      background: var(--fg);
+      color: var(--bg);
+    }
+    .pill.is-active .dot { background: var(--bg); }
+
+    :focus-visible { outline: 2px dashed var(--fg); outline-offset: 3px; }
+
+    html, body, a, button, [role="button"], .pill {
+      cursor: none !important;
+    }
+
+    .cursor-dot, .cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .cursor-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #CE4127;
+    }
+    .cursor-ring {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid #CE4127;
+      transition: width .15s ease, height .15s ease, opacity .15s ease, transform .15s ease;
+      opacity: .9;
+    }
+    .cursor-ring.is-hover {
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+
+    .coords{
+      position: fixed;
+      top: 14px;
+      right: 18px;
+      z-index: 9998;
+      pointer-events: none;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      color: rgba(206,65,39,.75);
+      text-align: right;
+    }
+    .coords b{ color: #CE4127; font-weight: 600; }
+
+    @media (hover: none) {
+      .cursor-dot, .cursor-ring { display: none !important; }
+      html, body { cursor: auto !important; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(60px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slideRight {
+      from { transform: translateX(-60px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .center { opacity: 0; }
+    .bottom-left { opacity: 0; }
+    .center.animate-in { animation: slideUp .9s cubic-bezier(.4,0,.2,1) .15s forwards; }
+    .bottom-left.animate-in { animation: slideRight .8s cubic-bezier(.4,0,.2,1) .35s forwards; }
+
+    .page-transition {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 99999;
+      pointer-events: none;
+      transform: translateY(100%);
+      transition: transform 1s cubic-bezier(.4,0,.2,1), background .1s ease;
+    }
+    .page-transition.to-red { background: #ce4127; }
+    .page-transition.to-yellow { background: #F7E491; }
+    .page-transition.to-dark { background: #060605; }
+    .page-transition.is-active {
+      transform: translateY(0);
+      pointer-events: all;
+    }
+    body.page-loading { overflow: hidden; }
+  </style>
+  <link rel="stylesheet" href="css/mobile-nav.css">
+</head>
+<body>
+  <main class="screen" aria-label="Sentinel Privacy Policy">
+
+    <section class="center" id="privacy">
+      <a class="policy-back" href="About.html">← Back to Our House</a>
+
+      <p class="policy-eyebrow">IS Studio® — Sentinel</p>
+      <h1 class="policy-title">Privacy Policy<br>for Sentinel</h1>
+      <p class="policy-meta">Effective date: July 15, 2026</p>
+
+      <p class="policy-intro">
+        Sentinel is operated by IS Studio, located in Ontario, Canada.
+        This Privacy Policy explains how Sentinel collects, uses, stores, and protects personal information when you use the Sentinel application, website, or services, including features connected to LinkedIn.
+        By using Sentinel or connecting your LinkedIn account, you acknowledge the practices described in this Privacy Policy.
+      </p>
+
+      <div class="policy-body">
+        <section class="policy-section" aria-labelledby="s1">
+          <h2 id="s1">1. Information We Collect</h2>
+          <h3>Information received from LinkedIn</h3>
+          <p>When you connect your LinkedIn account to Sentinel, LinkedIn may provide us with information based on the permissions you approve.</p>
+          <p>This information may include:</p>
+          <ul>
+            <li>Your LinkedIn member ID</li>
+            <li>Your name</li>
+            <li>Your profile picture</li>
+            <li>Your email address</li>
+            <li>Your LinkedIn profile information</li>
+            <li>LinkedIn Pages or organizations you manage</li>
+            <li>Page posts, comments, reactions, mentions, or analytics</li>
+            <li>Advertising account or campaign information, when applicable</li>
+            <li>The permissions granted to Sentinel</li>
+            <li>LinkedIn access tokens needed to maintain the connection</li>
+          </ul>
+          <p>Sentinel only requests information and permissions that are reasonably necessary to provide the selected features.</p>
+
+          <h3>Information you provide directly</h3>
+          <p>We may collect information that you submit to Sentinel, including:</p>
+          <ul>
+            <li>Your name and contact information</li>
+            <li>Account information</li>
+            <li>Business or company information</li>
+            <li>Content you create, upload, schedule, or publish</li>
+            <li>Customer-support messages</li>
+            <li>Settings and preferences</li>
+          </ul>
+
+          <h3>Technical information</h3>
+          <p>When you use Sentinel, we may automatically receive limited technical information, including:</p>
+          <ul>
+            <li>IP address</li>
+            <li>Browser and device type</li>
+            <li>Operating system</li>
+            <li>Login and activity timestamps</li>
+            <li>Application error reports</li>
+            <li>Security and diagnostic logs</li>
+            <li>Pages or features used within Sentinel</li>
+          </ul>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s2">
+          <h2 id="s2">2. How We Use Information</h2>
+          <p>We may use personal information to:</p>
+          <ul>
+            <li>Create and manage your Sentinel account</li>
+            <li>Authenticate you through LinkedIn</li>
+            <li>Connect Sentinel to LinkedIn Pages or accounts you authorize</li>
+            <li>Display LinkedIn information inside Sentinel</li>
+            <li>Publish, schedule, edit, or manage content when requested by you</li>
+            <li>Display comments, reactions, mentions, or analytics</li>
+            <li>Provide reports and performance information</li>
+            <li>Maintain account settings and integrations</li>
+            <li>Respond to support requests</li>
+            <li>Detect fraud, abuse, unauthorized access, or security incidents</li>
+            <li>Maintain and improve Sentinel</li>
+            <li>Comply with legal and regulatory obligations</li>
+            <li>Enforce our agreements and protect our legal rights</li>
+          </ul>
+          <p>Sentinel will not publish content, send messages, or perform actions through your LinkedIn account unless you have requested or enabled the relevant feature.</p>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s3">
+          <h2 id="s3">3. LinkedIn Authentication</h2>
+          <p>Sentinel uses LinkedIn’s OAuth authorization process.</p>
+          <p>Your LinkedIn username and password are entered directly through LinkedIn. Sentinel does not receive or store your LinkedIn password.</p>
+          <p>LinkedIn provides Sentinel with an authorization code or access token after you approve the requested permissions. Sentinel uses that token only to provide the LinkedIn-connected features you authorize.</p>
+          <p>You can remove Sentinel’s access through your LinkedIn account settings or by contacting us.</p>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s4">
+          <h2 id="s4">4. How We Share Information</h2>
+          <p>Sentinel does not sell or rent personal information.</p>
+          <p>We may share limited information with service providers that help us operate Sentinel, such as:</p>
+          <ul>
+            <li>Cloud-hosting providers</li>
+            <li>Database and storage providers</li>
+            <li>Authentication providers</li>
+            <li>Email and communication providers</li>
+            <li>Analytics and error-monitoring providers</li>
+            <li>Security and fraud-prevention providers</li>
+          </ul>
+          <p>These providers may process information only to perform services for Sentinel and are expected to protect it appropriately.</p>
+          <p>We may also disclose information:</p>
+          <ul>
+            <li>When required by law, regulation, court order, or legal process</li>
+            <li>To investigate fraud, abuse, or security threats</li>
+            <li>To protect Sentinel, IS Studio, our users, or the public</li>
+            <li>As part of a merger, acquisition, financing, restructuring, or sale of the business</li>
+            <li>When you give us permission to do so</li>
+          </ul>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s5">
+          <h2 id="s5">5. LinkedIn Data</h2>
+          <p>Information obtained from LinkedIn is used only in connection with Sentinel’s approved LinkedIn features and in accordance with applicable LinkedIn API terms.</p>
+          <p>Sentinel will:</p>
+          <ul>
+            <li>Request only the permissions needed for its features</li>
+            <li>Use LinkedIn information only for disclosed purposes</li>
+            <li>Protect LinkedIn access tokens from unauthorized access</li>
+            <li>Respect applicable LinkedIn data-storage and caching restrictions</li>
+            <li>Delete LinkedIn-derived information when required by LinkedIn’s terms</li>
+            <li>Respond to valid user deletion and access requests</li>
+          </ul>
+          <p>Certain LinkedIn information relating to people who have not authenticated directly with Sentinel may only be temporarily cached and may be subject to shorter storage limits.</p>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s6">
+          <h2 id="s6">6. Data Retention</h2>
+          <p>We keep personal information only for as long as reasonably necessary to:</p>
+          <ul>
+            <li>Provide Sentinel</li>
+            <li>Maintain your account and authorized integrations</li>
+            <li>Fulfil the purposes described in this policy</li>
+            <li>Meet legal, accounting, security, or regulatory obligations</li>
+            <li>Resolve disputes and enforce agreements</li>
+          </ul>
+          <p>LinkedIn access tokens are retained while your LinkedIn connection remains active or until the token expires, is revoked, or is no longer needed.</p>
+          <p>When you disconnect LinkedIn, close your Sentinel account, or submit a valid deletion request, we will delete or anonymize associated personal information unless retention is required by law, security obligations, LinkedIn requirements, or legitimate record-keeping needs.</p>
+          <p>Some information may remain temporarily in encrypted backups until those backups are securely overwritten.</p>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s7">
+          <h2 id="s7">7. Security</h2>
+          <p>We use reasonable administrative, technical, and organizational safeguards designed to protect personal information.</p>
+          <p>These measures may include:</p>
+          <ul>
+            <li>Encryption during transmission</li>
+            <li>Restricted access to production systems</li>
+            <li>Authentication and authorization controls</li>
+            <li>Secure storage of access tokens and credentials</li>
+            <li>Logging and monitoring</li>
+            <li>Software updates and vulnerability management</li>
+            <li>Backup and recovery procedures</li>
+          </ul>
+          <p>No online service can guarantee absolute security. Users should protect their account credentials and notify us immediately if they believe their account has been accessed without permission.</p>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s8">
+          <h2 id="s8">8. International Data Processing</h2>
+          <p>Sentinel and its service providers may process or store information in Canada, the United States, or other countries where our service providers operate.</p>
+          <p>Information processed in another country may be subject to the laws and lawful access requirements of that country.</p>
+          <p>Where required, we use reasonable contractual and security safeguards for international processing.</p>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s9">
+          <h2 id="s9">9. Your Privacy Rights</h2>
+          <p>Depending on where you live, you may have the right to:</p>
+          <ul>
+            <li>Request access to personal information we hold about you</li>
+            <li>Request correction of inaccurate information</li>
+            <li>Request deletion of personal information</li>
+            <li>Withdraw consent</li>
+            <li>Object to or restrict certain processing</li>
+            <li>Request information about how your information has been used or disclosed</li>
+            <li>Disconnect your LinkedIn account</li>
+            <li>Submit a privacy complaint</li>
+          </ul>
+          <p>To protect users, we may need to verify your identity before completing a request.</p>
+          <p>Some requests may be limited where retaining or processing the information is required by law or necessary to protect legal rights, security, or other users.</p>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s10">
+          <h2 id="s10">10. Withdrawing LinkedIn Access</h2>
+          <p>You may stop Sentinel’s access to your LinkedIn account by:</p>
+          <ul>
+            <li>Disconnecting LinkedIn inside Sentinel, when that option is available.</li>
+            <li>Removing Sentinel through your LinkedIn account’s permitted-services or application settings.</li>
+            <li>Contacting IS Studio and requesting disconnection or deletion.</li>
+          </ul>
+          <p>Revoking access prevents future LinkedIn API access but may not automatically delete information already stored by Sentinel. You may separately request deletion by contacting us.</p>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s11">
+          <h2 id="s11">11. Cookies and Similar Technologies</h2>
+          <p>Sentinel may use cookies, local storage, or similar technologies to:</p>
+          <ul>
+            <li>Keep users signed in</li>
+            <li>Maintain security</li>
+            <li>Remember preferences</li>
+            <li>Operate essential application features</li>
+            <li>Understand application performance</li>
+            <li>Diagnose technical problems</li>
+          </ul>
+          <p>Where required, Sentinel will request consent before using non-essential cookies or analytics technologies.</p>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s12">
+          <h2 id="s12">12. Children’s Privacy</h2>
+          <p>Sentinel is designed for businesses and professional users. It is not directed to children under 13, and we do not knowingly collect personal information from children under 13.</p>
+          <p>If we learn that such information has been collected, we will take reasonable steps to delete it.</p>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s13">
+          <h2 id="s13">13. Third-Party Services</h2>
+          <p>Sentinel may contain links to or integrations with third-party services, including LinkedIn.</p>
+          <p>Those services maintain their own privacy policies and are responsible for their own privacy practices. This Privacy Policy does not control how LinkedIn or other third parties collect and process information through their own services.</p>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s14">
+          <h2 id="s14">14. Changes to This Privacy Policy</h2>
+          <p>We may update this Privacy Policy when Sentinel’s features, legal obligations, or privacy practices change.</p>
+          <p>When changes are significant, we may provide notice through Sentinel, by email, or through our website.</p>
+          <p>The effective date at the top of this policy indicates when it was most recently updated.</p>
+        </section>
+
+        <section class="policy-section" aria-labelledby="s15">
+          <h2 id="s15">15. Contact Us</h2>
+          <p>Questions, privacy requests, deletion requests, or complaints may be sent to:</p>
+          <p>
+            Privacy Officer<br>
+            IS Studio – Sentinel<br>
+            Ontario, Canada<br>
+            Email: <a href="mailto:hello@isexperience.house">hello@isexperience.house</a>
+          </p>
+          <p>Please include enough information for us to understand and respond to your request. Do not send passwords, LinkedIn access tokens, or other sensitive credentials by email.</p>
+        </section>
+      </div>
+    </section>
+
+    <div class="bottom-left">
+      <a href="index.html" aria-label="Go to home">
+        <svg class="logo-svg" width="310" height="328" viewBox="0 0 310 328" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M309.689 240.691C309.689 253.905 307.329 265.861 302.61 276.558C298.205 287.256 291.755 296.537 283.26 304.403C274.765 311.954 264.382 317.775 252.112 321.865C240.156 325.955 226.627 328 211.525 328C198.625 328 185.725 326.584 172.825 323.752C160.24 321.235 148.756 317.46 138.374 312.426C128.306 307.392 119.968 301.414 113.361 294.492C107.068 287.256 103.922 279.233 103.922 270.423V219.925H112.417C117.766 251.703 128.148 274.513 143.565 288.357C159.296 302.2 180.534 309.122 207.277 309.122C215.458 309.122 223.166 308.178 230.402 306.291C237.954 304.088 244.561 300.942 250.224 296.852C255.887 292.762 260.449 287.728 263.91 281.75C267.371 275.772 269.102 268.85 269.102 260.984C269.102 247.14 264.697 235.342 255.887 225.588C247.392 215.835 234.493 205.924 217.188 195.856L159.139 161.404C139.003 149.448 124.687 137.335 116.192 125.065C108.012 112.794 103.922 97.8494 103.922 80.2302C103.922 67.9597 106.124 56.9477 110.529 47.1943C114.934 37.4408 121.069 29.1031 128.935 22.1813C137.115 14.9448 146.711 9.43884 157.723 5.66332C169.05 1.88777 181.635 0 195.479 0C207.12 0 218.919 1.25852 230.874 3.77555C243.145 6.29256 254.157 10.0681 263.91 15.1022C273.664 19.8216 281.687 25.7995 287.979 33.036C294.272 39.9578 297.418 47.8235 297.418 56.6331V107.131H288.923C283.575 75.3535 273.349 52.7002 258.247 39.1712C243.145 25.6422 222.222 18.8777 195.479 18.8777C188.557 18.8777 181.792 19.9789 175.185 22.1813C168.578 24.3837 162.757 27.53 157.723 31.6202C152.689 35.7103 148.599 40.7443 145.453 46.7223C142.307 52.7002 140.733 59.3074 140.733 66.5439C140.733 73.4657 141.835 79.6009 144.037 84.9496C146.239 90.2983 149.543 95.3324 153.948 100.052C158.353 104.771 163.859 109.491 170.466 114.21C177.073 118.615 184.624 123.334 193.119 128.368L251.168 162.82C261.236 168.798 269.888 174.619 277.125 180.282C284.676 185.631 290.811 191.451 295.531 197.744C300.25 203.722 303.711 210.172 305.913 217.094C308.43 224.015 309.689 231.881 309.689 240.691Z" fill="#CE4127"/>
+          <path d="M0 8.49512H42.4748V263.344C42.4748 277.502 44.3626 288.986 48.1381 297.796C52.2283 306.291 61.3525 310.538 75.5108 310.538H84.9497V319.977H42.4748C34.2945 319.977 27.3727 319.348 21.7094 318.089C16.3607 316.516 11.9559 313.685 8.49497 309.594C5.34868 305.19 3.14628 299.369 1.88777 292.132C0.629256 284.896 0 275.3 0 263.344V8.49512Z" fill="#CE4127"/>
+        </svg>
+      </a>
+      <nav class="pills" id="primary-nav" aria-label="Primary">
+        <a class="pill" href="work.html"><i class="dot" aria-hidden="true"></i> Website</a>
+        <a class="pill" href="long-term.html"><i class="dot" aria-hidden="true"></i> Projects</a>
+        <a class="pill" href="About.html"><i class="dot" aria-hidden="true"></i> Our House</a>
+        <a class="pill" href="contact.html"><i class="dot" aria-hidden="true"></i> Let's Talk</a>
+      </nav>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+        <span class="nav-toggle__bar" aria-hidden="true"></span>
+      </button>
+    </div>
+
+  </main>
+
+  <div class="page-transition is-active" id="pageTransition"></div>
+
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="coords" aria-hidden="true">
+    <div>[X].<b id="mx">0</b>px</div>
+    <div>[Y].<b id="my">0</b>px</div>
+  </div>
+
+  <script>
+    (function() {
+      const center = document.querySelector('.center');
+      const bottomLeft = document.querySelector('.bottom-left');
+      window.addEventListener('load', () => {
+        if (center) center.classList.add('animate-in');
+        if (bottomLeft) bottomLeft.classList.add('animate-in');
+      });
+    })();
+
+    (function(){
+      const dot = document.getElementById('cursorDot');
+      const ring = document.getElementById('cursorRing');
+      if (!dot || !ring) return;
+
+      let x = innerWidth / 2, y = innerHeight / 2, rx = x, ry = y;
+      const ease = 0.18;
+
+      window.addEventListener('mousemove', (e) => {
+        x = e.clientX; y = e.clientY;
+        dot.style.transform = `translate(${x}px, ${y}px)`;
+        const target = e.target.closest('a, button, .pill');
+        ring.classList.toggle('is-hover', !!target);
+      }, { passive: true });
+
+      (function tick(){
+        rx += (x - rx) * ease;
+        ry += (y - ry) * ease;
+        ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+        requestAnimationFrame(tick);
+      })();
+
+      const mx = document.getElementById('mx');
+      const my = document.getElementById('my');
+      if (mx && my) {
+        window.addEventListener('mousemove', (e) => {
+          mx.textContent = Math.round(e.clientX);
+          my.textContent = Math.round(e.clientY);
+        }, { passive: true });
+      }
+    })();
+
+    (function(){
+      function setVh(){
+        document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+      }
+      setVh();
+      window.addEventListener('resize', setVh);
+      window.addEventListener('orientationchange', setVh);
+    })();
+
+    (function() {
+      const transition = document.getElementById('pageTransition');
+      if (!transition) return;
+
+      if (document.readyState === 'loading') {
+        document.body.classList.add('page-loading');
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            document.body.classList.remove('page-loading');
+            transition.classList.remove('is-active');
+          }, 100);
+        });
+      } else {
+        setTimeout(() => {
+          transition.classList.remove('is-active');
+        }, 100);
+      }
+
+      const pageColors = {
+        'work.html': { bg: '#ce4127', text: '#F7E491' },
+        'index.html': { bg: '#F7E491', text: '#CE4127' },
+        'project.html': { bg: '#F7E491', text: '#CE4127' },
+        'About.html': { bg: '#ce4127', text: '#F7E491' },
+        'contact.html': { bg: '#F7E491', text: '#CE4127' },
+        'long-term.html': { bg: '#F7E491', text: '#CE4127' },
+        'long-term-project.html': { bg: '#F7E491', text: '#CE4127' },
+        'privacy-sentinel.html': { bg: '#F7E491', text: '#CE4127' }
+      };
+
+      document.querySelectorAll('a[href$=".html"], a[href*=".html?"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href.startsWith('http') || this.target === '_blank' || href.startsWith('mailto:')) {
+            return;
+          }
+
+          e.preventDefault();
+
+          const targetPage = href.split('/').pop().split('?')[0];
+          const targetColor = pageColors[targetPage] || pageColors['index.html'];
+          const isTargetRed = targetColor.bg === '#ce4127';
+          const isTargetDark = targetColor.bg === '#060605';
+
+          transition.classList.remove('to-red', 'to-yellow', 'to-dark');
+          if (isTargetRed) {
+            transition.classList.add('to-red');
+          } else if (isTargetDark) {
+            transition.classList.add('to-dark');
+          } else {
+            transition.classList.add('to-yellow');
+          }
+
+          document.body.classList.add('transitioning');
+          transition.classList.add('is-active');
+
+          setTimeout(() => {
+            window.location.href = href;
+          }, 1000);
+        });
+      });
+
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted) {
+          transition.classList.remove('is-active');
+        }
+      });
+    })();
+  </script>
+  <script src="js/mobile-nav.js"></script>
+</body>
+</html>
