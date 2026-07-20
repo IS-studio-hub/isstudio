@@ -262,6 +262,213 @@
       color: #F7E491;
     }
 
+
+    /* What we do — horizontal services */
+    .ut-services {
+      margin: clamp(4rem, 8vh, 7rem) auto 0;
+      pointer-events: auto;
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .9s cubic-bezier(.4, 0, .2, 1), transform .9s cubic-bezier(.4, 0, .2, 1);
+    }
+    .ut-services.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .ut-services__intro {
+      padding: 0 clamp(12px, 3vw, 40px);
+      margin-bottom: clamp(2rem, 5vh, 3.5rem);
+      max-width: 52rem;
+    }
+    .ut-services__kicker {
+      font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(247, 228, 145, .55);
+      margin: 0 0 .75rem;
+    }
+    .ut-services__title {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(2.75rem, 7vw, 5.5rem);
+      line-height: .92;
+      margin: 0;
+      color: #F7E491;
+      text-transform: uppercase;
+    }
+    .ut-services__title span {
+      color: rgba(247, 228, 145, .4);
+      font-weight: inherit;
+    }
+    .ut-services__lead {
+      margin: 1rem 0 0;
+      font-size: clamp(.95rem, 1.2vw, 1.1rem);
+      line-height: 1.65;
+      color: rgba(247, 228, 145, .75);
+      max-width: 42ch;
+    }
+    .ut-services__pin {
+      position: relative;
+      width: 100%;
+    }
+    .ut-services__track {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(3rem, 8vh, 5rem);
+      list-style: none;
+      margin: 0;
+      padding: 0 clamp(12px, 3vw, 40px) clamp(2rem, 4vh, 3rem);
+      box-sizing: border-box;
+    }
+    .ut-service {
+      width: 100%;
+      display: grid;
+      gap: clamp(1rem, 2.5vh, 1.5rem);
+    }
+    .ut-service__head {
+      display: flex;
+      align-items: baseline;
+      gap: .65rem;
+      flex-wrap: wrap;
+    }
+    .ut-service__name {
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(2rem, 5.5vw, 4.25rem);
+      line-height: .92;
+      margin: 0;
+      color: #F7E491;
+      text-transform: uppercase;
+    }
+    .ut-service__num {
+      font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
+      font-size: clamp(.85rem, 1.4vw, 1.15rem);
+      letter-spacing: .08em;
+      color: rgba(247, 228, 145, .4);
+    }
+    .ut-service__media {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: rgba(0, 0, 0, .18);
+      border: 1px solid rgba(247, 228, 145, .14);
+    }
+    .ut-service__media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transform: scale(1.02);
+      transition: transform .7s cubic-bezier(.4, 0, .2, 1);
+    }
+    .ut-service:hover .ut-service__media img {
+      transform: scale(1.06);
+    }
+    .ut-service__body {
+      display: grid;
+      gap: 1rem;
+      max-width: 36rem;
+    }
+    .ut-service__copy {
+      margin: 0;
+      font-size: clamp(.92rem, 1.15vw, 1.05rem);
+      line-height: 1.65;
+      color: rgba(247, 228, 145, .78);
+    }
+    .ut-service__btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .55rem;
+      min-height: 48px;
+      min-width: 140px;
+      padding: .85rem 1.25rem;
+      background: #F7E491;
+      color: #ce4127;
+      text-decoration: none;
+      font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      width: fit-content;
+      overflow: hidden;
+      transition: color .25s ease, background .25s ease, transform .25s ease;
+      cursor: none !important;
+    }
+    .ut-service__btn svg {
+      width: 1.1rem;
+      height: 1.1rem;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+    .ut-service__btn:hover {
+      background: transparent;
+      color: #F7E491;
+      outline: 1px solid rgba(247, 228, 145, .55);
+      outline-offset: -1px;
+      transform: translateY(-1px);
+    }
+
+    @media (min-width: 1100px) {
+      .ut-services__pin {
+        height: 100vh;
+        height: 100svh;
+        overflow: hidden;
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+      }
+      .ut-services__track {
+        flex-direction: row;
+        align-items: center;
+        gap: clamp(2rem, 3vw, 2.5rem);
+        height: 100%;
+        width: max-content;
+        padding: 0 clamp(16px, 4vw, 64px);
+        will-change: transform;
+      }
+      .ut-service {
+        width: min(88vw, 1180px);
+        flex: 0 0 auto;
+        grid-template-columns: minmax(0, 1.35fr) minmax(240px, .7fr);
+        grid-template-rows: auto 1fr;
+        column-gap: clamp(1.5rem, 3vw, 2.75rem);
+        row-gap: 1.25rem;
+        align-items: start;
+      }
+      .ut-service__head {
+        grid-column: 1 / -1;
+      }
+      .ut-service__media {
+        grid-column: 1;
+        grid-row: 2;
+        height: min(52vh, 460px);
+        aspect-ratio: auto;
+      }
+      .ut-service__body {
+        grid-column: 2;
+        grid-row: 2;
+        align-content: end;
+        padding-bottom: .25rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ut-services__pin { height: auto !important; overflow: visible !important; }
+      .ut-services__track {
+        flex-direction: column !important;
+        width: 100% !important;
+        height: auto !important;
+        transform: none !important;
+        padding: 0 clamp(12px, 3vw, 40px) clamp(2rem, 4vh, 3rem) !important;
+      }
+      .ut-service {
+        width: 100% !important;
+        grid-template-columns: 1fr !important;
+      }
+    }
+
     /* Privacy policy */
     .ut-privacy {
       margin-top: clamp(4rem, 8vh, 7rem);
@@ -1544,6 +1751,121 @@
         </div>
       </section>
 
+      <section class="ut-section ut-services" aria-labelledby="services-title">
+        <div class="ut-services__intro">
+          <p class="ut-services__kicker">capabilities</p>
+          <h2 class="ut-services__title" id="services-title">What we do <span>—</span></h2>
+          <p class="ut-services__lead">We make things that matter to businesses, to brands, and to the people they serve.</p>
+        </div>
+
+        <div class="ut-services__pin" id="servicesPin">
+          <ul class="ut-services__track" id="servicesTrack" role="list">
+            <li class="ut-service" role="listitem">
+              <div class="ut-service__head">
+                <h3 class="ut-service__name">Brand strategy &amp; design</h3>
+                <span class="ut-service__num" aria-hidden="true">01</span>
+              </div>
+              <div class="ut-service__media">
+                <img src="Assets/csc/lifestyle/wide/01-support-center.png" alt="Brand systems and digital presence work" loading="lazy" decoding="async" />
+              </div>
+              <div class="ut-service__body">
+                <p class="ut-service__copy">We build living brand systems that create long-term differentiation.</p>
+                <a class="ut-service__btn" href="work.html">
+                  <span>Explore</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true"><path fill-rule="evenodd" d="M11.648 6.321h14.893v14.892h-1.5V8.823L8.724 24.394h12.49v1.5H6.322V11h1.5v12.18L23.918 7.82h-12.27v-1.5Z" clip-rule="evenodd"/></svg>
+                </a>
+              </div>
+            </li>
+
+            <li class="ut-service" role="listitem">
+              <div class="ut-service__head">
+                <h3 class="ut-service__name">Marketing &amp; content</h3>
+                <span class="ut-service__num" aria-hidden="true">02</span>
+              </div>
+              <div class="ut-service__media">
+                <img src="Assets/anova/01-screen-grid.png" alt="Marketing and content experiences across devices" loading="lazy" decoding="async" />
+              </div>
+              <div class="ut-service__body">
+                <p class="ut-service__copy">We build brand-to-demand engines that push the boundaries of your brand.</p>
+                <a class="ut-service__btn" href="work.html">
+                  <span>Explore</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true"><path fill-rule="evenodd" d="M11.648 6.321h14.893v14.892h-1.5V8.823L8.724 24.394h12.49v1.5H6.322V11h1.5v12.18L23.918 7.82h-12.27v-1.5Z" clip-rule="evenodd"/></svg>
+                </a>
+              </div>
+            </li>
+
+            <li class="ut-service" role="listitem">
+              <div class="ut-service__head">
+                <h3 class="ut-service__name">Products &amp; platforms</h3>
+                <span class="ut-service__num" aria-hidden="true">03</span>
+              </div>
+              <div class="ut-service__media">
+                <img src="Assets/Mobile-screens.jpg" alt="Product interface screens" loading="lazy" decoding="async" />
+              </div>
+              <div class="ut-service__body">
+                <p class="ut-service__copy">We build user-centric, adaptive digital products that are designed for adoption and growth.</p>
+                <a class="ut-service__btn" href="work.html">
+                  <span>Explore</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true"><path fill-rule="evenodd" d="M11.648 6.321h14.893v14.892h-1.5V8.823L8.724 24.394h12.49v1.5H6.322V11h1.5v12.18L23.918 7.82h-12.27v-1.5Z" clip-rule="evenodd"/></svg>
+                </a>
+              </div>
+            </li>
+
+            <li class="ut-service" role="listitem">
+              <div class="ut-service__head">
+                <h3 class="ut-service__name">Composable commerce</h3>
+                <span class="ut-service__num" aria-hidden="true">04</span>
+              </div>
+              <div class="ut-service__media">
+                <img src="Assets/elicensing/hd/03-checkout-experience.jpg" alt="Commerce and checkout experience" loading="lazy" decoding="async" />
+              </div>
+              <div class="ut-service__body">
+                <p class="ut-service__copy">We build ecommerce solutions thinking around your business, not your platform.</p>
+                <a class="ut-service__btn" href="work.html">
+                  <span>Explore</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true"><path fill-rule="evenodd" d="M11.648 6.321h14.893v14.892h-1.5V8.823L8.724 24.394h12.49v1.5H6.322V11h1.5v12.18L23.918 7.82h-12.27v-1.5Z" clip-rule="evenodd"/></svg>
+                </a>
+              </div>
+            </li>
+
+            <li class="ut-service" role="listitem">
+              <div class="ut-service__head">
+                <h3 class="ut-service__name">Customer experience</h3>
+                <span class="ut-service__num" aria-hidden="true">05</span>
+              </div>
+              <div class="ut-service__media">
+                <img src="Assets/csc/lifestyle/wide/02-nurse-station.png" alt="Customer experience touchpoints" loading="lazy" decoding="async" />
+              </div>
+              <div class="ut-service__body">
+                <p class="ut-service__copy">We deliver exceptional experiences for businesses and customers that optimize channels, sales and loyalty.</p>
+                <a class="ut-service__btn" href="work.html">
+                  <span>Explore</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true"><path fill-rule="evenodd" d="M11.648 6.321h14.893v14.892h-1.5V8.823L8.724 24.394h12.49v1.5H6.322V11h1.5v12.18L23.918 7.82h-12.27v-1.5Z" clip-rule="evenodd"/></svg>
+                </a>
+              </div>
+            </li>
+
+            <li class="ut-service" role="listitem">
+              <div class="ut-service__head">
+                <h3 class="ut-service__name">AI activation</h3>
+                <span class="ut-service__num" aria-hidden="true">06</span>
+              </div>
+              <div class="ut-service__media">
+                <img src="Assets/ppjv/lifestyle/wide/02-war-room.png" alt="AI activation and operations" loading="lazy" decoding="async" />
+              </div>
+              <div class="ut-service__body">
+                <p class="ut-service__copy">We amplify AI adoption and transform operations through action. No theory, all results.</p>
+                <a class="ut-service__btn" href="contact.html">
+                  <span>Explore</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" aria-hidden="true"><path fill-rule="evenodd" d="M11.648 6.321h14.893v14.892h-1.5V8.823L8.724 24.394h12.49v1.5H6.322V11h1.5v12.18L23.918 7.82h-12.27v-1.5Z" clip-rule="evenodd"/></svg>
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+
       <!-- Utopia Tokyo–style intro (glitch headline + kanji + 3D) -->
       <section class="cc-intro" role="region" aria-labelledby="intro-title">
         <h2 id="intro-title" class="visually-hidden">Craft, speed, clarity, systems, vision, impact, and related studio capabilities</h2>
@@ -1985,7 +2307,7 @@
       })();
 
       function updateHover(e){
-        const target = e.target.closest('a, button, [role="button"], .pill, .showreel, .hero-btn, .ut-privacy-btn, .pagination__track, input, select, textarea, label');
+        const target = e.target.closest('a, button, [role="button"], .pill, .showreel, .hero-btn, .ut-privacy-btn, .ut-service__btn, .pagination__track, input, select, textarea, label');
         ring.classList.toggle('is-hover', !!target);
       }
       window.addEventListener('mousemove', updateHover, {passive:true});
@@ -2217,6 +2539,67 @@
         }, 600);
       });
     })();
+  </script>
+  <script>
+
+    /* What we do — horizontal scrub (desktop) */
+    (function() {
+      const pin = document.getElementById('servicesPin');
+      const track = document.getElementById('servicesTrack');
+      if (!pin || !track || !window.gsap || !window.ScrollTrigger) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      let st;
+      const mq = window.matchMedia('(min-width: 1100px)');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      function getScrollDistance() {
+        return Math.max(0, track.scrollWidth - pin.clientWidth);
+      }
+
+      function kill() {
+        if (st) {
+          st.kill();
+          st = null;
+        }
+        gsap.set(track, { clearProps: 'transform' });
+      }
+
+      function setup() {
+        kill();
+        if (!mq.matches || reduce.matches) return;
+
+        const distance = getScrollDistance();
+        if (distance < 8) return;
+
+        st = gsap.to(track, {
+          x: () => -getScrollDistance(),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: pin,
+            start: 'top top',
+            end: () => '+=' + getScrollDistance(),
+            scrub: 0.65,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          }
+        });
+      }
+
+      setup();
+      mq.addEventListener('change', setup);
+      reduce.addEventListener('change', setup);
+      window.addEventListener('load', () => {
+        setup();
+        ScrollTrigger.refresh();
+      });
+      window.addEventListener('resize', () => {
+        ScrollTrigger.refresh();
+      }, { passive: true });
+    })();
+
   </script>
   <script src="js/mobile-nav.js"></script>
 </body>
