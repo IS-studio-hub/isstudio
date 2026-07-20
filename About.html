@@ -263,25 +263,22 @@
     }
 
 
-    /* What we do — horizontal services */
+    /* What we do — sticky horizontal scrub */
     .ut-services {
-      margin: clamp(3rem, 6vh, 5rem) auto 0;
+      margin: clamp(2rem, 4vh, 3.5rem) auto 0;
       pointer-events: auto;
       opacity: 0;
       transition: opacity .9s cubic-bezier(.4, 0, .2, 1);
-      /* no transform — breaks ScrollTrigger pin */
     }
-    .ut-services.is-visible,
-    .ut-section.ut-services.is-visible {
+    .ut-section.ut-services,
+    .ut-section.ut-services.is-visible,
+    .ut-services.is-visible {
       opacity: 1;
-      transform: none;
-    }
-    .ut-section.ut-services {
-      transform: none;
+      transform: none !important;
     }
     .ut-services__intro {
       padding: 0 clamp(12px, 3vw, 40px);
-      margin-bottom: clamp(1.5rem, 3vh, 2.5rem);
+      margin-bottom: clamp(1.25rem, 2.5vh, 2rem);
       max-width: 52rem;
     }
     .ut-services__kicker {
@@ -311,6 +308,13 @@
       color: rgba(247, 228, 145, .75);
       max-width: 42ch;
     }
+    .ut-services__scroll {
+      position: relative;
+      width: 100%;
+    }
+    .ut-services__sticky {
+      position: relative;
+    }
     .ut-services__pin {
       position: relative;
       width: 100%;
@@ -328,6 +332,7 @@
       width: 100%;
       display: grid;
       gap: clamp(1rem, 2.5vh, 1.5rem);
+      box-sizing: border-box;
     }
     .ut-service__head {
       display: flex;
@@ -361,12 +366,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
       display: block;
-      transform: scale(1.02);
-      transition: transform .7s cubic-bezier(.4, 0, .2, 1);
-    }
-    .ut-service:hover .ut-service__media img {
-      transform: scale(1.06);
     }
     .ut-service__body {
       display: grid;
@@ -397,7 +398,6 @@
       letter-spacing: .08em;
       text-transform: uppercase;
       width: fit-content;
-      overflow: hidden;
       transition: color .25s ease, background .25s ease, transform .25s ease;
       cursor: none !important;
     }
@@ -420,58 +420,92 @@
         width: 100vw;
         margin-left: calc(50% - 50vw);
         margin-right: calc(50% - 50vw);
+      }
+      .ut-services__scroll {
+        /* height set in JS = viewport + horizontal travel */
+        height: 100vh;
+      }
+      .ut-services__sticky {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        height: 100dvh;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-sizing: border-box;
+        padding: clamp(1.25rem, 3vh, 2.5rem) 0;
+        background: #ce4127;
       }
       .ut-services__intro {
-        padding-left: clamp(16px, 4vw, 64px);
-        padding-right: clamp(16px, 4vw, 64px);
+        flex: 0 0 auto;
+        padding-left: clamp(24px, 4vw, 72px);
+        padding-right: clamp(24px, 4vw, 72px);
+        margin-bottom: clamp(1rem, 2.5vh, 1.75rem);
       }
       .ut-services__pin {
-        height: auto;
-        overflow: hidden;
+        flex: 1 1 auto;
+        min-height: 0;
         width: 100%;
-        margin-left: 0;
-        max-width: 100vw;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
       }
       .ut-services__track {
         flex-direction: row;
-        align-items: center;
-        gap: clamp(2rem, 3vw, 2.5rem);
-        height: auto;
-        min-height: min(58vh, 520px);
+        flex-wrap: nowrap;
+        align-items: stretch;
+        gap: 0;
+        height: 100%;
         width: max-content;
-        max-width: none;
-        padding: 0 clamp(16px, 4vw, 64px);
+        padding: 0;
         will-change: transform;
       }
       .ut-service {
-        width: min(86vw, 1120px);
-        flex: 0 0 auto;
-        grid-template-columns: minmax(0, 1.35fr) minmax(240px, .7fr);
-        grid-template-rows: auto 1fr;
-        column-gap: clamp(1.5rem, 3vw, 2.75rem);
-        row-gap: 1.25rem;
+        width: 100vw;
+        height: 100%;
+        flex: 0 0 100vw;
+        padding: 0 clamp(24px, 4vw, 72px);
+        grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.7fr);
+        grid-template-rows: auto minmax(0, 1fr);
+        column-gap: clamp(1.5rem, 3vw, 3rem);
+        row-gap: 1rem;
         align-items: start;
       }
       .ut-service__head {
         grid-column: 1 / -1;
       }
+      .ut-service__name {
+        font-size: clamp(2.4rem, 4.8vw, 4.5rem);
+      }
       .ut-service__media {
         grid-column: 1;
         grid-row: 2;
-        height: min(48vh, 420px);
+        height: 100%;
+        min-height: 280px;
+        max-height: 52vh;
         aspect-ratio: auto;
+        align-self: stretch;
       }
       .ut-service__body {
         grid-column: 2;
         grid-row: 2;
         align-content: end;
-        padding-bottom: .25rem;
+        align-self: end;
+        max-width: none;
+        padding-bottom: .35rem;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .ut-services__pin { height: auto !important; overflow: visible !important; }
+      .ut-services__scroll { height: auto !important; }
+      .ut-services__sticky {
+        position: relative !important;
+        height: auto !important;
+        overflow: visible !important;
+        display: block !important;
+      }
       .ut-services__track {
         flex-direction: column !important;
         width: 100% !important;
@@ -481,7 +515,10 @@
       }
       .ut-service {
         width: 100% !important;
+        flex: none !important;
+        height: auto !important;
         grid-template-columns: 1fr !important;
+        padding: 0 !important;
       }
     }
 
@@ -1768,6 +1805,8 @@
       </section>
 
       <section class="ut-section ut-services" aria-labelledby="services-title">
+        <div class="ut-services__scroll" id="servicesScroll">
+        <div class="ut-services__sticky" id="servicesSticky">
         <div class="ut-services__intro">
           <p class="ut-services__kicker">capabilities</p>
           <h2 class="ut-services__title" id="services-title">What we do <span>—</span></h2>
@@ -1878,6 +1917,8 @@
               </div>
             </li>
           </ul>
+        </div>
+        </div>
         </div>
       </section>
 
@@ -2558,20 +2599,24 @@
   </script>
   <script>
 
-    /* What we do — pin + horizontal scrub (desktop) */
+    /* What we do — sticky horizontal scrub (desktop) */
     (function() {
       const section = document.querySelector('.ut-services');
+      const scrollEl = document.getElementById('servicesScroll');
+      const sticky = document.getElementById('servicesSticky');
       const track = document.getElementById('servicesTrack');
-      if (!section || !track || !window.gsap || !window.ScrollTrigger) return;
+      if (!section || !scrollEl || !sticky || !track || !window.gsap || !window.ScrollTrigger) return;
 
       gsap.registerPlugin(ScrollTrigger);
 
-      let tween;
+      let tween = null;
       const mq = window.matchMedia('(min-width: 1100px)');
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
       function getDistance() {
-        return Math.max(0, track.scrollWidth - window.innerWidth);
+        // one full viewport per slide after the first
+        const slides = track.querySelectorAll('.ut-service').length;
+        return Math.max(0, (slides - 1) * window.innerWidth);
       }
 
       function kill() {
@@ -2581,63 +2626,54 @@
           tween = null;
         }
         gsap.set(track, { clearProps: 'transform' });
+        scrollEl.style.height = '';
       }
 
       function setup() {
         kill();
         if (!mq.matches || reduce.matches) return;
 
-        const distance = getDistance();
-        if (distance < 24) return;
+        const slides = track.querySelectorAll('.ut-service').length;
+        if (slides < 2) return;
 
-        // Pin the whole section: vertical scroll freezes, scrub moves cards horizontally,
-        // then vertical scroll continues. Scroll up reverses the same path.
+        const distance = getDistance();
+        // Tall scroll runway: sticky viewport + horizontal travel
+        scrollEl.style.height = (window.innerHeight + distance) + 'px';
+
         tween = gsap.to(track, {
           x: () => -getDistance(),
           ease: 'none',
           scrollTrigger: {
             id: 'services-horizontal',
-            trigger: section,
+            trigger: scrollEl,
             start: 'top top',
-            end: () => '+=' + Math.round(Math.max(getDistance(), window.innerWidth) * 1.2),
-            scrub: 0.4,
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1,
+            end: 'bottom bottom',
+            scrub: 0.35,
             invalidateOnRefresh: true,
-            pinType: 'transform',
+            anticipatePin: 0,
           }
         });
       }
 
-      function boot() {
-        setup();
-        requestAnimationFrame(() => ScrollTrigger.refresh());
-        // Refresh again as images finish so horizontal distance stays accurate
-        track.querySelectorAll('img').forEach((img) => {
-          if (img.complete) return;
-          img.addEventListener('load', () => {
-            setup();
-            ScrollTrigger.refresh();
-          }, { once: true });
-          img.addEventListener('error', () => ScrollTrigger.refresh(), { once: true });
-        });
-      }
-
-      // Avoid transform/opacity animation fighting the pin
       section.classList.add('is-visible');
       section.style.transform = 'none';
 
-      boot();
-      mq.addEventListener('change', setup);
-      reduce.addEventListener('change', setup);
-      window.addEventListener('load', () => {
+      setup();
+      requestAnimationFrame(() => {
         setup();
         ScrollTrigger.refresh();
       });
+
+      mq.addEventListener('change', () => { setup(); ScrollTrigger.refresh(); });
+      reduce.addEventListener('change', () => { setup(); ScrollTrigger.refresh(); });
+      window.addEventListener('load', () => { setup(); ScrollTrigger.refresh(); });
+      let resizeTimer;
       window.addEventListener('resize', () => {
-        setup();
-        ScrollTrigger.refresh();
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          setup();
+          ScrollTrigger.refresh();
+        }, 120);
       }, { passive: true });
     })();
 
