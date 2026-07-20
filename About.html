@@ -265,19 +265,23 @@
 
     /* What we do — horizontal services */
     .ut-services {
-      margin: clamp(4rem, 8vh, 7rem) auto 0;
+      margin: clamp(3rem, 6vh, 5rem) auto 0;
       pointer-events: auto;
       opacity: 0;
-      transform: translateY(32px);
-      transition: opacity .9s cubic-bezier(.4, 0, .2, 1), transform .9s cubic-bezier(.4, 0, .2, 1);
+      transition: opacity .9s cubic-bezier(.4, 0, .2, 1);
+      /* no transform — breaks ScrollTrigger pin */
     }
-    .ut-services.is-visible {
+    .ut-services.is-visible,
+    .ut-section.ut-services.is-visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: none;
+    }
+    .ut-section.ut-services {
+      transform: none;
     }
     .ut-services__intro {
       padding: 0 clamp(12px, 3vw, 40px);
-      margin-bottom: clamp(2rem, 5vh, 3.5rem);
+      margin-bottom: clamp(1.5rem, 3vh, 2.5rem);
       max-width: 52rem;
     }
     .ut-services__kicker {
@@ -412,24 +416,36 @@
     }
 
     @media (min-width: 1100px) {
-      .ut-services__pin {
-        height: 100vh;
-        height: 100svh;
-        overflow: hidden;
+      .ut-services {
         width: 100vw;
         margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+        overflow: hidden;
+      }
+      .ut-services__intro {
+        padding-left: clamp(16px, 4vw, 64px);
+        padding-right: clamp(16px, 4vw, 64px);
+      }
+      .ut-services__pin {
+        height: auto;
+        overflow: hidden;
+        width: 100%;
+        margin-left: 0;
+        max-width: 100vw;
       }
       .ut-services__track {
         flex-direction: row;
         align-items: center;
         gap: clamp(2rem, 3vw, 2.5rem);
-        height: 100%;
+        height: auto;
+        min-height: min(58vh, 520px);
         width: max-content;
+        max-width: none;
         padding: 0 clamp(16px, 4vw, 64px);
         will-change: transform;
       }
       .ut-service {
-        width: min(88vw, 1180px);
+        width: min(86vw, 1120px);
         flex: 0 0 auto;
         grid-template-columns: minmax(0, 1.35fr) minmax(240px, .7fr);
         grid-template-rows: auto 1fr;
@@ -443,7 +459,7 @@
       .ut-service__media {
         grid-column: 1;
         grid-row: 2;
-        height: min(52vh, 460px);
+        height: min(48vh, 420px);
         aspect-ratio: auto;
       }
       .ut-service__body {
@@ -1766,7 +1782,7 @@
                 <span class="ut-service__num" aria-hidden="true">01</span>
               </div>
               <div class="ut-service__media">
-                <img src="Assets/csc/lifestyle/wide/01-support-center.png" alt="Brand systems and digital presence work" loading="lazy" decoding="async" />
+                <img src="Assets/csc/lifestyle/wide/01-support-center.png" alt="Brand systems and digital presence work" loading="eager" decoding="async" />
               </div>
               <div class="ut-service__body">
                 <p class="ut-service__copy">We build living brand systems that create long-term differentiation.</p>
@@ -1783,7 +1799,7 @@
                 <span class="ut-service__num" aria-hidden="true">02</span>
               </div>
               <div class="ut-service__media">
-                <img src="Assets/anova/01-screen-grid.png" alt="Marketing and content experiences across devices" loading="lazy" decoding="async" />
+                <img src="Assets/anova/01-screen-grid.png" alt="Marketing and content experiences across devices" loading="eager" decoding="async" />
               </div>
               <div class="ut-service__body">
                 <p class="ut-service__copy">We build brand-to-demand engines that push the boundaries of your brand.</p>
@@ -1800,7 +1816,7 @@
                 <span class="ut-service__num" aria-hidden="true">03</span>
               </div>
               <div class="ut-service__media">
-                <img src="Assets/Mobile-screens.jpg" alt="Product interface screens" loading="lazy" decoding="async" />
+                <img src="Assets/Mobile-screens.jpg" alt="Product interface screens" loading="eager" decoding="async" />
               </div>
               <div class="ut-service__body">
                 <p class="ut-service__copy">We build user-centric, adaptive digital products that are designed for adoption and growth.</p>
@@ -1817,7 +1833,7 @@
                 <span class="ut-service__num" aria-hidden="true">04</span>
               </div>
               <div class="ut-service__media">
-                <img src="Assets/elicensing/hd/03-checkout-experience.jpg" alt="Commerce and checkout experience" loading="lazy" decoding="async" />
+                <img src="Assets/elicensing/hd/03-checkout-experience.jpg" alt="Commerce and checkout experience" loading="eager" decoding="async" />
               </div>
               <div class="ut-service__body">
                 <p class="ut-service__copy">We build ecommerce solutions thinking around your business, not your platform.</p>
@@ -1834,7 +1850,7 @@
                 <span class="ut-service__num" aria-hidden="true">05</span>
               </div>
               <div class="ut-service__media">
-                <img src="Assets/csc/lifestyle/wide/02-nurse-station.png" alt="Customer experience touchpoints" loading="lazy" decoding="async" />
+                <img src="Assets/csc/lifestyle/wide/02-nurse-station.png" alt="Customer experience touchpoints" loading="eager" decoding="async" />
               </div>
               <div class="ut-service__body">
                 <p class="ut-service__copy">We deliver exceptional experiences for businesses and customers that optimize channels, sales and loyalty.</p>
@@ -1851,7 +1867,7 @@
                 <span class="ut-service__num" aria-hidden="true">06</span>
               </div>
               <div class="ut-service__media">
-                <img src="Assets/ppjv/lifestyle/wide/02-war-room.png" alt="AI activation and operations" loading="lazy" decoding="async" />
+                <img src="Assets/ppjv/lifestyle/wide/02-war-room.png" alt="AI activation and operations" loading="eager" decoding="async" />
               </div>
               <div class="ut-service__body">
                 <p class="ut-service__copy">We amplify AI adoption and transform operations through action. No theory, all results.</p>
@@ -2542,26 +2558,27 @@
   </script>
   <script>
 
-    /* What we do — horizontal scrub (desktop) */
+    /* What we do — pin + horizontal scrub (desktop) */
     (function() {
-      const pin = document.getElementById('servicesPin');
+      const section = document.querySelector('.ut-services');
       const track = document.getElementById('servicesTrack');
-      if (!pin || !track || !window.gsap || !window.ScrollTrigger) return;
+      if (!section || !track || !window.gsap || !window.ScrollTrigger) return;
 
       gsap.registerPlugin(ScrollTrigger);
 
-      let st;
+      let tween;
       const mq = window.matchMedia('(min-width: 1100px)');
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-      function getScrollDistance() {
-        return Math.max(0, track.scrollWidth - pin.clientWidth);
+      function getDistance() {
+        return Math.max(0, track.scrollWidth - window.innerWidth);
       }
 
       function kill() {
-        if (st) {
-          st.kill();
-          st = null;
+        if (tween) {
+          if (tween.scrollTrigger) tween.scrollTrigger.kill();
+          tween.kill();
+          tween = null;
         }
         gsap.set(track, { clearProps: 'transform' });
       }
@@ -2570,25 +2587,48 @@
         kill();
         if (!mq.matches || reduce.matches) return;
 
-        const distance = getScrollDistance();
-        if (distance < 8) return;
+        const distance = getDistance();
+        if (distance < 24) return;
 
-        st = gsap.to(track, {
-          x: () => -getScrollDistance(),
+        // Pin the whole section: vertical scroll freezes, scrub moves cards horizontally,
+        // then vertical scroll continues. Scroll up reverses the same path.
+        tween = gsap.to(track, {
+          x: () => -getDistance(),
           ease: 'none',
           scrollTrigger: {
-            trigger: pin,
+            id: 'services-horizontal',
+            trigger: section,
             start: 'top top',
-            end: () => '+=' + getScrollDistance(),
-            scrub: 0.65,
+            end: () => '+=' + Math.round(Math.max(getDistance(), window.innerWidth) * 1.2),
+            scrub: 0.4,
             pin: true,
+            pinSpacing: true,
             anticipatePin: 1,
             invalidateOnRefresh: true,
+            pinType: 'transform',
           }
         });
       }
 
-      setup();
+      function boot() {
+        setup();
+        requestAnimationFrame(() => ScrollTrigger.refresh());
+        // Refresh again as images finish so horizontal distance stays accurate
+        track.querySelectorAll('img').forEach((img) => {
+          if (img.complete) return;
+          img.addEventListener('load', () => {
+            setup();
+            ScrollTrigger.refresh();
+          }, { once: true });
+          img.addEventListener('error', () => ScrollTrigger.refresh(), { once: true });
+        });
+      }
+
+      // Avoid transform/opacity animation fighting the pin
+      section.classList.add('is-visible');
+      section.style.transform = 'none';
+
+      boot();
       mq.addEventListener('change', setup);
       reduce.addEventListener('change', setup);
       window.addEventListener('load', () => {
@@ -2596,6 +2636,7 @@
         ScrollTrigger.refresh();
       });
       window.addEventListener('resize', () => {
+        setup();
         ScrollTrigger.refresh();
       }, { passive: true });
     })();
