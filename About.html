@@ -492,7 +492,6 @@
         grid-column: 2;
         grid-row: 2;
         align-content: end;
-        align-self: end;
         max-width: none;
         padding-bottom: .35rem;
       }
@@ -2637,21 +2636,28 @@
         if (slides < 2) return;
 
         const distance = getDistance();
-        // Tall scroll runway: sticky viewport + horizontal travel
-        scrollEl.style.height = (window.innerHeight + distance) + 'px';
+        // Enter distance: scroll while the slider moves from first peek → fully in view
+        const enter = window.innerHeight;
+        // Tall runway: seat the full slider in the viewport, then horizontal travel
+        scrollEl.style.height = (enter + distance) + 'px';
 
-        tween = gsap.to(track, {
-          x: () => -getDistance(),
-          ease: 'none',
+        // Hold x at 0 until the entire sticky slider fills the viewport, then scrub
+        tween = gsap.timeline({
           scrollTrigger: {
             id: 'services-horizontal',
             trigger: scrollEl,
-            start: 'top top',
+            start: 'top bottom',
             end: 'bottom bottom',
             scrub: 0.35,
             invalidateOnRefresh: true,
             anticipatePin: 0,
           }
+        });
+        tween.to({}, { duration: enter });
+        tween.to(track, {
+          x: () => -getDistance(),
+          duration: Math.max(distance, 1),
+          ease: 'none',
         });
       }
 
