@@ -3,11 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>IS - Experience House</title>
+    <meta name="description" content="Project case study — IS Studio Experience House." />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="color-scheme" content="light" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<title>IS - Experience House</title>
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/scrollbars.css">
+
 
   <!-- GSAP -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -582,161 +588,249 @@
       outline-offset: 4px;
     }
 
-    body.details-modal-open {
+    body.details-drawer-open {
       overflow: hidden !important;
     }
 
-    body.details-modal-open .cursor-dot,
-    body.details-modal-open .cursor-ring {
+    body.details-drawer-open .cursor-dot,
+    body.details-drawer-open .cursor-ring {
       z-index: 10001;
     }
 
-    .details-modal,
-    .details-modal * {
+    .details-drawer,
+    .details-drawer * {
       cursor: none !important;
     }
 
-    .details-modal {
+    .details-drawer {
       position: fixed;
       inset: 0;
       z-index: 10000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: clamp(20px, 4vw, 56px);
-      box-sizing: border-box;
-      opacity: 0;
-      visibility: hidden;
       pointer-events: none;
-      transition: opacity 0.28s ease, visibility 0.28s ease;
+      visibility: hidden;
     }
 
-    .details-modal.is-open {
-      opacity: 1;
-      visibility: visible;
+    .details-drawer.is-open {
       pointer-events: auto;
+      visibility: visible;
     }
 
-    .details-modal__backdrop {
+    .details-drawer__backdrop {
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.58);
       border: 0;
       padding: 0;
+      background: rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
     }
 
-    .details-modal__dialog {
-      position: relative;
-      z-index: 1;
-      width: min(1180px, 92vw);
-      max-height: min(88vh, 900px);
-      background: var(--bg);
-      color: var(--fg);
-      border: 2px solid var(--fg);
-      border-radius: clamp(14px, 2vw, 22px);
+    .details-drawer.is-open .details-drawer__backdrop {
+      opacity: 1;
+    }
+
+    .details-drawer__panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(480px, 100vw);
+      background: #ffffff;
+      color: #A82F18;
+      box-shadow: -18px 0 48px rgba(0, 0, 0, 0.18);
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 28px 90px rgba(0, 0, 0, 0.38);
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-sizing: border-box;
     }
 
-    .details-modal__header {
+    .details-drawer.is-open .details-drawer__panel {
+      transform: translateX(0);
+    }
+
+    .details-drawer__header {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 1rem;
-      padding: clamp(1rem, 2.5vw, 1.5rem) clamp(1.25rem, 3vw, 2rem);
-      border-bottom: 1px solid rgba(206, 65, 39, 0.25);
+      padding: max(clamp(1.25rem, 3vw, 1.75rem), env(safe-area-inset-top)) clamp(1.25rem, 3vw, 1.75rem) 1rem;
+      border-bottom: 1px solid rgba(168, 47, 24, 0.18);
       flex-shrink: 0;
     }
 
-    .details-modal__title {
-      margin: 0;
-      font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+    .details-drawer__eyebrow {
+      margin: 0 0 0.35rem;
+      font-size: 0.68rem;
       font-weight: 600;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: #ce4027;
+      color: rgba(168, 47, 24, 0.7);
     }
 
-    .details-modal__close {
+    .details-drawer__title {
+      margin: 0;
+      font-family: "Bebas Neue", Impact, sans-serif;
+      font-size: clamp(1.75rem, 4vw, 2.35rem);
+      font-weight: 400;
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: #A82F18;
+    }
+
+    .details-drawer__close {
       flex-shrink: 0;
-      width: 44px;
-      height: 44px;
-      border: 2px solid #ce4027;
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid #A82F18;
       border-radius: 50%;
       background: transparent;
-      color: #ce4027;
-      font-size: 1.5rem;
+      color: #A82F18;
+      font-size: 1.35rem;
       line-height: 1;
       cursor: pointer;
       transition: background 0.2s ease, color 0.2s ease;
     }
 
-    .details-modal__close:hover {
-      background: #ce4027;
-      color: var(--bg);
+    .details-drawer__close:hover {
+      background: #A82F18;
+      color: #ffffff;
     }
 
-    .details-modal__body {
+    .details-drawer__body {
       overflow-y: auto;
-      padding: clamp(1rem, 2.5vw, 1.75rem);
+      flex: 1;
+      min-height: 0;
+      padding: 0.5rem clamp(1.25rem, 3vw, 1.75rem) clamp(1.75rem, 4vh, 2.5rem);
       -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(168, 47, 24, 0.35) transparent;
     }
 
-    .details-modal__grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
-      gap: clamp(0.75rem, 2vw, 1.25rem);
+    .details-drawer__tagline {
+      margin: 0 0 1.25rem;
+      font-size: 0.98rem;
+      font-weight: 600;
+      line-height: 1.4;
+      color: #A82F18;
     }
 
-    .details-modal__grid .gallery-item {
-      border-radius: clamp(8px, 1.5vw, 12px);
-      aspect-ratio: 4 / 3;
-      min-height: 160px;
+    .details-drawer__accordion {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid rgba(168, 47, 24, 0.2);
     }
 
-    .details-modal__empty {
+    .details-drawer__item {
+      border-bottom: 1px solid rgba(168, 47, 24, 0.2);
+    }
+
+    .details-drawer__trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.95rem 0;
       margin: 0;
-      text-align: center;
-      color: #863b19;
-      font-size: 0.95rem;
-      line-height: 1.6;
-      padding: 2rem 1rem;
+      border: 0;
+      background: none;
+      color: #A82F18;
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      text-align: left;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
     }
 
-    @media (max-width: 900px), ((max-width: 1100px) and (orientation: portrait)) {
-      .details-modal {
-        padding: 0;
-        align-items: stretch;
-      }
+    .details-drawer__trigger:hover {
+      opacity: 0.7;
+    }
 
-      .details-modal__dialog {
-        width: 100%;
-        max-width: 100%;
-        max-height: 100%;
-        height: 100%;
-        border-radius: 0;
-        border-width: 0;
-        box-shadow: none;
-      }
+    .details-drawer__icon {
+      flex: 0 0 auto;
+      width: 10px;
+      height: 10px;
+      position: relative;
+    }
 
-      .details-modal__header {
-        padding-top: max(1rem, env(safe-area-inset-top));
-      }
+    .details-drawer__icon::before,
+    .details-drawer__icon::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 10px;
+      height: 1.5px;
+      background: currentColor;
+      transform: translate(-50%, -50%);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
 
-      .details-modal__body {
-        flex: 1;
-        min-height: 0;
-      }
+    .details-drawer__icon::after {
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
 
-      .details-modal__grid {
-        grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr));
-      }
+    .details-drawer__item.is-open .details-drawer__icon::after {
+      transform: translate(-50%, -50%) rotate(90deg) scaleX(0);
+      opacity: 0;
+    }
+
+    .details-drawer__acc-panel {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .details-drawer__item.is-open .details-drawer__acc-panel {
+      grid-template-rows: 1fr;
+    }
+
+    .details-drawer__content {
+      overflow: hidden;
+      min-height: 0;
+      padding-bottom: 0;
+      transition: padding-bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .details-drawer__item.is-open .details-drawer__content {
+      padding-bottom: 1rem;
+    }
+
+    .details-drawer__text {
+      margin: 0 0 0.75rem;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: #A82F18;
+    }
+
+    .details-drawer__text:last-child {
+      margin-bottom: 0;
+    }
+
+    .details-drawer__list {
+      margin: 0;
+      padding-left: 1.1rem;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .details-drawer__list li {
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: #A82F18;
     }
 
     @media (max-width: 520px) {
+      .details-drawer__panel {
+        width: 100vw;
+      }
+
       .project-actions {
         gap: 0.65rem 1rem;
       }
@@ -1196,6 +1290,13 @@
       background: #000;
       pointer-events: auto;
       cursor: auto !important;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .examples__live-site .live-site-frame::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      display: none;
     }
 
     .examples__live-site .live-site-embed-fallback {
@@ -1627,9 +1728,12 @@
     }
   </style>
   <link rel="stylesheet" href="css/mobile-nav.css">
+  <link rel="stylesheet" href="css/a11y.css">
 </head>
 <body>
-  <main class="screen" aria-label="Project Detail">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <main id="main-content" class="screen" aria-label="Project Detail">
 
     <!-- Top-left: show reel -->
     <a class="showreel" href="work.html" aria-label="Back to projects">
@@ -1656,7 +1760,6 @@
       </a>
       <nav class="pills" id="primary-nav" aria-label="Primary">
         <a class="pill" href="work.html"><i class="dot" aria-hidden="true"></i> Website</a>
-        <a class="pill" href="long-term.html"><i class="dot" aria-hidden="true"></i> Projects</a>
         <a class="pill" href="About.html"><i class="dot" aria-hidden="true"></i> Our House</a>
         <a class="pill" href="contact.html"><i class="dot" aria-hidden="true"></i> Let's Talk</a>
       </nav>
@@ -1672,16 +1775,24 @@
   <!-- Page Transition Overlay -->
   <div class="page-transition is-active" id="pageTransition"></div>
 
-  <!-- God Is in the Small Details — media grid modal -->
-  <div class="details-modal" id="detailsModal" hidden aria-hidden="true">
-    <button type="button" class="details-modal__backdrop" data-details-close aria-label="Close details"></button>
-    <div class="details-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="detailsModalTitle">
-      <div class="details-modal__header">
-        <h3 class="details-modal__title" id="detailsModalTitle">God Is in the Small Details</h3>
-        <button type="button" class="details-modal__close" data-details-close aria-label="Close">×</button>
+  <!-- God Is in the Small Details — right-side case study drawer -->
+  <div class="details-drawer" id="detailsDrawer" hidden aria-hidden="true">
+    <button type="button" class="details-drawer__backdrop" data-details-close aria-label="Close details"></button>
+    <aside
+      class="details-drawer__panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="detailsDrawerTitle"
+    >
+      <div class="details-drawer__header">
+        <div>
+          <p class="details-drawer__eyebrow">Case Study</p>
+          <h3 class="details-drawer__title" id="detailsDrawerTitle">Project</h3>
+        </div>
+        <button type="button" class="details-drawer__close" data-details-close aria-label="Close">×</button>
       </div>
-      <div class="details-modal__body" id="detailsModalBody"></div>
-    </div>
+      <div class="details-drawer__body" id="detailsDrawerBody"></div>
+    </aside>
   </div>
 
   <!-- Custom cursor elements -->
@@ -2215,6 +2326,306 @@
             'https://images.unsplash.com/photo-1556905055-8bf35821c0e0?auto=format&fit=crop&w=1800&q=80'
           ]
         }
+      },
+      '07': {
+        name: 'MANITOBA',
+        number: '07',
+        liveSiteUrl: 'https://www.manitobaelicensing.ca/public/home',
+        liveEmbedPath: 'embeds/manitoba-embed.html',
+        tagline: 'Manitoba eLicensing',
+        description: 'A public digital experience for Manitoba eLicensing—helping people find and manage licences online.',
+        businessDescription: 'Manitoba eLicensing is a public service platform for discovering and managing licences across Manitoba. The experience supports citizens and organizations with clearer paths to the licences and information they need.',
+        projectDescription: [
+          'We contributed to a public licensing experience built for clarity and access.',
+          'The work focuses on helping people reach the right licence pathways with less friction.',
+          'The result: a live government-facing service at manitobaelicensing.ca.'
+        ],
+        howItStarted: {
+          title: 'How it\'s start',
+          description: 'Public licensing systems succeed when people can find the right path quickly. Manitoba eLicensing needed a clear public home for that journey.',
+          content: [
+            'The Challenge: Make licence discovery and access understandable for a broad public audience.',
+            'Initial Brief: Support a public eLicensing experience that feels navigable and trustworthy.',
+            'Our Approach: Prioritize clarity, hierarchy, and service-oriented interaction patterns.',
+            'The Opportunity: Apply studio craft to civic digital services with real-world utility.'
+          ],
+          images: []
+        },
+        process: {
+          title: 'Process',
+          description: 'Service design and interface work oriented around public access.',
+          content: [
+            'Service mapping: Identified primary public entry points into licensing.',
+            'Interface: Structured information for scanability and trust.',
+            'Delivery: Connected the live public home into the studio portfolio.'
+          ],
+          images: []
+        },
+        assets: {
+          title: 'Assets',
+          description: 'Public service interface and entry experience for Manitoba eLicensing.',
+          content: [
+            'Public home experience for licence discovery.',
+            'Service-oriented layout and content hierarchy.',
+            'Live production URL for portfolio review.'
+          ],
+          images: []
+        },
+        finalResult: {
+          title: 'Final result',
+          description: 'A live public eLicensing experience at www.manitobaelicensing.ca/public/home.',
+          content: [
+            'Public-facing licensing entry point.',
+            'Clearer pathways for citizens and organizations.',
+            'A portfolio case showing civic and service design work.'
+          ],
+          images: []
+        }
+      },
+      '08': {
+        name: 'WALMART',
+        number: '08',
+        liveSiteUrl: 'https://www.walmart.ca/en',
+        liveEmbedPath: 'embeds/walmart-embed.html',
+        tagline: 'Everyday Digital Commerce',
+        description: 'Digital experience work supporting clear product discovery and conversion paths for Walmart\'s Canadian retail surface.',
+        businessDescription: 'Walmart is one of the world\'s largest retailers—serving millions of shoppers with everyday essentials, grocery, and general merchandise. Our work focused on digital patterns that keep browsing fast, trustworthy, and easy to act on across high-volume retail journeys.',
+        projectDescription: [
+          'We shaped retail web experiences around speed, clarity, and conversion.',
+          'The work prioritizes scannable product discovery and frictionless paths to purchase.',
+          'The result: digital surfaces that support Walmart\'s everyday shopping promise at scale.'
+        ],
+        howItStarted: {
+          title: 'How it\'s start',
+          description: 'High-volume retail needs digital interfaces that stay clear under pressure—from homepage discovery to product detail and cart.',
+          content: [
+            'The Challenge: Support shoppers moving quickly through dense catalogs without losing trust or clarity.',
+            'Initial Brief: Strengthen key digital commerce patterns for browse, compare, and convert.',
+            'Our Approach: Prioritize hierarchy, scanability, and mobile-ready interaction across the shopping funnel.',
+            'The Opportunity: Apply studio craft to one of retail\'s most familiar everyday experiences.'
+          ],
+          images: ['Assets/walmart/home.jpg']
+        },
+        process: {
+          title: 'Process',
+          description: 'From journey mapping to polished retail interface patterns.',
+          content: [
+            'Mapped high-intent shopping paths across homepage, category, and product surfaces.',
+            'Designed clear visual hierarchy for promotions, essentials, and product cards.',
+            'Refined interaction details for mobile and desktop conversion moments.'
+          ],
+          images: ['Assets/walmart/home.jpg']
+        },
+        assets: {
+          title: 'Assets',
+          description: 'Retail interface patterns and homepage preview for Walmart.ca.',
+          content: [
+            'Homepage and discovery layout direction.',
+            'Product-card and promotional hierarchy patterns.',
+            'Portfolio preview embed for review alongside the live site.'
+          ],
+          images: ['Assets/walmart/home.jpg']
+        },
+        finalResult: {
+          title: 'Final result',
+          description: 'A portfolio-ready retail case with live access to Walmart.ca.',
+          content: [
+            'Clearer product discovery and promotional hierarchy.',
+            'Commerce patterns built for everyday high-volume shopping.',
+            'Live site access for stakeholders and portfolio review.'
+          ],
+          images: ['Assets/walmart/home.jpg']
+        }
+      },
+      '09': {
+        name: 'CANADIAN TIRE',
+        number: '09',
+        liveSiteUrl: 'https://www.canadiantire.ca/',
+        liveEmbedPath: 'embeds/canadian-tire-embed.html',
+        tagline: 'Design System for Canada\'s Leading Retail Brands',
+        description: 'Scalable web components and landing-page systems across Canadian Tire, Mark\'s, Sportchek, and Party City.',
+        businessDescription: 'We partnered with Canadian Tire Corporation to build scalable web components and landing-page systems used across Canadian Tire, Mark\'s, Sportchek, and Party City. The work focused on shared navigation patterns, promotional landing pages, and responsive templates that keep each brand distinct while accelerating delivery across agile pods.',
+        projectDescription: [
+          'We built a shared design system that powers multiple CTC retail banners.',
+          'Mega-navigation, event pages, and category templates stay brand-true while shipping faster.',
+          'The result: reusable components live across Canadian Tire, Sportchek, Mark\'s, and Party City.'
+        ],
+        howItStarted: {
+          title: 'How it\'s start',
+          description: 'Canadian Tire Corporation needed a unified component library for multiple retail banners without slowing campaigns.',
+          content: [
+            'The Challenge: Serve Canadian Tire, Mark\'s, Sportchek, and Party City from one system without flattening brand identity.',
+            'Initial Brief: Create web components and UX research outputs for landing pages and navigation.',
+            'Our Approach: Audit existing flows, then build reusable Figma components in the CTC landing-page system.',
+            'The Opportunity: Accelerate seasonal campaigns while raising consistency and accessibility.'
+          ],
+          images: [
+            'Assets/csc/screens/01-design-system.png',
+            'Assets/csc/screens/02-main-nav.png'
+          ]
+        },
+        process: {
+          title: 'Process',
+          description: 'Agile partnership with product, content, ADA, and engineering pods.',
+          content: [
+            'Mapped mega-navigation states across Canadian Tire, Mark\'s, Sportchek, and Party City.',
+            'Designed reusable category and promotional components for cross-brand landing pages.',
+            'Built responsive Sportchek event templates and L1 / L2 PLP layout patterns.',
+            'Presented specs to leadership and iterated with engineering in Jira sprints.'
+          ],
+          images: [
+            'Assets/csc/screens/05-event-page-desktop.png',
+            'Assets/csc/screens/07-categories-desktop.png'
+          ]
+        },
+        assets: {
+          title: 'Assets',
+          description: 'CTC landing-page design system and shared web component library.',
+          content: [
+            'Mega-navigation patterns for Canadian Tire, Mark\'s, Sportchek, and Party City.',
+            'Sportchek event page templates — desktop and mobile.',
+            'Categories navigation component with multiple tile layouts.',
+            'L1 / L2 product listing page specifications for Sportchek.'
+          ],
+          images: [
+            'Assets/csc/screens/10-categories-variant-1.png',
+            'Assets/csc/screens/12-plp-layout.png'
+          ]
+        },
+        finalResult: {
+          title: 'Final result',
+          description: 'A scalable component system supporting faster rollout across CTC retail banners.',
+          content: [
+            'Clearer mega-nav and category discovery on canadiantire.ca and related properties.',
+            'Reusable landing-page templates that help teams ship seasonal campaigns with less rework.',
+            'A component library ready for new campaigns, category expansions, and cross-banner rollout.'
+          ],
+          images: [
+            'Assets/csc/screens/06-event-page-mobile.png',
+            'Assets/csc/screens/12-plp-layout.png'
+          ]
+        }
+      },
+      '10': {
+        name: 'ONE KINGS LANE',
+        number: '10',
+        liveSiteUrl: 'https://www.onekingslane.com/',
+        liveEmbedPath: 'embeds/onekingslane-embed.html',
+        tagline: 'Curated Home, Elevated Commerce',
+        description: 'Digital experience work for One Kings Lane—supporting a premium home and lifestyle commerce journey.',
+        businessDescription: 'One Kings Lane is a curated home and lifestyle retailer known for design-forward furnishings, décor, and editorial shopping. Our work focused on digital experiences that feel as considered as the products—clear merchandising, elegant hierarchy, and a path to purchase that stays premium.',
+        projectDescription: [
+          'We shaped a commerce experience that matches One Kings Lane\'s curated brand voice.',
+          'Editorial merchandising and product storytelling sit alongside clear conversion paths.',
+          'The result: a refined digital surface for discovering and shopping elevated home goods.'
+        ],
+        howItStarted: {
+          title: 'How it\'s start',
+          description: 'Premium home retail needs a digital experience that feels editorial without hiding the path to buy.',
+          content: [
+            'The Challenge: Balance inspiration-led browsing with clear product discovery and checkout confidence.',
+            'Initial Brief: Strengthen the digital home for curated furnishings and lifestyle merchandising.',
+            'Our Approach: Lead with visual hierarchy, editorial rhythm, and frictionless commerce details.',
+            'The Opportunity: Show how studio craft elevates specialty retail beyond generic templates.'
+          ],
+          images: ['Assets/onekingslane/home.jpg']
+        },
+        process: {
+          title: 'Process',
+          description: 'From brand immersion to polished merchandising and commerce patterns.',
+          content: [
+            'Mapped inspiration-to-purchase journeys across homepage, collections, and product detail.',
+            'Designed layout systems for editorial storytelling and product grids.',
+            'Refined interaction details that keep the experience premium on every device.'
+          ],
+          images: ['Assets/onekingslane/home.jpg']
+        },
+        assets: {
+          title: 'Assets',
+          description: 'Home commerce preview and merchandising direction for One Kings Lane.',
+          content: [
+            'Homepage and collection hierarchy direction.',
+            'Editorial merchandising and product presentation patterns.',
+            'Portfolio preview embed with live-site access.'
+          ],
+          images: ['Assets/onekingslane/home.jpg']
+        },
+        finalResult: {
+          title: 'Final result',
+          description: 'A portfolio-ready specialty retail case with live access to One Kings Lane.',
+          content: [
+            'A digital experience aligned to curated home shopping.',
+            'Clearer paths from inspiration to product and purchase.',
+            'Live site access for stakeholders and portfolio review.'
+          ],
+          images: ['Assets/onekingslane/home.jpg']
+        }
+      },
+      '11': {
+        name: 'ANOVA',
+        number: '11',
+        liveSiteUrl: 'https://anovaculinary.com/',
+        liveEmbedPath: 'embeds/anova-embed.html',
+        tagline: 'Guide System for Smart Digital Oven',
+        description: 'An intuitive in-app guide system for Anova\'s smart digital oven—beyond a traditional manual.',
+        businessDescription: 'We designed an intuitive guide system for Anova\'s smart digital oven — a native app experience that goes beyond a traditional manual. The guide integrates into the cooking journey with clear prompts, visual cues, and step-by-step flows built for both novice and experienced home cooks.',
+        projectDescription: [
+          'We designed a guide that feels like part of the product—not a separate PDF.',
+          'Flows cover browse, recipe detail, active cook, and completion with clear prompts.',
+          'The result: a shorter learning curve and a tighter bond between app and hardware.'
+        ],
+        howItStarted: {
+          title: 'How it\'s start',
+          description: 'Anova needed a guide system that felt native to the cooking journey and reduced the smart oven learning curve.',
+          content: [
+            'The Challenge: Replace manual-style guidance with an in-product experience for novice and experienced cooks.',
+            'Initial Brief: Design a native guide system integrated into the full product journey.',
+            'Our Approach: Research, journey mapping, wireframes, then high-fidelity Guide Page UI in Figma.',
+            'The Opportunity: Connect hardware and software through craft that cooks can trust mid-recipe.'
+          ],
+          images: [
+            'Assets/anova/03-trio-journey.png',
+            'Assets/anova/01-screen-grid.png'
+          ]
+        },
+        process: {
+          title: 'Process',
+          description: 'From research and wireframes to high-fidelity handoff.',
+          content: [
+            'Conducted user research and mapped guide flows for novice and experienced cooks.',
+            'Built wireframes for onboarding, recipe browse, and step-by-step cook modes.',
+            'Created high-fidelity UI aligned to Anova brand guidelines.',
+            'Prototyped, tested, and prepared detailed handoff specs for engineering.'
+          ],
+          images: ['Assets/anova/01-screen-grid.png']
+        },
+        assets: {
+          title: 'Assets',
+          description: 'Guide system screens, flows, and handoff documentation.',
+          content: [
+            'End-to-end user flow for the Anova guide system.',
+            'Wireframe set covering onboarding through cook completion.',
+            'High-fidelity Guide Page screens and component library.',
+            'Development handoff files with per-component documentation.'
+          ],
+          images: [
+            'Assets/anova/04-duo-cauliflower.png',
+            'Assets/anova/02-quad-flow.png'
+          ]
+        },
+        finalResult: {
+          title: 'Final result',
+          description: 'An intuitive guide that reduces the smart oven learning curve and connects app to hardware.',
+          content: [
+            'Higher user satisfaction through clearer in-cook guidance.',
+            'Seamless integration between the app guide and the oven experience.',
+            'A scalable design foundation for future Anova app features.'
+          ],
+          images: [
+            'Assets/anova/02-quad-flow.png',
+            'Assets/anova/03-trio-journey.png'
+          ]
+        }
       }
     };
 
@@ -2228,134 +2639,222 @@
     // The project.video now contains the same video path as the data-video from work.html
     // This video will be used in all accordion items
 
-    const DETAIL_SECTIONS = ['howItStarted', 'process', 'assets', 'finalResult'];
+    function escapeDrawerHtml(value) {
+      return String(value == null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
 
-    function collectProjectMedia(project) {
-      const seen = new Set();
-      const items = [];
+    function renderDrawerParagraphs(items) {
+      if (!items || !items.length) return '';
+      return items
+        .filter(Boolean)
+        .map((text) => `<p class="details-drawer__text">${escapeDrawerHtml(text)}</p>`)
+        .join('');
+    }
 
-      const add = (item) => {
-        if (!item || !item.src) return;
-        const key = item.src;
-        if (seen.has(key)) return;
-        seen.add(key);
-        items.push(item);
+    function renderDrawerList(items) {
+      if (!items || !items.length) return '';
+      return `
+        <ul class="details-drawer__list">
+          ${items.map((text) => `<li>${escapeDrawerHtml(text)}</li>`).join('')}
+        </ul>
+      `;
+    }
+
+    function renderDrawerAccordionItem(id, title, content, openByDefault) {
+      if (!content || !String(content).trim()) return '';
+      const isOpen = !!openByDefault;
+      return `
+        <div class="details-drawer__item${isOpen ? ' is-open' : ''}">
+          <button
+            type="button"
+            class="details-drawer__trigger"
+            aria-expanded="${isOpen}"
+            aria-controls="drawer-panel-${id}"
+            id="drawer-trigger-${id}"
+          >
+            <span>${escapeDrawerHtml(title)}</span>
+            <span class="details-drawer__icon" aria-hidden="true"></span>
+          </button>
+          <div
+            class="details-drawer__acc-panel"
+            id="drawer-panel-${id}"
+            role="region"
+            aria-labelledby="drawer-trigger-${id}"
+            aria-hidden="${isOpen ? 'false' : 'true'}"
+          >
+            <div class="details-drawer__content">
+              ${content}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function getDrawerChallenge(project) {
+      if (project.challenge) return project.challenge;
+      const started = project.howItStarted && project.howItStarted.content;
+      if (started && started[0]) return started[0];
+      return (project.howItStarted && project.howItStarted.description) || '';
+    }
+
+    function getDrawerApproach(project) {
+      if (project.approach) return project.approach;
+      const started = project.howItStarted && project.howItStarted.content;
+      if (started && started.length > 2) return started[2];
+      const process = project.process && project.process.content;
+      if (process && process.length) return process[0];
+      return (project.process && project.process.description) || '';
+    }
+
+    function getDrawerProcess(project) {
+      if (project.processHighlights && project.processHighlights.length) return project.processHighlights;
+      return (project.process && project.process.content) || [];
+    }
+
+    function getDrawerDeliverables(project) {
+      if (project.deliverables && project.deliverables.length) return project.deliverables;
+      return (project.assets && project.assets.content) || [];
+    }
+
+    function getDrawerOutcomes(project) {
+      if (project.outcomes && project.outcomes.length) return project.outcomes;
+      return (project.finalResult && project.finalResult.content) || [];
+    }
+
+    function buildDetailsDrawerBody(project) {
+      const sections = [];
+      let first = true;
+
+      const push = (id, title, content) => {
+        const html = renderDrawerAccordionItem(id, title, content, first);
+        if (html) {
+          sections.push(html);
+          first = false;
+        }
       };
 
-      if (project.video) {
-        const src = project.video;
-        const isVideo = /\.(mp4|mov|webm)(\?|$)/i.test(src);
-        add({
-          type: isVideo ? 'video' : 'image',
-          src,
-          alt: `${project.name} showreel`
+      push(
+        'overview',
+        'Overview',
+        project.businessDescription
+          ? `<p class="details-drawer__text">${escapeDrawerHtml(project.businessDescription)}</p>`
+          : ''
+      );
+
+      push('details', 'Project Details', renderDrawerParagraphs(project.projectDescription));
+
+      const challenge = getDrawerChallenge(project);
+      push(
+        'challenge',
+        'The Challenge',
+        challenge ? `<p class="details-drawer__text">${escapeDrawerHtml(challenge)}</p>` : ''
+      );
+
+      const approach = getDrawerApproach(project);
+      push(
+        'approach',
+        'Approach',
+        approach ? `<p class="details-drawer__text">${escapeDrawerHtml(approach)}</p>` : ''
+      );
+
+      push('process', 'Process Highlights', renderDrawerList(getDrawerProcess(project)));
+      push('deliverables', 'Key Deliverables', renderDrawerList(getDrawerDeliverables(project)));
+      push('outcomes', 'Impact & Outcomes', renderDrawerList(getDrawerOutcomes(project)));
+
+      const tagline = project.tagline
+        ? `<p class="details-drawer__tagline">${escapeDrawerHtml(project.tagline)}</p>`
+        : '';
+
+      return `
+        ${tagline}
+        <div class="details-drawer__accordion" id="detailsDrawerAccordion">
+          ${sections.join('')}
+        </div>
+      `;
+    }
+
+    function initDetailsDrawerAccordion(container) {
+      if (!container) return;
+      const items = Array.from(container.querySelectorAll('.details-drawer__item'));
+
+      const setPanelState = (item, open) => {
+        const panel = item.querySelector('.details-drawer__acc-panel');
+        const trigger = item.querySelector('.details-drawer__trigger');
+        if (!panel || !trigger) return;
+        trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+        item.classList.toggle('is-open', open);
+      };
+
+      items.forEach((item) => {
+        const trigger = item.querySelector('.details-drawer__trigger');
+        if (!trigger) return;
+        trigger.addEventListener('click', () => {
+          const wasOpen = item.classList.contains('is-open');
+          items.forEach((other) => setPanelState(other, false));
+          if (!wasOpen) setPanelState(item, true);
         });
-      }
-
-      DETAIL_SECTIONS.forEach((sectionKey) => {
-        const data = project[sectionKey];
-        if (!data) return;
-        if (data.media && data.media.length) {
-          data.media.forEach(add);
-        }
-        if (data.images && data.images.length) {
-          data.images.forEach((src, index) => {
-            add({
-              type: 'image',
-              src,
-              alt: `${data.title || sectionKey} ${index + 1}`
-            });
-          });
-        }
       });
-
-      return items;
     }
 
-    function renderDetailsGridItem(item, fallbackAlt) {
-      const alt = (item.alt || fallbackAlt || 'Project detail').replace(/"/g, '&quot;');
-      const src = encodeURI(item.src);
+    function initDetailsDrawer() {
+      const drawer = document.getElementById('detailsDrawer');
+      if (!drawer || drawer.dataset.bound === '1') return;
+      drawer.dataset.bound = '1';
 
-      if (item.type === 'youtube' || (item.src && item.src.includes('youtube.com/embed'))) {
-        return `
-          <div class="gallery-item">
-            <iframe src="${src}" title="${alt}" frameborder="0" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-          </div>
-        `;
-      }
+      let closeTimer = null;
 
-      if (item.type === 'video' || /\.(mp4|mov|webm)(\?|$)/i.test(item.src)) {
-        return `
-          <div class="gallery-item">
-            <video autoplay loop muted playsinline preload="metadata">
-              <source src="${src}" type="video/mp4">
-              <source src="${src}" type="video/quicktime">
-              <source src="${src}" type="video/webm">
-            </video>
-          </div>
-        `;
-      }
-
-      const isGif = item.src && (item.src.toLowerCase().endsWith('.gif') || item.src.toLowerCase().includes('.gif'));
-      return `
-        <div class="gallery-item">
-          <img src="${src}" alt="${alt}" loading="lazy"${isGif ? ' class="gif-image"' : ''} />
-        </div>
-      `;
-    }
-
-    function generateDetailsGrid(mediaArray, fallbackAlt) {
-      if (!mediaArray || !mediaArray.length) {
-        return '<p class="details-modal__empty">Detail media coming soon for this project.</p>';
-      }
-      return `
-        <div class="details-modal__grid">
-          ${mediaArray.map((item) => renderDetailsGridItem(item, fallbackAlt)).join('')}
-        </div>
-      `;
-    }
-
-    function initDetailsModal() {
-      const modal = document.getElementById('detailsModal');
-      if (!modal || modal.dataset.bound === '1') return;
-      modal.dataset.bound = '1';
-
-      const closeModal = () => {
-        modal.classList.remove('is-open');
-        modal.setAttribute('aria-hidden', 'true');
-        modal.hidden = true;
-        document.body.classList.remove('details-modal-open');
+      const closeDrawer = () => {
+        drawer.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('details-drawer-open');
+        if (closeTimer) clearTimeout(closeTimer);
+        closeTimer = setTimeout(() => {
+          drawer.hidden = true;
+        }, 400);
       };
 
-      modal.querySelectorAll('[data-details-close]').forEach((el) => {
-        el.addEventListener('click', closeModal);
+      drawer.querySelectorAll('[data-details-close]').forEach((el) => {
+        el.addEventListener('click', closeDrawer);
       });
 
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('is-open')) {
-          closeModal();
+        if (e.key === 'Escape' && drawer.classList.contains('is-open')) {
+          closeDrawer();
         }
       });
 
-      window.closeDetailsModal = closeModal;
-      window.openDetailsModal = (project) => {
-        const body = document.getElementById('detailsModalBody');
-        if (!body) return;
-        const media = collectProjectMedia(project);
-        body.innerHTML = generateDetailsGrid(media, project.name);
-        body.querySelectorAll('video').forEach((video) => {
-          video.load();
-          video.play().catch(() => {});
+      window.closeDetailsDrawer = closeDrawer;
+      window.openDetailsDrawer = (project) => {
+        const body = document.getElementById('detailsDrawerBody');
+        const title = document.getElementById('detailsDrawerTitle');
+        if (!body || !project) return;
+
+        if (closeTimer) {
+          clearTimeout(closeTimer);
+          closeTimer = null;
+        }
+
+        if (title) title.textContent = project.name || 'Project';
+        body.innerHTML = buildDetailsDrawerBody(project);
+        initDetailsDrawerAccordion(document.getElementById('detailsDrawerAccordion'));
+
+        drawer.hidden = false;
+        drawer.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('details-drawer-open');
+        requestAnimationFrame(() => {
+          drawer.classList.add('is-open');
         });
-        modal.hidden = false;
-        modal.classList.add('is-open');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('details-modal-open');
-        modal.querySelector('.details-modal__close')?.focus();
+        drawer.querySelector('.details-drawer__close')?.focus();
       };
     }
 
-    initDetailsModal();
+    initDetailsDrawer();
 
     // Helper function to generate single large image HTML from media array (only first item)
     const generateGallery = (mediaArray, altText) => {
@@ -2437,6 +2936,28 @@
       `;
     }
 
+    function hideIframeScrollbars(iframe) {
+      if (!iframe) return;
+      const apply = () => {
+        try {
+          const doc = iframe.contentDocument;
+          if (!doc || !doc.documentElement) return;
+          if (doc.getElementById('hide-iframe-scrollbars')) return;
+          const style = doc.createElement('style');
+          style.id = 'hide-iframe-scrollbars';
+          style.textContent = [
+            'html, body { scrollbar-width: none !important; -ms-overflow-style: none !important; }',
+            'html::-webkit-scrollbar, body::-webkit-scrollbar, *::-webkit-scrollbar { width: 0 !important; height: 0 !important; display: none !important; background: transparent !important; }'
+          ].join('');
+          (doc.head || doc.documentElement).appendChild(style);
+        } catch (_) {
+          /* cross-origin iframes cannot be styled */
+        }
+      };
+      apply();
+      iframe.addEventListener('load', apply);
+    }
+
     function fitLivePreview(root) {
       const wrap = root.querySelector('.examples__live-site');
       const scaler = root.querySelector('.live-site-frame-scaler');
@@ -2447,6 +2968,7 @@
       scaler.dataset.fitScale = '1';
       scaler.style.transform = 'scale(' + scale + ')';
       wrap.style.height = (w * 720 / 1280) + 'px';
+      hideIframeScrollbars(root.querySelector('.live-site-frame'));
     }
 
     function mountSrcdocEmbed(project, root) {
@@ -2547,7 +3069,7 @@
               </div>
               <div class="project-actions">
                 <a href="${project.liveSiteUrl || '#'}" class="project-view-button"${project.liveSiteUrl ? ' target="_blank" rel="noopener noreferrer"' : ''}>View the Result</a>
-                <button type="button" class="project-details-button" data-details-modal-open>God Is in the Small Details</button>
+                <button type="button" class="project-details-button" data-details-drawer-open>God Is in the Small Details</button>
               </div>
             </div>
             </div>
@@ -2558,12 +3080,12 @@
       // Update page title
       document.title = `${project.name} - IS Experience House`;
 
-      const detailsBtn = contentEl.querySelector('[data-details-modal-open]');
+      const detailsBtn = contentEl.querySelector('[data-details-drawer-open]');
       if (detailsBtn) {
         detailsBtn.addEventListener('click', (e) => {
           e.preventDefault();
-          if (typeof window.openDetailsModal === 'function') {
-            window.openDetailsModal(project);
+          if (typeof window.openDetailsDrawer === 'function') {
+            window.openDetailsDrawer(project);
           }
         });
       }
@@ -2740,13 +3262,11 @@
 
       // Page color mapping
       const pageColors = {
-        'work.html': { bg: '#ce4127', text: '#F7E491' }, // Red page
+        'work.html': { bg: '#ce4127', text: '#FFFFFF' }, // Red page
         'index.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
         'project.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
-        'About.html': { bg: '#ce4127', text: '#ffffff' },
+        'About.html': { bg: '#ce4127', text: '#FFFFFF' },
         'contact.html': { bg: '#F7E491', text: '#CE4127' },
-        'long-term.html': { bg: '#F7E491', text: '#CE4127' },
-        'long-term-project.html': { bg: '#F7E491', text: '#CE4127' }
       };
 
       // Intercept all internal navigation links

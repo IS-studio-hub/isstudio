@@ -3,7 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>IS - Experience House</title>
+    <meta name="description" content="IS Studio — Experience House. Human-first, AI-native design and technology." />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="color-scheme" content="light" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<title>IS - Experience House</title>
 
   <!-- Favicon with house emoji -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>" />
@@ -12,11 +17,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/scrollbars.css">
 
+
   <style>
     :root{
       --bg: #F7E491;
-      --fg: #CE4127;
-      --muted: #CE4127;
+      --fg: #A82F18;
+      --muted: #A82F18;
       --border: rgba(206, 65, 39,1);
       --dot: #CE4127;
       --dot-glow: rgba(134, 59, 25, 1);
@@ -340,11 +346,11 @@
       pointer-events: none;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 12px;
-      color: rgba(206,65,39,.75);
+      color: #A82F18;
       text-align: right;
       letter-spacing: .02em;
     }
-    .coords b{ color: #CE4127; font-weight: 600; }
+    .coords b{ color: #A82F18; font-weight: 600; }
     @media (hover: none) {
       .cursor-dot, .cursor-ring { display: none !important; }
       html, body { cursor: auto !important; }
@@ -481,9 +487,12 @@
     }
   </style>
   <link rel="stylesheet" href="css/mobile-nav.css">
+  <link rel="stylesheet" href="css/a11y.css">
 </head>
 <body>
-  <main class="screen" aria-label="Experience Studio Hero">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <main id="main-content" class="screen" aria-label="Experience Studio Hero">
 
     <!-- Top-left: show reel -->
     <a class="showreel" href="#" id="btn-showreel" aria-label="Play show reel">
@@ -522,7 +531,6 @@
       </svg>
       <nav class="pills" id="primary-nav" aria-label="Primary">
         <a class="pill" href="work.html"><i class="dot" aria-hidden="true"></i> Website</a>
-        <a class="pill" href="long-term.html"><i class="dot" aria-hidden="true"></i> Projects</a>
         <a class="pill" href="About.html"><i class="dot" aria-hidden="true"></i> Our House</a>
         <a class="pill" href="contact.html"><i class="dot" aria-hidden="true"></i> Let's Talk</a>
       </nav>
@@ -795,13 +803,11 @@
           
           // Page color mapping
           const pageColors = {
-            'work.html': { bg: '#ce4127', text: '#F7E491' }, // Red page
+            'work.html': { bg: '#ce4127', text: '#FFFFFF' }, // Red page
             'index.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
             'project.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
-            'About.html': { bg: '#ce4127', text: '#ffffff' },
+            'About.html': { bg: '#ce4127', text: '#FFFFFF' },
             'contact.html': { bg: '#F7E491', text: '#CE4127' },
-            'long-term.html': { bg: '#F7E491', text: '#CE4127' },
-            'long-term-project.html': { bg: '#F7E491', text: '#CE4127' }
           };
           
           // Extract target page name

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1280, initial-scale=1" />
+  <title>Canadian Tire — preview</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar,
+    *::-webkit-scrollbar {
+      width: 0 !important;
+      height: 0 !important;
+      display: none !important;
+    }
+    .bar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .55rem 1rem;
+      background: #c8102e;
+      color: #fff;
+      font: 600 12px/1.3 Inter, system-ui, sans-serif;
+      letter-spacing: .04em;
+    }
+    .bar a {
+      color: #fff;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,.45);
+      padding: .35rem .7rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .bar a:hover { background: rgba(255,255,255,.1); }
+    .note { margin: 0; opacity: .9; font-weight: 500; }
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      padding: 1.25rem;
+      box-sizing: border-box;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .stack img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #fff;
+      box-shadow: 0 8px 28px rgba(0,0,0,.08);
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <p class="note">Canadian Tire — design system &amp; component preview</p>
+    <a href="https://www.canadiantire.ca/" target="_blank" rel="noopener noreferrer">Open live site</a>
+  </div>
+  <div class="stack">
+    <img src="../Assets/csc/screens/01-design-system.png" alt="CTC web design system" width="1280" />
+    <img src="../Assets/csc/screens/02-main-nav.png" alt="Canadian Tire mega navigation" width="1280" />
+    <img src="../Assets/csc/screens/05-event-page-desktop.png" alt="Sportchek event page desktop" width="1280" />
+    <img src="../Assets/csc/screens/12-plp-layout.png" alt="Sportchek product listing layout" width="1280" />
+  </div>
+</body>
+</html>

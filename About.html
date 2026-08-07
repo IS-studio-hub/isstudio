@@ -3,7 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>IS - Experience House</title>
+    <meta name="description" content="About IS Studio — a human-first, AI-native design and technology company." />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="color-scheme" content="light" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<title>IS - Experience House</title>
 
   <!-- Favicon with magnet emoji -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧲</text></svg>" />
@@ -11,9 +16,10 @@
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/scrollbars.css">
+
   <style>
     :root{
-      --bg: #F7E491;
+      --bg: #ce4127;
       --fg: #CE4127;
       --muted: #CE4127;
       --border: rgba(206, 65, 39,1);
@@ -44,9 +50,9 @@
 
     body.about-page {
       background: #ce4127;
-      color: #F7E491;
-      --fg: #F7E491;
-      --muted: rgba(247, 228, 145, 0.75);
+      color: #FFFFFF;
+      --fg: #FFFFFF;
+      --muted: #FFFFFF;
     }
 
     .screen {
@@ -69,14 +75,14 @@
       overflow-y: visible;
     }
 
-    body.about-page .showreel { color: #F7E491; }
-    body.about-page .showreel .play { border-left-color: #F7E491; }
-    body.about-page .showreel .icon { outline-color: rgba(247, 228, 145, .5); }
-    body.about-page .showreel .icon::before { border-color: rgba(247, 228, 145, .25); }
-    body.about-page .coords { color: rgba(247, 228, 145, .65); }
-    body.about-page .coords b { color: #F7E491; }
+    body.about-page .showreel { color: #FFFFFF; }
+    body.about-page .showreel .play { border-left-color: #FFFFFF; }
+    body.about-page .showreel .icon { outline-color: rgba(255, 255, 255, .5); }
+    body.about-page .showreel .icon::before { border-color: rgba(255, 255, 255, .25); }
+    body.about-page .coords { color: #FFFFFF; }
+    body.about-page .coords b { color: #FFFFFF; }
     body.about-page .cursor-dot { background: #ffffff; }
-    body.about-page .cursor-ring { border-color: #F7E491; }
+    body.about-page .cursor-ring { border-color: #FFFFFF; }
 
     .center {
       width: 100%;
@@ -100,14 +106,14 @@
       transform: translateY(0);
     }
     .ut-frame {
-      border: 1px solid rgba(247, 228, 145, .12);
+      border: 1px solid rgba(255, 255, 255, .12);
       padding: clamp(1.25rem, 3vw, 2.5rem);
     }
     .ut-eyebrow {
       font-size: .62rem;
       letter-spacing: .18em;
       text-transform: uppercase;
-      color: rgba(247, 228, 145, .45);
+      color: #FFFFFF;
       margin: 0 0 1rem;
     }
     .ut-heading {
@@ -115,23 +121,23 @@
       font-size: clamp(2.5rem, 6.5vw, 5.5rem);
       line-height: .92;
       margin: 0;
-      color: #F7E491;
+      color: #FFFFFF;
       text-transform: uppercase;
     }
-    .ut-heading strong { color: #F7E491; font-weight: inherit; }
+    .ut-heading strong { color: #FFFFFF; font-weight: inherit; }
     .ut-data-tag {
       display: block;
       font-family: ui-monospace, monospace;
       font-size: .58rem;
       letter-spacing: .12em;
-      color: rgba(247, 228, 145, .75);
+      color: #FFFFFF;
       margin-top: .35rem;
     }
 
     /* Marquee */
     .ut-marquee-wrap {
       overflow: hidden;
-      border-block: 1px solid rgba(247, 228, 145, .1);
+      border-block: 1px solid rgba(255, 255, 255, .1);
       padding: clamp(1.25rem, 2.5vh, 2rem) 0;
       margin: clamp(3rem, 6vh, 5rem) 0;
     }
@@ -154,11 +160,11 @@
       font-family: "Bebas Neue", Impact, sans-serif;
       font-size: clamp(2rem, 5vw, 4.5rem);
       white-space: nowrap;
-      color: #F7E491;
+      color: #FFFFFF;
       text-transform: uppercase;
       letter-spacing: .04em;
     }
-    .ut-marquee__item span { color: rgba(247, 228, 145, .25); margin: 0 .5rem; }
+    .ut-marquee__item span { color: rgba(255, 255, 255, .25); margin: 0 .5rem; }
 
     /* Stacked vertical type */
     .ut-craft-discover__grid {
@@ -191,20 +197,20 @@
       font-size: clamp(3rem, 12vw, 9rem);
       line-height: .85;
       color: transparent;
-      -webkit-text-stroke: 1px rgba(247, 228, 145, .35);
+      -webkit-text-stroke: 1px rgba(255, 255, 255, .35);
       text-transform: uppercase;
       margin: 0;
     }
     .ut-stack-type__line.is-fill {
-      color: #F7E491;
+      color: #FFFFFF;
       -webkit-text-stroke: 0;
     }
-    .ut-stack-type__line strong { color: #F7E491; -webkit-text-stroke: 0; }
+    .ut-stack-type__line strong { color: #FFFFFF; -webkit-text-stroke: 0; }
 
     .ut-manifesto {
       font-size: clamp(.88rem, 1.1vw, 1rem);
       line-height: 1.75;
-      color: rgba(247, 228, 145, .65);
+      color: #FFFFFF;
       max-width: 52ch;
       margin: clamp(1.5rem, 3vh, 2rem) 0 0;
     }
@@ -214,17 +220,17 @@
       font-family: ui-monospace, monospace;
       font-size: .72rem;
       letter-spacing: .08em;
-      color: #F7E491;
+      color: #FFFFFF;
       margin-bottom: .5rem;
     }
     .ut-discover__title {
       font-family: "Bebas Neue", Impact, sans-serif;
       font-size: clamp(2rem, 4.5vw, 3.5rem);
       margin: 0 0 1.5rem;
-      color: #F7E491;
+      color: #FFFFFF;
       text-transform: uppercase;
     }
-    .ut-discover__title strong { color: #F7E491; }
+    .ut-discover__title strong { color: #FFFFFF; }
     .ut-build-stats {
       display: flex;
       flex-direction: column;
@@ -240,12 +246,12 @@
       font-size: .68rem;
       letter-spacing: .1em;
       text-transform: uppercase;
-      color: rgba(247, 228, 145, .55);
+      color: #FFFFFF;
     }
     .ut-build-row__bar {
       grid-column: 1 / -1;
       height: 4px;
-      background: rgba(247, 228, 145, .1);
+      background: rgba(255, 255, 255, .1);
       position: relative;
       overflow: hidden;
     }
@@ -259,7 +265,7 @@
     .ut-build-row__val {
       font-family: "Bebas Neue", Impact, sans-serif;
       font-size: 1.25rem;
-      color: #F7E491;
+      color: #FFFFFF;
     }
 
 
@@ -286,7 +292,7 @@
       font-size: .72rem;
       letter-spacing: .12em;
       text-transform: uppercase;
-      color: rgba(247, 228, 145, .55);
+      color: #FFFFFF;
       margin: 0 0 .75rem;
     }
     .ut-services__title {
@@ -294,18 +300,18 @@
       font-size: clamp(2.75rem, 7vw, 5.5rem);
       line-height: .92;
       margin: 0;
-      color: #F7E491;
+      color: #FFFFFF;
       text-transform: uppercase;
     }
     .ut-services__title span {
-      color: rgba(247, 228, 145, .4);
+      color: #FFFFFF;
       font-weight: inherit;
     }
     .ut-services__lead {
       margin: 1rem 0 0;
       font-size: clamp(.95rem, 1.2vw, 1.1rem);
       line-height: 1.65;
-      color: rgba(247, 228, 145, .75);
+      color: #FFFFFF;
       max-width: 42ch;
     }
     .ut-services__scroll {
@@ -345,14 +351,14 @@
       font-size: clamp(2rem, 5.5vw, 4.25rem);
       line-height: .92;
       margin: 0;
-      color: #F7E491;
+      color: #FFFFFF;
       text-transform: uppercase;
     }
     .ut-service__num {
       font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
       font-size: clamp(.85rem, 1.4vw, 1.15rem);
       letter-spacing: .08em;
-      color: rgba(247, 228, 145, .4);
+      color: #FFFFFF;
     }
     .ut-service__media {
       position: relative;
@@ -360,7 +366,7 @@
       aspect-ratio: 16 / 9;
       overflow: hidden;
       background: rgba(0, 0, 0, .18);
-      border: 1px solid rgba(247, 228, 145, .14);
+      border: 1px solid rgba(255, 255, 255, .14);
     }
     .ut-service__media img {
       width: 100%;
@@ -378,7 +384,7 @@
       margin: 0;
       font-size: clamp(.92rem, 1.15vw, 1.05rem);
       line-height: 1.65;
-      color: rgba(247, 228, 145, .78);
+      color: #FFFFFF;
     }
     .ut-service__btn {
       position: relative;
@@ -389,7 +395,7 @@
       min-height: 48px;
       min-width: 140px;
       padding: .85rem 1.25rem;
-      background: #F7E491;
+      background: #FFFFFF;
       color: #ce4127;
       text-decoration: none;
       font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
@@ -409,8 +415,8 @@
     }
     .ut-service__btn:hover {
       background: transparent;
-      color: #F7E491;
-      outline: 1px solid rgba(247, 228, 145, .55);
+      color: #FFFFFF;
+      outline: 1px solid rgba(255, 255, 255, .55);
       outline-offset: -1px;
       transform: translateY(-1px);
     }
@@ -526,7 +532,7 @@
       margin-top: clamp(4rem, 8vh, 7rem);
     }
     .ut-privacy__frame {
-      border: 1px solid rgba(247, 228, 145, .12);
+      border: 1px solid rgba(255, 255, 255, .12);
       padding: clamp(1.25rem, 3vw, 2.5rem);
     }
     .ut-privacy__head {
@@ -544,8 +550,8 @@
       align-items: center;
       gap: .55rem;
       background: transparent;
-      border: 1px solid rgba(247, 228, 145, .35);
-      color: #F7E491;
+      border: 1px solid rgba(255, 255, 255, .35);
+      color: #FFFFFF;
       text-decoration: none;
       font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
       font-size: clamp(.68rem, 1vw, .82rem);
@@ -560,13 +566,13 @@
       width: .45rem;
       height: .45rem;
       border-radius: 50%;
-      background: #F7E491;
+      background: #FFFFFF;
       flex-shrink: 0;
     }
     .ut-privacy-btn:hover {
-      background: #F7E491;
+      background: #FFFFFF;
       color: #ce4127;
-      border-color: #F7E491;
+      border-color: #FFFFFF;
       transform: translateY(-1px);
     }
     .ut-privacy-btn:hover .dot { background: #ce4127; }
@@ -575,7 +581,7 @@
     .ut-footer {
       margin-top: clamp(4rem, 8vh, 6rem);
       padding-top: 2rem;
-      border-top: 1px solid rgba(247, 228, 145, .1);
+      border-top: 1px solid rgba(255, 255, 255, .1);
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 2rem;
@@ -584,32 +590,32 @@
     .ut-footer__coords {
       font-family: ui-monospace, monospace;
       font-size: .68rem;
-      color: rgba(247, 228, 145, .4);
+      color: #FFFFFF;
       letter-spacing: .08em;
     }
     .ut-footer__copy {
       font-size: .75rem;
-      color: rgba(247, 228, 145, .45);
+      color: #FFFFFF;
       margin: .5rem 0 0;
       line-height: 1.6;
     }
     .ut-footer__copy a {
-      color: #F7E491;
+      color: #FFFFFF;
       text-decoration: none;
     }
-    .ut-footer__copy a:hover { color: #F7E491; }
+    .ut-footer__copy a:hover { color: #FFFFFF; }
     .ut-footer__mark {
       font-family: "Bebas Neue", Impact, sans-serif;
       font-size: clamp(3rem, 8vw, 6rem);
       line-height: .85;
       text-align: right;
       color: transparent;
-      -webkit-text-stroke: 1px rgba(247, 228, 145, .2);
+      -webkit-text-stroke: 1px rgba(255, 255, 255, .2);
       text-transform: uppercase;
       margin: 0;
     }
     .ut-footer__mark strong {
-      color: #F7E491;
+      color: #FFFFFF;
       -webkit-text-stroke: 0;
     }
 
@@ -751,10 +757,10 @@
       pointer-events: auto;
       display: inline-flex; align-items: center; gap: .6rem;
       padding: .65rem 1.1rem;
-      border: 1.6px solid #CE4127;
+      border: 1.6px solid #FFFFFF;
       border-radius: 999px;
-      background: #f7e491;
-      color: #CE4127;
+      background: transparent;
+      color: #FFFFFF;
       font-weight: 600;
       letter-spacing: .05em;
       font-size: clamp(.72rem, .95vw, .9rem);
@@ -763,16 +769,16 @@
       transition: background .2s ease, color .2s ease, transform .12s ease, border-color .2s ease;
       cursor: none !important;
     }
-    .pill .dot { width: .45rem; height: .45rem; border-radius: 50%; background: #CE4127; }
-    .pill:hover { background: #ce4127; color: #F7E491; transform: translateY(-1px); }
-    .pill:hover .dot { background: #F7E491; }
+    .pill .dot { width: .45rem; height: .45rem; border-radius: 50%; background: #FFFFFF; }
+    .pill:hover { background: #FFFFFF; color: #CE4127; transform: translateY(-1px); }
+    .pill:hover .dot { background: #CE4127; }
     .pill.is-active {
-      background: #ce4127;
-      color: #F7E491;
-      border-color: #CE4127;
+      background: #FFFFFF;
+      color: #CE4127;
+      border-color: #FFFFFF;
     }
-    .pill.is-active .dot { background: #F7E491; }
-    body.about-page .logo-svg path { fill: #F7E491; }
+    .pill.is-active .dot { background: #CE4127; }
+    body.about-page .logo-svg path { fill: #FFFFFF; }
 
     .wedge { display: none; }
 
@@ -793,7 +799,7 @@
     .hero__component { display: grid; gap: 1rem; }
 
     .hero__frame {
-      border: 1px solid rgba(247, 228, 145, .12);
+      border: 1px solid rgba(255, 255, 255, .12);
       padding: clamp(1rem, 2.5vw, 1.75rem);
     }
 
@@ -829,7 +835,7 @@
       margin: 0;
       font-size: .68rem;
       letter-spacing: .16em;
-      color: rgba(247, 228, 145, .55);
+      color: #FFFFFF;
       text-transform: uppercase;
     }
     .hero__logo .h-display {
@@ -839,13 +845,13 @@
       margin: 0;
       text-align: right;
       text-transform: uppercase;
-      color: #F7E491;
+      color: #FFFFFF;
     }
     .u-text-outline {
       color: transparent;
-      -webkit-text-stroke: 1.5px #f7e491;
+      -webkit-text-stroke: 1.5px #FFFFFF;
     }
-    .h-display strong { color: #F7E491; -webkit-text-stroke: 0; font-weight: inherit; }
+    .h-display strong { color: #FFFFFF; -webkit-text-stroke: 0; font-weight: inherit; }
 
     .hero__title {
       display: flex;
@@ -863,9 +869,9 @@
       line-height: 1;
       letter-spacing: .05em;
       margin: 0;
-      color: #F7E491;
+      color: #FFFFFF;
     }
-    .hero__subtitle-item strong { color: #F7E491; }
+    .hero__subtitle-item strong { color: #FFFFFF; }
 
     .hero__cta {
       display: flex;
@@ -877,7 +883,7 @@
       display: inline-block;
       background: transparent;
       border: none;
-      color: #F7E491;
+      color: #FFFFFF;
       text-decoration: none;
       font-family: ui-monospace, Menlo, Monaco, Consolas, monospace;
       font-size: clamp(.68rem, 1vw, .82rem);
@@ -886,7 +892,7 @@
       padding: .9rem 1.2rem;
       cursor: none !important;
     }
-    .hero-btn:hover { color: #F7E491; }
+    .hero-btn:hover { color: #FFFFFF; }
     .frame { position: absolute; inset: 0; pointer-events: none; }
     .frame__corner {
       position: absolute;
@@ -908,7 +914,7 @@
       margin: 0;
       font-size: clamp(.88rem, 1.15vw, 1.02rem);
       line-height: 1.65;
-      color: rgba(247, 228, 145, .82);
+      color: #FFFFFF;
       max-width: 40ch;
     }
     .hero__title .p-m + .p-m {
@@ -943,7 +949,7 @@
       aspect-ratio: 4/5;
       object-fit: cover;
       display: block;
-      border: 1px solid rgba(247, 228, 145, .15);
+      border: 1px solid rgba(255, 255, 255, .15);
       transition: filter .6s ease, opacity .6s ease;
     }
     .slide__text {
@@ -1018,7 +1024,7 @@
     .pagination__tick--minor {
       width: 1px;
       height: 7px;
-      background: rgba(247, 228, 145, .2);
+      background: rgba(255, 255, 255, .2);
     }
     .pagination__tick--major {
       width: 1px;
@@ -1031,7 +1037,7 @@
       transform: translate(-50%, -50%);
       display: flex;
       align-items: center;
-      color: #F7E491;
+      color: #FFFFFF;
       pointer-events: none;
     }
     .pagination__handle-bracket {
@@ -1059,7 +1065,7 @@
     .hero__decoration .eyebrow {
       padding: 0;
       font-size: .62rem;
-      color: rgba(247, 228, 145, .35);
+      color: rgba(255, 255, 255, .35);
     }
 
     @media (max-width: 991px) {
@@ -1190,7 +1196,7 @@
       font-size: clamp(2.5rem, 6.5vw, 5.25rem);
       line-height: .92;
       margin: 0;
-      color: #F7E491;
+      color: #FFFFFF;
       flex: 1 1 auto;
       position: relative;
       display: inline-block;
@@ -1199,7 +1205,7 @@
       animation: intro-strong-flicker 2.2s ease-in-out infinite;
     }
     .intro__text-item .h2 strong {
-      color: #F7E491;
+      color: #FFFFFF;
       font-weight: inherit;
     }
     .intro__text-eyebrow {
@@ -1214,7 +1220,7 @@
       font-family: ui-monospace, Menlo, monospace;
       font-size: clamp(.52rem, .85vw, .68rem);
       letter-spacing: .12em;
-      color: rgba(247, 228, 145, .65);
+      color: #FFFFFF;
       text-transform: lowercase;
       white-space: nowrap;
     }
@@ -1235,7 +1241,7 @@
       border: none;
     }
     .intro__kanji-item {
-      color: #F7E491;
+      color: #FFFFFF;
       height: auto;
     }
     .intro__kanji-svg {
@@ -1295,7 +1301,7 @@
       position: absolute;
       inset: 0;
       z-index: 1;
-      background: radial-gradient(ellipse 70% 60% at 55% 45%, rgba(247, 228, 145, .14) 0%, transparent 70%);
+      background: radial-gradient(ellipse 70% 60% at 55% 45%, rgba(255, 255, 255, .14) 0%, transparent 70%);
       pointer-events: none;
     }
     .intro__bg-scanline.bg__scanline {
@@ -1313,8 +1319,8 @@
       opacity: 0.12;
       background: repeating-linear-gradient(
         to bottom,
-        rgba(247, 228, 145, 0.06) 0px,
-        rgba(247, 228, 145, 0.06) 1px,
+        rgba(255, 255, 255, 0.06) 0px,
+        rgba(255, 255, 255, 0.06) 1px,
         transparent 2px,
         transparent 6px
       );
@@ -1328,9 +1334,9 @@
       mix-blend-mode: overlay;
       opacity: 0.06;
       background-image:
-        radial-gradient(circle at 20% 30%, rgba(247, 228, 145, 0.45) 0 1px, transparent 1px),
-        radial-gradient(circle at 70% 60%, rgba(247, 228, 145, 0.55) 0 1px, transparent 1px),
-        radial-gradient(circle at 40% 80%, rgba(247, 228, 145, 0.5) 0 1px, transparent 1px);
+        radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.45) 0 1px, transparent 1px),
+        radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.55) 0 1px, transparent 1px),
+        radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.5) 0 1px, transparent 1px);
       background-size: 120px 120px;
       animation: glitch-noise 0.9s infinite steps(2, end);
     }
@@ -1479,12 +1485,12 @@
       pointer-events: none;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 12px;
-      color: rgba(247, 228, 145,.75);
+      color: rgba(255, 255, 255,.75);
       text-align: right;
       letter-spacing: .02em;
     }
-    .coords b{ color: #F7E491; font-weight: 600; }
-    body.about-page .coords b { color: #F7E491; }
+    .coords b{ color: #FFFFFF; font-weight: 600; }
+    body.about-page .coords b { color: #FFFFFF; }
     @media (hover: none) {
       .cursor-dot, .cursor-ring { display: none !important; }
       html, body { cursor: auto !important; }
@@ -1555,7 +1561,7 @@
     }
 
     body.about-page .page-transition.to-yellow {
-      background: #F7E491;
+      __PROTECT_5__;
     }
 
     /* Page Transition Overlay */
@@ -1580,7 +1586,7 @@
     
     /* Yellow background when transitioning to yellow pages */
     .page-transition.to-yellow {
-      background: #F7E491;
+      __PROTECT_6__;
     }
 
     .page-transition.to-dark {
@@ -1626,12 +1632,12 @@
       overflow: hidden;
     }
 
-    /* About page — red bg, cream type */
+    /* About page — red bg, white type */
     body.about-page .ut-frame,
     body.about-page .hero__frame,
     body.about-page .ut-stat,
     body.about-page .slide__img {
-      border-color: rgba(247, 228, 145, 0.2);
+      border-color: rgba(255, 255, 255, 0.2);
     }
     body.about-page .ut-eyebrow,
     body.about-page .hero__title .eyebrow,
@@ -1641,7 +1647,7 @@
     body.about-page .ut-footer__copy,
     body.about-page .hero__title .p-m,
     body.about-page .ut-manifesto {
-      color: rgba(247, 228, 145, 0.75);
+      color: #FFFFFF;
     }
     body.about-page .ut-heading,
     body.about-page .ut-marquee__item,
@@ -1651,7 +1657,7 @@
     body.about-page .hero-btn,
     body.about-page .slide__text,
     body.about-page .ut-footer__copy a {
-      color: #F7E491;
+      color: #FFFFFF;
     }
     body.about-page .ut-heading strong,
     body.about-page .ut-stack-type__line strong,
@@ -1659,37 +1665,37 @@
     body.about-page .h-display strong,
     body.about-page .hero__subtitle-item strong,
     body.about-page .ut-footer__mark strong {
-      color: #F7E491;
+      color: #FFFFFF;
     }
     body.about-page .u-text-outline {
-      -webkit-text-stroke: 1.5px #F7E491;
+      -webkit-text-stroke: 1.5px #FFFFFF;
     }
     body.about-page .ut-stack-type__line {
-      -webkit-text-stroke: 1px rgba(247, 228, 145, 0.35);
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.35);
     }
     body.about-page .ut-stack-type__line.is-fill,
     body.about-page .ut-footer__mark strong {
-      color: #F7E491;
+      color: #FFFFFF;
       -webkit-text-stroke: 0;
     }
     body.about-page .ut-data-tag,
     body.about-page .ut-discover__label {
-      color: rgba(247, 228, 145, 0.85);
+      color: rgba(255, 255, 255, 0.85);
     }
     body.about-page .ut-marquee__item span {
-      color: rgba(247, 228, 145, 0.3);
+      color: rgba(255, 255, 255, 0.3);
     }
     body.about-page .ut-marquee-wrap {
-      border-block-color: rgba(247, 228, 145, 0.15);
+      border-block-color: rgba(255, 255, 255, 0.15);
     }
     body.about-page .ut-footer {
-      border-top-color: rgba(247, 228, 145, 0.15);
+      border-top-color: rgba(255, 255, 255, 0.15);
     }
     body.about-page .ut-footer__mark {
-      -webkit-text-stroke: 1px rgba(247, 228, 145, 0.25);
+      -webkit-text-stroke: 1px rgba(255, 255, 255, 0.25);
     }
     body.about-page .ut-footer__copy a:hover {
-      color: rgba(247, 228, 145, 0.7);
+      color: rgba(255, 255, 255, 0.7);
     }
     body.about-page .ut-build-row__bar {
       background: rgba(255, 255, 255, 0.15);
@@ -1700,10 +1706,10 @@
     body.about-page .ut-build-row__val,
     body.about-page .ut-stat__value,
     body.about-page .hero-btn:hover {
-      color: rgba(247, 228, 145, 0.75);
+      color: #FFFFFF;
     }
     body.about-page .frame__corner {
-      border-color: #F7E491;
+      border-color: #FFFFFF;
     }
     body.about-page .frame__line {
       background: rgba(255, 255, 255, 0.45);
@@ -1716,19 +1722,22 @@
     }
     body.about-page .pagination__tick--major,
     body.about-page .pagination__handle {
-      color: #F7E491;
+      color: #FFFFFF;
     }
     body.about-page .pagination__tick--major {
       background: rgba(255, 255, 255, 0.9);
     }
     body.about-page :focus-visible {
-      outline-color: #F7E491;
+      outline-color: #FFFFFF;
     }
   </style>
   <link rel="stylesheet" href="css/mobile-nav.css">
+  <link rel="stylesheet" href="css/a11y.css">
 </head>
 <body class="about-page">
-  <main class="screen" aria-label="Experience Studio — Our House">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <main id="main-content" class="screen" aria-label="Experience Studio — Our House">
 
     <!-- Top-left: show reel -->
     <a class="showreel" href="#" id="btn-showreel" aria-label="Play show reel">
@@ -1820,7 +1829,7 @@
                 <span class="ut-service__num" aria-hidden="true">01</span>
               </div>
               <div class="ut-service__media">
-                <img src="Assets/csc/lifestyle/wide/01-support-center.png" alt="Brand systems and digital presence work" loading="eager" decoding="async" />
+                <img src="Assets/optimized/support-center.jpg" alt="Brand systems and digital presence work" width="1400" height="900" loading="eager" decoding="async" fetchpriority="high" />
               </div>
               <div class="ut-service__body">
                 <p class="ut-service__copy">We build living brand systems that create long-term differentiation.</p>
@@ -1837,7 +1846,7 @@
                 <span class="ut-service__num" aria-hidden="true">02</span>
               </div>
               <div class="ut-service__media">
-                <img src="Assets/anova/01-screen-grid.png" alt="Marketing and content experiences across devices" loading="eager" decoding="async" />
+                <img src="Assets/optimized/anova-screen-grid.jpg" alt="Marketing and content experiences across devices" width="1400" height="900" loading="lazy" decoding="async" />
               </div>
               <div class="ut-service__body">
                 <p class="ut-service__copy">We build brand-to-demand engines that push the boundaries of your brand.</p>
@@ -1854,7 +1863,7 @@
                 <span class="ut-service__num" aria-hidden="true">03</span>
               </div>
               <div class="ut-service__media">
-                <img src="Assets/Mobile-screens.jpg" alt="Product interface screens" loading="eager" decoding="async" />
+                <img src="Assets/optimized/mobile-screens.jpg" alt="Product interface screens" width="1600" height="1067" loading="lazy" decoding="async" />
               </div>
               <div class="ut-service__body">
                 <p class="ut-service__copy">We build user-centric, adaptive digital products that are designed for adoption and growth.</p>
@@ -1871,7 +1880,7 @@
                 <span class="ut-service__num" aria-hidden="true">04</span>
               </div>
               <div class="ut-service__media">
-                <img src="Assets/elicensing/hd/03-checkout-experience.jpg" alt="Commerce and checkout experience" loading="eager" decoding="async" />
+                <img src="Assets/optimized/checkout-experience.jpg" alt="Commerce and checkout experience" width="1400" height="900" loading="lazy" decoding="async" />
               </div>
               <div class="ut-service__body">
                 <p class="ut-service__copy">We build ecommerce solutions thinking around your business, not your platform.</p>
@@ -1888,7 +1897,7 @@
                 <span class="ut-service__num" aria-hidden="true">05</span>
               </div>
               <div class="ut-service__media">
-                <img src="Assets/csc/lifestyle/wide/02-nurse-station.png" alt="Customer experience touchpoints" loading="eager" decoding="async" />
+                <img src="Assets/optimized/nurse-station.jpg" alt="Customer experience touchpoints" width="1400" height="900" loading="lazy" decoding="async" />
               </div>
               <div class="ut-service__body">
                 <p class="ut-service__copy">We deliver exceptional experiences for businesses and customers that optimize channels, sales and loyalty.</p>
@@ -1905,7 +1914,7 @@
                 <span class="ut-service__num" aria-hidden="true">06</span>
               </div>
               <div class="ut-service__media">
-                <img src="Assets/ppjv/lifestyle/wide/02-war-room.png" alt="AI activation and operations" loading="eager" decoding="async" />
+                <img src="Assets/optimized/war-room.jpg" alt="AI activation and operations" width="1400" height="900" loading="lazy" decoding="async" />
               </div>
               <div class="ut-service__body">
                 <p class="ut-service__copy">We amplify AI adoption and transform operations through action. No theory, all results.</p>
@@ -2072,13 +2081,12 @@
     <div class="bottom-left">
       <a href="index.html" aria-label="Go to home">
         <svg class="logo-svg" width="310" height="328" viewBox="0 0 310 328" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M309.689 240.691C309.689 253.905 307.329 265.861 302.61 276.558C298.205 287.256 291.755 296.537 283.26 304.403C274.765 311.954 264.382 317.775 252.112 321.865C240.156 325.955 226.627 328 211.525 328C198.625 328 185.725 326.584 172.825 323.752C160.24 321.235 148.756 317.46 138.374 312.426C128.306 307.392 119.968 301.414 113.361 294.492C107.068 287.256 103.922 279.233 103.922 270.423V219.925H112.417C117.766 251.703 128.148 274.513 143.565 288.357C159.296 302.2 180.534 309.122 207.277 309.122C215.458 309.122 223.166 308.178 230.402 306.291C237.954 304.088 244.561 300.942 250.224 296.852C255.887 292.762 260.449 287.728 263.91 281.75C267.371 275.772 269.102 268.85 269.102 260.984C269.102 247.14 264.697 235.342 255.887 225.588C247.392 215.835 234.493 205.924 217.188 195.856L159.139 161.404C139.003 149.448 124.687 137.335 116.192 125.065C108.012 112.794 103.922 97.8494 103.922 80.2302C103.922 67.9597 106.124 56.9477 110.529 47.1943C114.934 37.4408 121.069 29.1031 128.935 22.1813C137.115 14.9448 146.711 9.43884 157.723 5.66332C169.05 1.88777 181.635 0 195.479 0C207.12 0 218.919 1.25852 230.874 3.77555C243.145 6.29256 254.157 10.0681 263.91 15.1022C273.664 19.8216 281.687 25.7995 287.979 33.036C294.272 39.9578 297.418 47.8235 297.418 56.6331V107.131H288.923C283.575 75.3535 273.349 52.7002 258.247 39.1712C243.145 25.6422 222.222 18.8777 195.479 18.8777C188.557 18.8777 181.792 19.9789 175.185 22.1813C168.578 24.3837 162.757 27.53 157.723 31.6202C152.689 35.7103 148.599 40.7443 145.453 46.7223C142.307 52.7002 140.733 59.3074 140.733 66.5439C140.733 73.4657 141.835 79.6009 144.037 84.9496C146.239 90.2983 149.543 95.3324 153.948 100.052C158.353 104.771 163.859 109.491 170.466 114.21C177.073 118.615 184.624 123.334 193.119 128.368L251.168 162.82C261.236 168.798 269.888 174.619 277.125 180.282C284.676 185.631 290.811 191.451 295.531 197.744C300.25 203.722 303.711 210.172 305.913 217.094C308.43 224.015 309.689 231.881 309.689 240.691Z" fill="#F7E491"/>
-          <path d="M0 8.49512H42.4748V263.344C42.4748 277.502 44.3626 288.986 48.1381 297.796C52.2283 306.291 61.3525 310.538 75.5108 310.538H84.9497V319.977H42.4748C34.2945 319.977 27.3727 319.348 21.7094 318.089C16.3607 316.516 11.9559 313.685 8.49497 309.594C5.34868 305.19 3.14628 299.369 1.88777 292.132C0.629256 284.896 0 275.3 0 263.344V8.49512Z" fill="#F7E491"/>
+          <path d="M309.689 240.691C309.689 253.905 307.329 265.861 302.61 276.558C298.205 287.256 291.755 296.537 283.26 304.403C274.765 311.954 264.382 317.775 252.112 321.865C240.156 325.955 226.627 328 211.525 328C198.625 328 185.725 326.584 172.825 323.752C160.24 321.235 148.756 317.46 138.374 312.426C128.306 307.392 119.968 301.414 113.361 294.492C107.068 287.256 103.922 279.233 103.922 270.423V219.925H112.417C117.766 251.703 128.148 274.513 143.565 288.357C159.296 302.2 180.534 309.122 207.277 309.122C215.458 309.122 223.166 308.178 230.402 306.291C237.954 304.088 244.561 300.942 250.224 296.852C255.887 292.762 260.449 287.728 263.91 281.75C267.371 275.772 269.102 268.85 269.102 260.984C269.102 247.14 264.697 235.342 255.887 225.588C247.392 215.835 234.493 205.924 217.188 195.856L159.139 161.404C139.003 149.448 124.687 137.335 116.192 125.065C108.012 112.794 103.922 97.8494 103.922 80.2302C103.922 67.9597 106.124 56.9477 110.529 47.1943C114.934 37.4408 121.069 29.1031 128.935 22.1813C137.115 14.9448 146.711 9.43884 157.723 5.66332C169.05 1.88777 181.635 0 195.479 0C207.12 0 218.919 1.25852 230.874 3.77555C243.145 6.29256 254.157 10.0681 263.91 15.1022C273.664 19.8216 281.687 25.7995 287.979 33.036C294.272 39.9578 297.418 47.8235 297.418 56.6331V107.131H288.923C283.575 75.3535 273.349 52.7002 258.247 39.1712C243.145 25.6422 222.222 18.8777 195.479 18.8777C188.557 18.8777 181.792 19.9789 175.185 22.1813C168.578 24.3837 162.757 27.53 157.723 31.6202C152.689 35.7103 148.599 40.7443 145.453 46.7223C142.307 52.7002 140.733 59.3074 140.733 66.5439C140.733 73.4657 141.835 79.6009 144.037 84.9496C146.239 90.2983 149.543 95.3324 153.948 100.052C158.353 104.771 163.859 109.491 170.466 114.21C177.073 118.615 184.624 123.334 193.119 128.368L251.168 162.82C261.236 168.798 269.888 174.619 277.125 180.282C284.676 185.631 290.811 191.451 295.531 197.744C300.25 203.722 303.711 210.172 305.913 217.094C308.43 224.015 309.689 231.881 309.689 240.691Z" fill="#FFFFFF"/>
+          <path d="M0 8.49512H42.4748V263.344C42.4748 277.502 44.3626 288.986 48.1381 297.796C52.2283 306.291 61.3525 310.538 75.5108 310.538H84.9497V319.977H42.4748C34.2945 319.977 27.3727 319.348 21.7094 318.089C16.3607 316.516 11.9559 313.685 8.49497 309.594C5.34868 305.19 3.14628 299.369 1.88777 292.132C0.629256 284.896 0 275.3 0 263.344V8.49512Z" fill="#FFFFFF"/>
         </svg>
       </a>
       <nav class="pills" id="primary-nav" aria-label="Primary">
         <a class="pill" href="work.html"><i class="dot" aria-hidden="true"></i> Website</a>
-        <a class="pill" href="long-term.html"><i class="dot" aria-hidden="true"></i> Projects</a>
         <a class="pill is-active" href="About.html" aria-current="page"><i class="dot" aria-hidden="true"></i> Our House</a>
         <a class="pill" href="contact.html"><i class="dot" aria-hidden="true"></i> Let's Talk</a>
       </nav>
@@ -2297,24 +2305,31 @@
 
     /* Unicorn Studio — intro 3D background (ruhkfDBZQc8ZllOQ4Fr8) */
     (function(){
-      var s = document.createElement('script');
-      s.src = 'js/unicorn-init.js?v=2';
-      s.onload = function () {
-        loadUnicornStudio({
-          version: 'v2.1.12',
-          skipBelow: 470,
-          onReady: function () {
-            requestAnimationFrame(function () {
-              if (typeof window.refreshCcIntro === 'function') {
-                window.refreshCcIntro();
-              } else if (window.ScrollTrigger) {
-                ScrollTrigger.refresh();
-              }
-            });
-          }
-        });
-      };
-      (document.head || document.body).appendChild(s);
+      function loadUS() {
+        var s = document.createElement('script');
+        s.src = 'js/unicorn-init.js?v=2';
+        s.onload = function () {
+          loadUnicornStudio({
+            version: 'v2.1.12',
+            skipBelow: 470,
+            onReady: function () {
+              requestAnimationFrame(function () {
+                if (typeof window.refreshCcIntro === 'function') {
+                  window.refreshCcIntro();
+                } else if (window.ScrollTrigger) {
+                  ScrollTrigger.refresh();
+                }
+              });
+            }
+          });
+        };
+        (document.head || document.body).appendChild(s);
+      }
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadUS, { timeout: 2500 });
+      } else {
+        window.addEventListener('load', function () { setTimeout(loadUS, 1); });
+      }
     })();
 
     // showreel demo
@@ -2475,13 +2490,11 @@
 
       // Page color mapping
       const pageColors = {
-        'work.html': { bg: '#ce4127', text: '#F7E491' }, // Red page
+        'work.html': { bg: '#ce4127', text: '#FFFFFF' }, // Red page
         'index.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
         'project.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
-        'About.html': { bg: '#ce4127', text: '#F7E491' },
+        'About.html': { bg: '#ce4127', text: '#FFFFFF' },
         'contact.html': { bg: '#F7E491', text: '#CE4127' },
-        'long-term.html': { bg: '#F7E491', text: '#CE4127' },
-        'long-term-project.html': { bg: '#F7E491', text: '#CE4127' },
         'privacy-sentinel.html': { bg: '#F7E491', text: '#CE4127' }
       };
 
@@ -2504,7 +2517,7 @@
           const isTargetRed = targetColor.bg === '#ce4127';
           const isTargetDark = targetColor.bg === '#060605';
           
-          const creamTransitionPages = ['contact.html', 'long-term.html', 'long-term-project.html', 'privacy-sentinel.html'];
+          const creamTransitionPages = ['contact.html', 'privacy-sentinel.html'];
           transition.classList.remove('to-red', 'to-yellow', 'to-dark');
           if (creamTransitionPages.includes(targetPage)) {
             transition.classList.add('to-yellow');
@@ -2635,30 +2648,36 @@
         const slides = track.querySelectorAll('.ut-service').length;
         if (slides < 2) return;
 
+        const vh = window.innerHeight;
         const distance = getDistance();
-        // Enter distance: scroll while the slider moves from first peek → fully in view
-        const enter = window.innerHeight;
-        // Tall runway: seat the full slider in the viewport, then horizontal travel
-        scrollEl.style.height = (enter + distance) + 'px';
+        // Hold on the first card only after the sticky fills the viewport
+        const enter = Math.round(vh * 1.15);
+        // Brief hold on the last card before unpinning into vertical scroll
+        const exit = Math.round(vh * 0.55);
+        // start: top top → runway must include one viewport + enter + travel + exit
+        scrollEl.style.height = (vh + enter + distance + exit) + 'px';
 
-        // Hold x at 0 until the entire sticky slider fills the viewport, then scrub
         tween = gsap.timeline({
           scrollTrigger: {
             id: 'services-horizontal',
             trigger: scrollEl,
-            start: 'top bottom',
+            // Begin only once the sticky section is fully seated
+            start: 'top top',
             end: 'bottom bottom',
-            scrub: 0.35,
+            scrub: 0.7,
             invalidateOnRefresh: true,
             anticipatePin: 0,
           }
         });
+        // Keep x at 0 so card 01 stays fully revealed
         tween.to({}, { duration: enter });
         tween.to(track, {
           x: () => -getDistance(),
           duration: Math.max(distance, 1),
           ease: 'none',
         });
+        // Settle on the last card before vertical scroll resumes
+        tween.to({}, { duration: exit });
       }
 
       section.classList.add('is-visible');

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=1280, initial-scale=1" />
+  <title>One Kings Lane — preview</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #f7f4ef;
+      overflow-x: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar,
+    *::-webkit-scrollbar {
+      width: 0 !important;
+      height: 0 !important;
+      display: none !important;
+    }
+    .preview {
+      display: block;
+      width: 1280px;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+    .bar {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .55rem 1rem;
+      background: #1c1c1c;
+      color: #f7f4ef;
+      font: 600 12px/1.3 Inter, system-ui, sans-serif;
+      letter-spacing: .04em;
+    }
+    .bar a {
+      color: #f7f4ef;
+      text-decoration: none;
+      border: 1px solid rgba(247,244,239,.45);
+      padding: .35rem .7rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .bar a:hover { background: rgba(255,255,255,.08); }
+    .note { margin: 0; opacity: .9; font-weight: 500; }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <p class="note">One Kings Lane preview (live site blocks iframe embedding)</p>
+    <a href="https://www.onekingslane.com/" target="_blank" rel="noopener noreferrer">Open live site</a>
+  </div>
+  <img class="preview" src="../Assets/onekingslane/home.jpg" alt="One Kings Lane home preview" width="1280" />
+</body>
+</html>

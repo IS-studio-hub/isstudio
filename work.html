@@ -3,7 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>IS - Experience House</title>
+    <meta name="description" content="Website work by IS Studio — campaign sites, products, and digital experiences." />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="color-scheme" content="light" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<title>IS - Experience House</title>
 
   <!-- Favicon with dollar sign with wings emoji -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💸</text></svg>" />
@@ -12,6 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/scrollbars.css">
 
+
   <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
@@ -19,11 +25,11 @@
   <style>
     :root{
       --bg: #ce4127;
-      --fg: #F7E491;
-      --muted: #F7E491;
-      --border: rgba(247, 228, 145, 1);
-      --dot: #F7E491;
-      --dot-glow: rgba(247, 228, 145, 0.6);
+      --fg: #FFFFFF;
+      --muted: #FFFFFF;
+      --border: rgba(255, 255, 255, 1);
+      --dot: #FFFFFF;
+      --dot-glow: rgba(255, 255, 255, 0.6);
       --accent-img: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop');
       --gutter: clamp(16px, 6vw, 140px);
       --toast-bg: rgba(255,255,255,.08);
@@ -120,7 +126,7 @@
     .projects-list {
       list-style: none;
       display: flex;
-      gap: 5rem;
+      gap: 16rem;
       padding-right: var(--gutter);
       min-width: max-content;
       margin: 0;
@@ -159,7 +165,7 @@
 
     /* Hover video preview (desktop only) */
     @media (min-width: 1024px) {
-      /* Portal preview lives in <body>, so it never gets clipped by the slider */
+      /* Portal preview lives in body so it never gets clipped by the slider */
       .project-preview {
         position: fixed;
         left: 0;
@@ -198,8 +204,9 @@
     }
 
     .project-link:hover {
-      opacity: 0.7;
+      opacity: 1;
       text-decoration: none !important;
+      filter: brightness(1.08);
     }
 
     .project-number {
@@ -302,7 +309,7 @@
     }
     .showreel .icon::before {
       content: ""; position: absolute; inset: 0;
-      border: 1.5px dashed rgba(247, 228, 145,.25);
+      border: 1.5px dashed rgba(255, 255, 255,.25);
       border-radius: 10px;
       transform: scale(.86);
     }
@@ -344,11 +351,11 @@
       pointer-events: auto;
       display: inline-flex; align-items: center; gap: .6rem;
       padding: .65rem 1.1rem;
-      border: 1.6px solid var(--fg);
+      border: 1.6px solid #FFFFFF;
       border-radius: 999px;
-      background: #f7e491;
-      color: #CE4127;
-      border-color: #CE4127;
+      background: transparent;
+      color: #FFFFFF;
+      border-color: #FFFFFF;
       font-weight: 600;
       letter-spacing: .05em;
       font-size: clamp(.72rem, .95vw, .9rem);
@@ -357,9 +364,9 @@
       transition: background .2s ease, color .2s ease, transform .12s ease, border-color .2s ease;
       cursor: none !important;
     }
-    .pill .dot{ width: .45rem; height: .45rem; border-radius: 50%; background: #CE4127; }
-    .pill:hover { background: var(--bg); color: var(--fg); transform: translateY(-1px); }
-    .pill:hover .dot{ background: var(--fg); }
+    .pill .dot{ width: .45rem; height: .45rem; border-radius: 50%; background: #FFFFFF; }
+    .pill:hover { background: #FFFFFF; color: #CE4127; transform: translateY(-1px); }
+    .pill:hover .dot{ background: #CE4127; }
 
     /* bottom-right rock wedge */
     .wedge {
@@ -400,7 +407,7 @@
       }
       
       .projects-list {
-        gap: 8rem;
+        gap: 18rem;
         padding-right: var(--gutter);
       }
       
@@ -427,7 +434,7 @@
       }
       
       .projects-list {
-        gap: 6rem;
+        gap: 12rem;
       }
       
       .project-item {
@@ -457,13 +464,13 @@
     .cursor-dot {
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: #F7E491;
+      background: #FFFFFF;
       mix-blend-mode: normal;
     }
     .cursor-ring {
       width: 28px; height: 28px;
       border-radius: 50%;
-      border: 1px solid #F7E491;
+      border: 1px solid #FFFFFF;
       transition: width .15s ease, height .15s ease, opacity .15s ease, transform .15s ease;
       opacity: .9;
     }
@@ -480,11 +487,11 @@
       pointer-events: none;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 12px;
-      color: rgba(247,228,145,.75);
+      color: #FFFFFF;
       text-align: right;
       letter-spacing: .02em;
     }
-    .coords b{ color: #F7E491; font-weight: 600; }
+    .coords b{ color: #FFFFFF; font-weight: 600; }
     @media (hover: none) {
       .cursor-dot, .cursor-ring { display: none !important; }
       html, body { cursor: auto !important; }
@@ -578,7 +585,7 @@
     
     /* Yellow background when transitioning to yellow pages */
     .page-transition.to-yellow {
-      background: #F7E491;
+      __PROTECT_1__;
     }
 
     .page-transition.to-dark {
@@ -621,9 +628,11 @@
     }
   </style>
   <link rel="stylesheet" href="css/mobile-nav.css">
+  <link rel="stylesheet" href="css/a11y.css">
 </head>
-<body>
-  <main class="screen" aria-label="Experience Studio Hero">
+<body class="work-page">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <main id="main-content" class="screen" aria-label="Experience Studio Hero">
 
     <!-- Top-left: show reel -->
     <a class="showreel" href="#" id="btn-showreel" aria-label="Play show reel">
@@ -673,6 +682,36 @@
                 <div class="project-name">SORRY.</div>
               </a>
             </li>
+            <li class="project-item">
+              <a href="project.html?project=07" class="project-link">
+                <div class="project-number">07</div>
+                <div class="project-name">MANITOBA</div>
+              </a>
+            </li>
+            <li class="project-item">
+              <a href="project.html?project=08" class="project-link">
+                <div class="project-number">08</div>
+                <div class="project-name">WALMART</div>
+              </a>
+            </li>
+            <li class="project-item">
+              <a href="project.html?project=09" class="project-link">
+                <div class="project-number">09</div>
+                <div class="project-name">CANADIAN TIRE</div>
+              </a>
+            </li>
+            <li class="project-item">
+              <a href="project.html?project=10" class="project-link">
+                <div class="project-number">10</div>
+                <div class="project-name">ONE KINGS LANE</div>
+              </a>
+            </li>
+            <li class="project-item">
+              <a href="project.html?project=11" class="project-link">
+                <div class="project-number">11</div>
+                <div class="project-name">ANOVA</div>
+              </a>
+            </li>
           </ul>
         </div>
 
@@ -696,13 +735,12 @@
     <div class="bottom-left">
       <a href="index.html" aria-label="Go to home">
         <svg class="logo-svg" width="310" height="328" viewBox="0 0 310 328" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M309.689 240.691C309.689 253.905 307.329 265.861 302.61 276.558C298.205 287.256 291.755 296.537 283.26 304.403C274.765 311.954 264.382 317.775 252.112 321.865C240.156 325.955 226.627 328 211.525 328C198.625 328 185.725 326.584 172.825 323.752C160.24 321.235 148.756 317.46 138.374 312.426C128.306 307.392 119.968 301.414 113.361 294.492C107.068 287.256 103.922 279.233 103.922 270.423V219.925H112.417C117.766 251.703 128.148 274.513 143.565 288.357C159.296 302.2 180.534 309.122 207.277 309.122C215.458 309.122 223.166 308.178 230.402 306.291C237.954 304.088 244.561 300.942 250.224 296.852C255.887 292.762 260.449 287.728 263.91 281.75C267.371 275.772 269.102 268.85 269.102 260.984C269.102 247.14 264.697 235.342 255.887 225.588C247.392 215.835 234.493 205.924 217.188 195.856L159.139 161.404C139.003 149.448 124.687 137.335 116.192 125.065C108.012 112.794 103.922 97.8494 103.922 80.2302C103.922 67.9597 106.124 56.9477 110.529 47.1943C114.934 37.4408 121.069 29.1031 128.935 22.1813C137.115 14.9448 146.711 9.43884 157.723 5.66332C169.05 1.88777 181.635 0 195.479 0C207.12 0 218.919 1.25852 230.874 3.77555C243.145 6.29256 254.157 10.0681 263.91 15.1022C273.664 19.8216 281.687 25.7995 287.979 33.036C294.272 39.9578 297.418 47.8235 297.418 56.6331V107.131H288.923C283.575 75.3535 273.349 52.7002 258.247 39.1712C243.145 25.6422 222.222 18.8777 195.479 18.8777C188.557 18.8777 181.792 19.9789 175.185 22.1813C168.578 24.3837 162.757 27.53 157.723 31.6202C152.689 35.7103 148.599 40.7443 145.453 46.7223C142.307 52.7002 140.733 59.3074 140.733 66.5439C140.733 73.4657 141.835 79.6009 144.037 84.9496C146.239 90.2983 149.543 95.3324 153.948 100.052C158.353 104.771 163.859 109.491 170.466 114.21C177.073 118.615 184.624 123.334 193.119 128.368L251.168 162.82C261.236 168.798 269.888 174.619 277.125 180.282C284.676 185.631 290.811 191.451 295.531 197.744C300.25 203.722 303.711 210.172 305.913 217.094C308.43 224.015 309.689 231.881 309.689 240.691Z" fill="#F7E491"/>
-          <path d="M0 8.49506H42.4748V263.344C42.4748 277.502 44.3626 288.986 48.1381 297.796C52.2283 306.291 61.3525 310.538 75.5108 310.538H84.9497V319.977H42.4748C34.2945 319.977 27.3727 319.348 21.7094 318.089C16.3607 316.516 11.9559 313.684 8.49497 309.594C5.34868 305.189 3.14628 299.369 1.88777 292.132C0.629256 284.896 0 275.3 0 263.344V8.49506Z" fill="#F7E491"/>
+          <path d="M309.689 240.691C309.689 253.905 307.329 265.861 302.61 276.558C298.205 287.256 291.755 296.537 283.26 304.403C274.765 311.954 264.382 317.775 252.112 321.865C240.156 325.955 226.627 328 211.525 328C198.625 328 185.725 326.584 172.825 323.752C160.24 321.235 148.756 317.46 138.374 312.426C128.306 307.392 119.968 301.414 113.361 294.492C107.068 287.256 103.922 279.233 103.922 270.423V219.925H112.417C117.766 251.703 128.148 274.513 143.565 288.357C159.296 302.2 180.534 309.122 207.277 309.122C215.458 309.122 223.166 308.178 230.402 306.291C237.954 304.088 244.561 300.942 250.224 296.852C255.887 292.762 260.449 287.728 263.91 281.75C267.371 275.772 269.102 268.85 269.102 260.984C269.102 247.14 264.697 235.342 255.887 225.588C247.392 215.835 234.493 205.924 217.188 195.856L159.139 161.404C139.003 149.448 124.687 137.335 116.192 125.065C108.012 112.794 103.922 97.8494 103.922 80.2302C103.922 67.9597 106.124 56.9477 110.529 47.1943C114.934 37.4408 121.069 29.1031 128.935 22.1813C137.115 14.9448 146.711 9.43884 157.723 5.66332C169.05 1.88777 181.635 0 195.479 0C207.12 0 218.919 1.25852 230.874 3.77555C243.145 6.29256 254.157 10.0681 263.91 15.1022C273.664 19.8216 281.687 25.7995 287.979 33.036C294.272 39.9578 297.418 47.8235 297.418 56.6331V107.131H288.923C283.575 75.3535 273.349 52.7002 258.247 39.1712C243.145 25.6422 222.222 18.8777 195.479 18.8777C188.557 18.8777 181.792 19.9789 175.185 22.1813C168.578 24.3837 162.757 27.53 157.723 31.6202C152.689 35.7103 148.599 40.7443 145.453 46.7223C142.307 52.7002 140.733 59.3074 140.733 66.5439C140.733 73.4657 141.835 79.6009 144.037 84.9496C146.239 90.2983 149.543 95.3324 153.948 100.052C158.353 104.771 163.859 109.491 170.466 114.21C177.073 118.615 184.624 123.334 193.119 128.368L251.168 162.82C261.236 168.798 269.888 174.619 277.125 180.282C284.676 185.631 290.811 191.451 295.531 197.744C300.25 203.722 303.711 210.172 305.913 217.094C308.43 224.015 309.689 231.881 309.689 240.691Z" fill="#FFFFFF"/>
+          <path d="M0 8.49506H42.4748V263.344C42.4748 277.502 44.3626 288.986 48.1381 297.796C52.2283 306.291 61.3525 310.538 75.5108 310.538H84.9497V319.977H42.4748C34.2945 319.977 27.3727 319.348 21.7094 318.089C16.3607 316.516 11.9559 313.684 8.49497 309.594C5.34868 305.189 3.14628 299.369 1.88777 292.132C0.629256 284.896 0 275.3 0 263.344V8.49506Z" fill="#FFFFFF"/>
         </svg>
       </a>
       <nav class="pills" id="primary-nav" aria-label="Primary">
         <a class="pill" href="work.html"><i class="dot" aria-hidden="true"></i> Website</a>
-        <a class="pill" href="long-term.html"><i class="dot" aria-hidden="true"></i> Projects</a>
         <a class="pill" href="About.html"><i class="dot" aria-hidden="true"></i> Our House</a>
         <a class="pill" href="contact.html"><i class="dot" aria-hidden="true"></i> Let's Talk</a>
       </nav>
@@ -917,13 +955,12 @@
             const distanceFromCenter = Math.abs(itemCenter - containerCenter);
             const distanceRatio = distanceFromCenter / containerCenter;
             
-            // Scale and opacity based on distance
+            // Scale based on distance; keep full opacity for AA contrast on titles
             const scale = Math.max(0.85, 1 - (distanceRatio * 0.15));
-            const opacity = Math.max(0.6, 1 - (distanceRatio * 0.4));
             
             effectsTween.to(item, {
               scale: scale,
-              opacity: opacity,
+              opacity: 1,
               duration: 0.4,
               ease: "power2.out"
             }, 0); // All animations start at same time
@@ -1733,13 +1770,11 @@
           
           // Page color mapping
           const pageColors = {
-            'work.html': { bg: '#ce4127', text: '#F7E491' }, // Red page
+            'work.html': { bg: '#ce4127', text: '#FFFFFF' }, // Red page
             'index.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
             'project.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
-            'About.html': { bg: '#ce4127', text: '#ffffff' },
+            'About.html': { bg: '#ce4127', text: '#FFFFFF' },
             'contact.html': { bg: '#F7E491', text: '#CE4127' },
-            'long-term.html': { bg: '#F7E491', text: '#CE4127' },
-            'long-term-project.html': { bg: '#F7E491', text: '#CE4127' }
           };
           
           // Extract target page name

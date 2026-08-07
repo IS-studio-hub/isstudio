@@ -16,40 +16,6 @@
     gap: 0;
   }
 
-  .long-term-bottom .bottom-left {
-    width: 100%;
-    left: auto;
-    right: auto;
-  }
-
-  .long-term-hero .long-term-bottom .bottom-left {
-    align-items: center;
-  }
-
-  .long-term-bottom {
-    z-index: 10;
-  }
-
-  .long-term-bottom .lt-slider__title-block {
-    position: relative;
-    z-index: 1;
-  }
-
-  .long-term-bottom .bottom-left {
-    position: relative;
-    z-index: 10;
-    isolation: isolate;
-  }
-
-  .long-term-bottom .bottom-left.is-nav-open {
-    z-index: 15;
-  }
-
-  .long-term-bottom .nav-toggle {
-    position: relative;
-    z-index: 22;
-  }
-
   .logo-svg {
     width: 48px;
   }
@@ -114,10 +80,6 @@
     visibility: visible;
     pointer-events: auto;
     transform: translateY(0);
-  }
-
-  .long-term-hero .bottom-left.is-nav-open .pill {
-    background: #f7e491;
   }
 
   .pill {

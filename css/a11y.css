@@ -1,0 +1,179 @@
+/* WCAG 2.2 AA contrast + focus + motion helpers
+   Cream #F7E491 + brand red #CE4127 is ~3.73:1 (OK for large text only).
+   Small UI text uses AA-safe tokens below. */
+
+:root {
+  --fg-aa: #A82F18;          /* ≥4.5:1 on #F7E491 */
+  --fg-aa-strong: #8F2814;   /* ≥6:1 on cream */
+  --on-brand-aa: #FFFFFF;    /* ≥4.5:1 on #CE4127 */
+  --on-brand-muted-aa: #FFFFFF;
+}
+
+/* Focus visibility (keyboard) — required even with custom cursor */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 3px solid var(--fg-aa) !important;
+  outline-offset: 3px !important;
+}
+body.about-page :focus-visible,
+body.work-page :focus-visible {
+  outline-color: var(--on-brand-aa) !important;
+}
+
+/* Cream-background pages: small UI text */
+.eyebrow,
+.showreel .label,
+.coords,
+.coords b,
+.pill,
+.email,
+.email a,
+.contact-eyebrow,
+.contact-lead,
+.contact-direct,
+.form-note,
+.policy-eyebrow,
+.policy-meta,
+.policy-intro,
+.policy-section p,
+.policy-section li,
+.policy-section h3,
+.policy-back {
+  color: var(--fg-aa);
+}
+
+.pill {
+  border-color: var(--fg-aa) !important;
+  color: var(--fg-aa) !important;
+}
+.pill .dot { background: var(--fg-aa) !important; }
+.pill:hover,
+.pill.is-active {
+  background: var(--fg-aa) !important;
+  color: #F7E491 !important;
+  border-color: var(--fg-aa) !important;
+}
+.pill:hover .dot,
+.pill.is-active .dot { background: #F7E491 !important; }
+
+.showreel .icon { outline-color: rgba(168, 47, 24, .45); }
+.showreel .play { border-left-color: var(--fg-aa); }
+
+/* Red / brand-background pages (About, Work) */
+body.about-page,
+body.work-page {
+  --fg-aa: var(--on-brand-aa);
+}
+
+body.about-page .eyebrow,
+body.about-page .showreel .label,
+body.about-page .coords,
+body.about-page .coords b,
+body.about-page .p-m,
+body.about-page .ut-services__kicker,
+body.about-page .ut-services__lead,
+body.about-page .ut-manifesto,
+body.about-page .ut-footer__coords,
+body.about-page .ut-footer__copy,
+body.about-page .ut-data-tag,
+body.about-page .ut-privacy .ut-eyebrow,
+body.about-page .hero-btn,
+body.about-page .slide__text,
+body.about-page .ut-service__copy,
+body.about-page .ut-service__num,
+body.about-page .ut-service__btn,
+body.about-page .ut-service__btn span,
+body.work-page .showreel .label,
+body.work-page .coords,
+body.work-page .coords b,
+body.work-page .project-number {
+  color: #FFFFFF !important;
+}
+
+body.about-page .ut-service__btn {
+  color: #CE4127 !important;
+  background: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+}
+body.about-page .ut-service__btn span {
+  color: #CE4127 !important;
+}
+
+body.about-page .pill,
+body.work-page .pill {
+  color: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+  background: transparent;
+}
+body.about-page .pill .dot,
+body.work-page .pill .dot { background: #FFFFFF !important; }
+body.about-page .pill:hover,
+body.about-page .pill.is-active,
+body.work-page .pill:hover,
+body.work-page .pill.is-active {
+  background: #FFFFFF !important;
+  color: #CE4127 !important;
+  border-color: #FFFFFF !important;
+}
+body.about-page .pill:hover .dot,
+body.about-page .pill.is-active .dot,
+body.work-page .pill:hover .dot,
+body.work-page .pill.is-active .dot { background: #CE4127 !important; }
+
+body.work-page .project-name {
+  color: #FFFFFF !important;
+}
+body.work-page .project-number {
+  color: #FFFFFF !important;
+}
+
+/* Decorative HUD coords — force AA */
+.coords,
+.coords b {
+  color: var(--fg-aa) !important;
+}
+body.about-page .showreel span.label,
+body.work-page .showreel span.label {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+body.about-page .slide__text {
+  color: #FFFFFF !important;
+}
+body.about-page .showreel {
+  color: #FFFFFF !important;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  z-index: 100000;
+  padding: .65rem 1rem;
+  background: #A82F18;
+  color: #F7E491;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 8px;
+  transform: translateY(-160%);
+  transition: transform .2s ease;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 3px solid #fff !important;
+  outline-offset: 2px !important;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
