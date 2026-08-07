@@ -826,6 +826,36 @@
       color: #A82F18;
     }
 
+    .details-drawer__images {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.65rem;
+    }
+
+    .details-drawer__image {
+      margin: 0;
+      border: 1px solid rgba(168, 47, 24, 0.18);
+      background: #f7f7f7;
+      overflow: hidden;
+    }
+
+    .details-drawer__image img,
+    .details-drawer__image video,
+    .details-drawer__image iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      object-position: top center;
+      border: 0;
+      background: #111;
+    }
+
+    .details-drawer__image iframe {
+      object-fit: unset;
+    }
+
     @media (max-width: 520px) {
       .details-drawer__panel {
         width: 100vw;
@@ -1233,7 +1263,9 @@
       top: auto;
       padding: clamp(0.5rem, 2vw, 2.5rem);
       max-height: 100%;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
+      scrollbar-width: thin;
       width: 100%;
     }
 
@@ -2387,54 +2419,67 @@
         number: '08',
         liveSiteUrl: 'https://www.walmart.ca/en',
         liveEmbedPath: 'embeds/walmart-embed.html',
-        tagline: 'Everyday Digital Commerce',
-        description: 'Digital experience work supporting clear product discovery and conversion paths for Walmart\'s Canadian retail surface.',
-        businessDescription: 'Walmart is one of the world\'s largest retailers—serving millions of shoppers with everyday essentials, grocery, and general merchandise. Our work focused on digital patterns that keep browsing fast, trustworthy, and easy to act on across high-volume retail journeys.',
+        tagline: 'Virtual Fitting Room Experience',
+        description: 'Digital experience work for a virtual fitting-room and model-switching journey across mobile and retail contexts.',
+        businessDescription: 'Walmart is one of the world\'s largest retailers—serving millions of shoppers with everyday essentials, grocery, and general merchandise. Our work focused on inclusive virtual try-on patterns: model selection, virtual closet browsing, and fitting-room flows that help shoppers choose with confidence.',
         projectDescription: [
-          'We shaped retail web experiences around speed, clarity, and conversion.',
-          'The work prioritizes scannable product discovery and frictionless paths to purchase.',
-          'The result: digital surfaces that support Walmart\'s everyday shopping promise at scale.'
+          'We designed a virtual fitting-room experience around model choice, closet browsing, and try-on confidence.',
+          'Lifestyle and in-context mockups show how the product feels in boutique and at-home shopping moments.',
+          'The result: clearer paths from welcome → select model → closet → try on.'
         ],
         howItStarted: {
           title: 'How it\'s start',
-          description: 'High-volume retail needs digital interfaces that stay clear under pressure—from homepage discovery to product detail and cart.',
+          description: 'Retail try-on needs digital interfaces that feel personal—from choosing a model to browsing a virtual closet.',
           content: [
-            'The Challenge: Support shoppers moving quickly through dense catalogs without losing trust or clarity.',
-            'Initial Brief: Strengthen key digital commerce patterns for browse, compare, and convert.',
-            'Our Approach: Prioritize hierarchy, scanability, and mobile-ready interaction across the shopping funnel.',
-            'The Opportunity: Apply studio craft to one of retail\'s most familiar everyday experiences.'
+            'The Challenge: Help shoppers preview fit and style without friction, across diverse body models.',
+            'Initial Brief: Design mobile-first fitting-room flows for welcome, model selection, and closet try-on.',
+            'Our Approach: Build inclusive model switching and scannable closet grids that feel premium in real retail contexts.',
+            'The Opportunity: Bring confidence to digital apparel shopping through clear, human-centered interaction.'
           ],
-          images: ['Assets/walmart/home.jpg']
+          images: [
+            'Assets/walmart/lifestyle/03-welcome.png',
+            'Assets/walmart/lifestyle/01-hand-phone.png'
+          ]
         },
         process: {
           title: 'Process',
-          description: 'From journey mapping to polished retail interface patterns.',
+          description: 'From journey mapping to polished fitting-room and model-switch patterns.',
           content: [
-            'Mapped high-intent shopping paths across homepage, category, and product surfaces.',
-            'Designed clear visual hierarchy for promotions, essentials, and product cards.',
-            'Refined interaction details for mobile and desktop conversion moments.'
+            'Mapped welcome, model selection, closet, and switch-model journeys.',
+            'Designed inclusive model cards with clear sizing context.',
+            'Refined mobile and desktop mockups for boutique and at-home use.'
           ],
-          images: ['Assets/walmart/home.jpg']
+          images: [
+            'Assets/walmart/lifestyle/05-dual-phones.png',
+            'Assets/walmart/lifestyle/02-shopper.png'
+          ]
         },
         assets: {
           title: 'Assets',
-          description: 'Retail interface patterns and homepage preview for Walmart.ca.',
+          description: 'Lifestyle and device mockups for the Walmart virtual fitting-room experience.',
           content: [
-            'Homepage and discovery layout direction.',
-            'Product-card and promotional hierarchy patterns.',
-            'Portfolio preview embed for review alongside the live site.'
+            'Welcome and get-started fitting-room screens.',
+            'Model selection and switch-model flows.',
+            'Virtual closet grids and try-on device mockups.'
           ],
-          images: ['Assets/walmart/home.jpg']
+          images: [
+            'Assets/walmart/lifestyle/06-boutique-phones.png',
+            'Assets/walmart/lifestyle/04-mirror-phone.png',
+            'Assets/walmart/lifestyle/07-retail-duo.png'
+          ]
         },
         finalResult: {
           title: 'Final result',
-          description: 'A portfolio-ready retail case with live access to Walmart.ca.',
+          description: 'A portfolio-ready virtual fitting-room case with clear model and closet journeys.',
           content: [
-            'Clearer product discovery and promotional hierarchy.',
-            'Commerce patterns built for everyday high-volume shopping.',
-            'Live site access for stakeholders and portfolio review.'
+            'Inclusive model switching with clear sizing context.',
+            'Virtual closet browsing that supports confident try-on decisions.',
+            'Lifestyle mockups that show the product in real shopping contexts.'
           ],
-          images: ['Assets/walmart/home.jpg']
+          images: [
+            'Assets/walmart/lifestyle/08-design-studio.png',
+            'Assets/walmart/lifestyle/06-boutique-phones.png'
+          ]
         }
       },
       '09': {
@@ -2629,6 +2674,152 @@
       }
     };
 
+    const SITE_MEDIA = {
+      '01': [
+        { type: 'video', src: 'Video/gatorade.mp4', alt: 'Gatorade site video' },
+        { type: 'image', src: 'Assets/site-shots/01/01-hero.jpg', alt: 'Gatorade site hero' },
+        { type: 'image', src: 'Assets/site-shots/01/02-mid.jpg', alt: 'Gatorade site mid section' },
+        { type: 'image', src: 'Assets/site-shots/01/03-lower.jpg', alt: 'Gatorade site lower section' }
+      ],
+      '02': [
+        { type: 'video', src: 'Video/magicspoon.mp4', alt: 'Magic Spoon site video' },
+        { type: 'image', src: 'Assets/site-shots/02/01-hero.jpg', alt: 'Magic Spoon site hero' },
+        { type: 'image', src: 'Assets/site-shots/02/02-mid.jpg', alt: 'Magic Spoon site mid section' },
+        { type: 'image', src: 'Assets/site-shots/02/03-lower.jpg', alt: 'Magic Spoon site lower section' }
+      ],
+      '03': [
+        { type: 'video', src: 'Video/ozint.mp4', alt: 'Ozint site video' },
+        { type: 'image', src: 'Assets/site-shots/03/01-hero.jpg', alt: 'Ozint site hero' },
+        { type: 'image', src: 'Assets/site-shots/03/02-mid.jpg', alt: 'Ozint site mid section' },
+        { type: 'image', src: 'Assets/site-shots/03/03-lower.jpg', alt: 'Ozint site lower section' },
+        { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693c89b718f2df1b25d6abf5_12.png', alt: 'Ozint security intelligence' },
+        { type: 'image', src: 'https://cdn.prod.website-files.com/693b41b8c309d6de772cf4e2/693b41b8c309d6de772cf626_Executive%20Protection.png', alt: 'Ozint executive protection' },
+        { type: 'youtube', src: 'https://www.youtube.com/embed/w7Set1ad2pc?autoplay=1&mute=1&loop=1&playlist=w7Set1ad2pc&controls=0&modestbranding=1&playsinline=1&rel=0', alt: 'Ozint security video' },
+        { type: 'youtube', src: 'https://www.youtube.com/embed/NSvsTcZ8bX4?autoplay=1&mute=1&loop=1&playlist=NSvsTcZ8bX4&controls=0&modestbranding=1&playsinline=1&rel=0', alt: 'Ozint security video 2' }
+      ],
+      '04': [
+        { type: 'video', src: 'Video/superlocal.mp4', alt: 'Superlocal site video' },
+        { type: 'image', src: 'Assets/site-shots/04/01-hero.jpg', alt: 'Superlocal site hero' },
+        { type: 'image', src: 'Assets/site-shots/04/02-mid.jpg', alt: 'Superlocal site mid section' },
+        { type: 'image', src: 'Assets/site-shots/04/03-lower.jpg', alt: 'Superlocal site lower section' }
+      ],
+      '05': [
+        { type: 'video', src: 'Video/dahari.mp4', alt: 'Dahari site video' },
+        { type: 'image', src: 'Assets/site-shots/05/01-hero.jpg', alt: 'Dahari site hero' },
+        { type: 'image', src: 'Assets/site-shots/05/02-mid.jpg', alt: 'Dahari site mid section' },
+        { type: 'image', src: 'Assets/site-shots/05/03-lower.jpg', alt: 'Dahari site lower section' }
+      ],
+      '06': [
+        { type: 'video', src: 'Video/sorry.mp4', alt: 'SORRY. site video' },
+        { type: 'image', src: 'Assets/site-shots/06/01-hero.jpg', alt: 'SORRY. site hero' },
+        { type: 'image', src: 'Assets/site-shots/06/02-mid.jpg', alt: 'SORRY. site mid section' },
+        { type: 'image', src: 'Assets/site-shots/06/03-lower.jpg', alt: 'SORRY. site lower section' }
+      ],
+      '07': [
+        { type: 'image', src: 'Assets/site-shots/07/01-hero.jpg', alt: 'Manitoba eLicensing hero' },
+        { type: 'image', src: 'Assets/site-shots/07/02-mid.jpg', alt: 'Manitoba eLicensing mid section' },
+        { type: 'image', src: 'Assets/site-shots/07/03-lower.jpg', alt: 'Manitoba eLicensing lower section' },
+        { type: 'image', src: 'Assets/elicensing/hd/05-licence-types.jpg', alt: 'Manitoba licence types' },
+        { type: 'image', src: 'Assets/elicensing/hd/03-checkout-experience.jpg', alt: 'Manitoba checkout' },
+        { type: 'image', src: 'Assets/elicensing/hd/02-responsive-web-design.jpg', alt: 'Manitoba responsive design' }
+      ],
+      '08': [
+        { type: 'image', src: 'Assets/walmart/lifestyle/01-hand-phone.png', alt: 'Choose my model on phone' },
+        { type: 'image', src: 'Assets/walmart/lifestyle/02-shopper.png', alt: 'My Virtual Closet lifestyle' },
+        { type: 'image', src: 'Assets/walmart/lifestyle/03-welcome.png', alt: 'Fitting room welcome screen' },
+        { type: 'image', src: 'Assets/walmart/lifestyle/04-mirror-phone.png', alt: 'Virtual closet in fitting room' },
+        { type: 'image', src: 'Assets/walmart/lifestyle/05-dual-phones.png', alt: 'Switch model dual phones' },
+        { type: 'image', src: 'Assets/walmart/lifestyle/06-boutique-phones.png', alt: 'Boutique virtual try-on phones' },
+        { type: 'image', src: 'Assets/walmart/lifestyle/07-retail-duo.png', alt: 'Laptop and phone fitting room' },
+        { type: 'image', src: 'Assets/walmart/lifestyle/08-design-studio.png', alt: 'Virtual Dress Up design studio' }
+      ],
+      '09': [
+        { type: 'image', src: 'Assets/site-shots/09/01-design-system.png', alt: 'Canadian Tire design system' },
+        { type: 'image', src: 'Assets/site-shots/09/02-main-nav.png', alt: 'Canadian Tire mega nav' },
+        { type: 'image', src: 'Assets/site-shots/09/03-event-desktop.png', alt: 'Canadian Tire event page' },
+        { type: 'image', src: 'Assets/site-shots/09/04-categories.png', alt: 'Canadian Tire categories' },
+        { type: 'image', src: 'Assets/site-shots/09/05-plp.png', alt: 'Canadian Tire product listing' },
+        { type: 'image', src: 'Assets/csc/screens/06-event-page-mobile.png', alt: 'Canadian Tire event mobile' }
+      ],
+      '10': [
+        { type: 'image', src: 'Assets/site-shots/10/01-hero.jpg', alt: 'One Kings Lane site hero' },
+        { type: 'image', src: 'Assets/site-shots/10/02-mid.jpg', alt: 'One Kings Lane mid section' },
+        { type: 'image', src: 'Assets/site-shots/10/03-lower.jpg', alt: 'One Kings Lane lower section' },
+        { type: 'image', src: 'Assets/onekingslane/home.jpg', alt: 'One Kings Lane home capture' }
+      ],
+      '11': [
+        { type: 'image', src: 'Assets/site-shots/11/01-hero.jpg', alt: 'Anova site hero' },
+        { type: 'image', src: 'Assets/site-shots/11/02-mid.jpg', alt: 'Anova site mid section' },
+        { type: 'image', src: 'Assets/site-shots/11/03-lower.jpg', alt: 'Anova site lower section' },
+        { type: 'image', src: 'Assets/anova/01-screen-grid.png', alt: 'Anova guide screen grid' },
+        { type: 'image', src: 'Assets/anova/02-quad-flow.png', alt: 'Anova cook flow' },
+        { type: 'image', src: 'Assets/anova/03-trio-journey.png', alt: 'Anova journey screens' }
+      ]
+    };
+
+    function normalizeMediaItem(item, fallbackAlt) {
+      if (!item) return null;
+      if (typeof item === 'string') {
+        const src = item;
+        const isVideo = /\.(mp4|mov|webm)(\?|$)/i.test(src);
+        const isYoutube = /youtube\.com\/embed/i.test(src);
+        return {
+          type: isYoutube ? 'youtube' : (isVideo ? 'video' : 'image'),
+          src,
+          alt: fallbackAlt || 'Site media'
+        };
+      }
+      if (!item.src) return null;
+      let type = item.type;
+      if (!type) {
+        if (/youtube\.com\/embed/i.test(item.src)) type = 'youtube';
+        else if (/\.(mp4|mov|webm)(\?|$)/i.test(item.src)) type = 'video';
+        else type = 'image';
+      }
+      // Prefer portable local video paths over absolute machine paths
+      let src = item.src;
+      if (/^\/Users\//.test(src) || /CuttingEdgeSites/.test(src)) {
+        return null;
+      }
+      if (/Peppers\//.test(src)) return null;
+      if (/Screen Recording/.test(src) && !src.startsWith('Video/gatorade') && !src.startsWith('Video/magic') && !src.startsWith('Video/ozint') && !src.startsWith('Video/super') && !src.startsWith('Video/dahari') && !src.startsWith('Video/sorry')) {
+        return null;
+      }
+      return { type, src, alt: item.alt || fallbackAlt || 'Site media' };
+    }
+
+    function collectDrawerMedia(project) {
+      const seen = new Set();
+      const items = [];
+
+      const add = (raw) => {
+        const item = normalizeMediaItem(raw, project.name);
+        if (!item || !item.src || seen.has(item.src)) return;
+        seen.add(item.src);
+        items.push(item);
+      };
+
+      const configured = (project.siteMedia && project.siteMedia.length)
+        ? project.siteMedia
+        : (SITE_MEDIA[project.number] || []);
+      configured.forEach(add);
+
+      // Extra real-site media from project sections (skip stock placeholders)
+      ['howItStarted', 'process', 'assets', 'finalResult'].forEach((key) => {
+        const section = project[key];
+        if (!section || !section.media) return;
+        section.media.forEach((item) => {
+          if (!item || !item.src) return;
+          if (/unsplash\.com|via\.placeholder/i.test(item.src)) return;
+          if (/^https?:\/\//i.test(item.src) || item.src.startsWith('Video/') || item.src.startsWith('Assets/')) {
+            add(item);
+          }
+        });
+      });
+
+      return items;
+    }
+
     // Get project ID from URL (set by work.html when user clicks a project title)
     // Example: work.html links to "project.html?project=01" for GATORADE
     // This matches the data-video attribute from work.html's project-item
@@ -2726,6 +2917,42 @@
       return (project.finalResult && project.finalResult.content) || [];
     }
 
+    function renderDrawerSiteImages(project) {
+      const media = collectDrawerMedia(project);
+      if (!media.length) return '';
+
+      const figures = media.map((item, index) => {
+        const alt = escapeDrawerHtml(item.alt || `${project.name} media ${index + 1}`);
+        const src = escapeDrawerHtml(item.src);
+
+        if (item.type === 'youtube') {
+          return `
+            <figure class="details-drawer__image">
+              <iframe src="${src}" title="${alt}" loading="lazy" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+            </figure>
+          `;
+        }
+
+        if (item.type === 'video') {
+          return `
+            <figure class="details-drawer__image">
+              <video autoplay muted loop playsinline preload="metadata" aria-label="${alt}">
+                <source src="${src}" type="video/mp4">
+              </video>
+            </figure>
+          `;
+        }
+
+        return `
+          <figure class="details-drawer__image">
+            <img src="${src}" alt="${alt}" loading="lazy" decoding="async" />
+          </figure>
+        `;
+      }).join('');
+
+      return `<div class="details-drawer__images">${figures}</div>`;
+    }
+
     function buildDetailsDrawerBody(project) {
       const sections = [];
       let first = true;
@@ -2765,6 +2992,7 @@
       push('process', 'Process Highlights', renderDrawerList(getDrawerProcess(project)));
       push('deliverables', 'Key Deliverables', renderDrawerList(getDrawerDeliverables(project)));
       push('outcomes', 'Impact & Outcomes', renderDrawerList(getDrawerOutcomes(project)));
+      push('site-images', 'Images & Video', renderDrawerSiteImages(project));
 
       const tagline = project.tagline
         ? `<p class="details-drawer__tagline">${escapeDrawerHtml(project.tagline)}</p>`
@@ -2843,6 +3071,10 @@
         if (title) title.textContent = project.name || 'Project';
         body.innerHTML = buildDetailsDrawerBody(project);
         initDetailsDrawerAccordion(document.getElementById('detailsDrawerAccordion'));
+        body.querySelectorAll('video').forEach((video) => {
+          video.load();
+          video.play().catch(() => {});
+        });
 
         drawer.hidden = false;
         drawer.setAttribute('aria-hidden', 'false');

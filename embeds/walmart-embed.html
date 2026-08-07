@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=1280, initial-scale=1" />
-  <title>Walmart — preview</title>
+  <title>Walmart — virtual fitting room preview</title>
   <style>
     html, body {
       margin: 0;
@@ -19,13 +19,6 @@
       width: 0 !important;
       height: 0 !important;
       display: none !important;
-    }
-    .preview {
-      display: block;
-      width: 1280px;
-      max-width: 100%;
-      height: auto;
-      margin: 0 auto;
     }
     .bar {
       position: sticky;
@@ -51,13 +44,38 @@
     }
     .bar a:hover { background: rgba(255,255,255,.1); }
     .note { margin: 0; opacity: .9; font-weight: 500; }
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      padding: 1.25rem;
+      box-sizing: border-box;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .stack img {
+      display: block;
+      width: 100%;
+      height: auto;
+      background: #fff;
+      box-shadow: 0 8px 28px rgba(0,0,0,.08);
+    }
   </style>
 </head>
 <body>
   <div class="bar">
-    <p class="note">Walmart preview (live site blocks iframe embedding)</p>
+    <p class="note">Walmart — virtual fitting room preview</p>
     <a href="https://www.walmart.ca/en" target="_blank" rel="noopener noreferrer">Open live site</a>
   </div>
-  <img class="preview" src="../Assets/walmart/home.jpg" alt="Walmart Canada home preview" width="1280" />
+  <div class="stack">
+    <img src="../Assets/walmart/lifestyle/06-boutique-phones.png" alt="Boutique virtual try-on phones" width="1280" />
+    <img src="../Assets/walmart/lifestyle/01-hand-phone.png" alt="Choose my model on phone" width="1280" />
+    <img src="../Assets/walmart/lifestyle/02-shopper.png" alt="My Virtual Closet lifestyle" width="1280" />
+    <img src="../Assets/walmart/lifestyle/03-welcome.png" alt="Fitting room welcome screen" width="1280" />
+    <img src="../Assets/walmart/lifestyle/05-dual-phones.png" alt="Switch model dual phones" width="1280" />
+    <img src="../Assets/walmart/lifestyle/04-mirror-phone.png" alt="Virtual closet in fitting room" width="1280" />
+    <img src="../Assets/walmart/lifestyle/07-retail-duo.png" alt="Laptop and phone fitting room" width="1280" />
+    <img src="../Assets/walmart/lifestyle/08-design-studio.png" alt="Virtual Dress Up design studio" width="1280" />
+  </div>
 </body>
 </html>
