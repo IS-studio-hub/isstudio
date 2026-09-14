@@ -1186,24 +1186,106 @@
       z-index: 30;
     }
 
-    /* Back + menu readable over dark hero */
+    /* Back aligns with right-column copy (not over the media) */
     body.project-page--live .showreel {
-      color: #ffffff;
+      left: calc(50% + clamp(16px, 3vw, 48px));
+      color: var(--fg);
     }
     body.project-page--live .showreel .icon {
-      background-color: rgba(255,255,255,0.12);
-      outline-color: rgba(255,255,255,0.55);
+      background-color: #f7e491;
+      outline-color: var(--border);
     }
     body.project-page--live .showreel .icon::before {
-      border-color: rgba(255,255,255,0.35);
+      border-color: rgba(206, 65, 39, 0.25);
     }
     body.project-page--live .showreel .play {
-      border-left-color: #ffffff;
+      border-right-color: var(--fg);
     }
     body.project-page--live .bottom-left .logo-svg path {
       fill: #ffffff;
     }
 
+    /* Gatorade only: black ground, white copy, red logo + nav text */
+    body.project-theme--gatorade {
+      --bg: #000000;
+      --fg: #ffffff;
+      --muted: #ffffff;
+      --border: rgba(255, 255, 255, 0.45);
+    }
+
+    body.project-theme--gatorade .bottom-left .logo-svg path {
+      fill: #CE4127;
+    }
+
+    body.project-theme--gatorade .pill {
+      color: #CE4127;
+      border-color: #CE4127;
+      background: #f7e491;
+    }
+
+    body.project-theme--gatorade .pill .dot {
+      background: #CE4127;
+    }
+
+    body.project-theme--gatorade .pill:hover {
+      background: #CE4127;
+      color: #ffffff;
+    }
+
+    body.project-theme--gatorade .pill:hover .dot {
+      background: #ffffff;
+    }
+
+    body.project-theme--gatorade .nav-toggle__bar {
+      background: #ffffff;
+    }
+
+    body.project-theme--gatorade .showreel {
+      color: #ffffff;
+    }
+
+    body.project-theme--gatorade .showreel .icon {
+      background-color: transparent;
+      outline-color: rgba(255, 255, 255, 0.7);
+    }
+
+    body.project-theme--gatorade .showreel .icon::before {
+      border-color: rgba(255, 255, 255, 0.35);
+    }
+
+    body.project-theme--gatorade .showreel .play {
+      border-right-color: #ffffff;
+    }
+
+    body.project-theme--gatorade .project-brand-title,
+    body.project-theme--gatorade .project-business-description,
+    body.project-theme--gatorade .project-description-text,
+    body.project-theme--gatorade .project-tag,
+    body.project-theme--gatorade .examples__right h2,
+    body.project-theme--gatorade .examples__right p,
+    body.project-theme--gatorade .project-details-button,
+    body.project-theme--gatorade .coords,
+    body.project-theme--gatorade .coords b {
+      color: #ffffff;
+    }
+
+    body.project-theme--gatorade .project-details-button:hover {
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    body.project-theme--gatorade .project-details-button:focus-visible {
+      outline-color: #ffffff;
+    }
+
+    body.project-theme--gatorade .project-view-button {
+      color: #ffffff;
+      border-color: #ffffff;
+    }
+
+    body.project-theme--gatorade .project-view-button:hover {
+      background: #ffffff;
+      color: #000000;
+    }
 
     body.project-page--live .center {
       align-items: stretch;
@@ -1498,6 +1580,9 @@
     }
 
     @media (max-width: 1100px) {
+      body.project-page--live .showreel {
+        left: calc(50% + clamp(0.5rem, 1.5vw, 1.25rem));
+      }
       body.project-page--live .examples__right-content {
         padding: clamp(0.5rem, 1.5vw, 1.25rem);
       }
@@ -1512,6 +1597,9 @@
     @media (max-width: 900px) {
       .examples__grid {
         grid-template-columns: 1fr;
+      }
+      body.project-page--live .showreel {
+        left: clamp(16px, 4vw, 24px);
       }
       body.project-page--live {
         overflow-x: hidden;
@@ -2493,6 +2581,98 @@
             'https://images.unsplash.com/photo-1556905055-8bf35821c0e0?auto=format&fit=crop&w=1800&q=80'
           ]
         }
+      },
+      '07': {
+        name: 'BLAIR&JACK',
+        number: '07',
+        heroImage: 'Assets/work-placeholders/07-hero.svg',
+        heroLayout: 'stack-split',
+        heroMedia: [
+          { type: 'image', src: 'Assets/blairandjack/Home_Trio_7.png', alt: 'Blair & Jack product trio' },
+          { type: 'image', src: 'Assets/blairandjack/BJ-Anti-Bump-01.jpg', alt: 'Anti-Bump Treatment' },
+          { type: 'image', src: 'Assets/blairandjack/BJ-Refreshing-Cleanser-01.jpg', alt: 'Refreshing Cleanser' },
+          { type: 'image', src: 'Assets/blairandjack/BJ-Moisterizer-01.jpg', alt: 'Ultra-Hydrating Moisturizer' },
+          { type: 'video', src: 'Assets/blairandjack/vid/01-product.mp4', alt: 'Blair & Jack product film' },
+          { type: 'video', src: 'Video/blairandjack.mp4', alt: 'Blair & Jack site scroll' },
+          { type: 'video', src: 'Assets/blairandjack/vid/03-animation.mp4', alt: 'Blair & Jack product animation' }
+        ],
+        liveSiteUrl: 'https://is-studio-hub.github.io/blairandjack/',
+        video: 'Video/blairandjack.mp4',
+        description: 'We designed and developed a physician-backed men\'s skincare site for Blair & Jack—built around shaving irritation, razor bumps, and a simple three-step daily ritual.',
+        tagline: 'The New Standard of Men\'s Skin',
+        businessDescription: 'Blair & Jack is a physician-founded men\'s skincare brand created by Dr. Bimpe Ayeni, a board-certified plastic surgeon, and her husband Ade Ajayi. The brand focuses on the skin issues men actually face—redness, bumps, and post-shave irritation—through a clear daily ritual: Refreshing Cleanser, Anti-Bump Treatment, and Ultra-Hydrating Moisturizer.',
+        projectDescription: [
+          'We built a premium digital home for Blair & Jack that makes men\'s skincare feel credible, calm, and easy to start.',
+          'Through science storytelling, founder narrative, and product-led motion, we created a site that converts curiosity into a daily ritual.',
+          'The result: a live brand experience at is-studio-hub.github.io/blairandjack/ spanning Home, Science, Our Story, and Shop.'
+        ],
+        howItStarted: {
+          title: 'How it\'s start',
+          description: 'Blair & Jack came from a lived problem: Ade struggled to find skincare that soothed painful shaving irritation and bumps. After consulting with a pharmacist and formulating together with Dr. Ayeni, the brand—and its hero Anti-Bump Treatment—was born. They needed a digital presence that matched that clinical care with a modern, approachable brand voice.',
+          content: [
+            'The Challenge: Most men\'s skincare still feels like an afterthought—either watered-down women\'s lines or overly clinical pages that don\'t convert. Blair & Jack needed a site that felt trustworthy without being cold.',
+            'Initial Brief: Build a complete brand site covering Home, Science, Our Story, and Shop, with clear paths to the Anti-Bump Treatment and the full three-step ritual.',
+            'Our Approach: We centered the experience on real skin concerns—redness, bumps, barrier care—then wrapped science, founders, and product photography into one scroll-driven narrative.',
+            'The Opportunity: Position Blair & Jack as the new standard of men\'s skin: physician-backed formulas, a simple ritual, and digital storytelling that earns trust fast.'
+          ],
+          images: [
+            'Assets/blairandjack/Blair_Jack-0185-web.jpg',
+            'Assets/blairandjack/BJ-Content-03.jpg',
+            'Assets/blairandjack/BJ-Anti-Bump-01.jpg'
+          ]
+        },
+        process: {
+          title: 'Process',
+          description: 'We developed the Blair & Jack site from brand immersion through launch—balancing clinical credibility with a calm, editorial shopping experience.',
+          content: [
+            'Phase 1: Discovery & Positioning - Mapped the brand story, physician-founded credibility, and the core problem of razor bumps and post-shave irritation.',
+            'Phase 2: Information Architecture - Structured Home, Science, Our Story, and Shop so visitors can move from problem recognition to product confidence without friction.',
+            'Phase 3: Design System - Built a restrained visual language with product-led photography, confident typography, and motion that highlights texture, formula, and ritual.',
+            'Phase 4: Content & Science - Translated clinical thinking—benzoyl peroxide for bumps, hyaluronic hydration, barrier care—into plain-language sections and FAQs.',
+            'Phase 5: Development - Shipped a responsive marketing site with scroll storytelling, product modules, founder narrative, and clear CTAs into Shop.',
+            'Phase 6: Launch - Delivered the live experience at is-studio-hub.github.io/blairandjack/ ready for campaigns and ongoing product storytelling.'
+          ],
+          images: [
+            'Assets/blairandjack/BJ-Refreshing-Cleanser-01.jpg',
+            'Assets/blairandjack/BJ-Moisterizer-01.jpg',
+            'Assets/blairandjack/BJ-Content-04.jpg'
+          ]
+        },
+        assets: {
+          title: 'Assets',
+          description: 'We created a complete suite of visual and interactive assets that bring Blair & Jack\'s ritual to life across product, science, and story.',
+          content: [
+            'Product Photography: Hero and detail imagery for Anti-Bump Treatment, Refreshing Cleanser, and Ultra-Hydrating Moisturizer.',
+            'Motion & Product Films: Short-form marketing reels and product animations for hover previews and on-site storytelling.',
+            'Science Modules: Explainer sections covering redness, bumps, cleanse/refresh, hydration, and the everyday three-step ritual.',
+            'Founder Narrative: Story pages and portraits that connect clinical expertise with lived experience.',
+            'Shop Pathways: Clear CTAs into Anti-Bump Treatment and the full ritual without cluttering the brand experience.',
+            'Brand System: Wordmark, banners, and layout patterns that keep the site calm, credible, and conversion-ready.'
+          ],
+          images: [
+            'Assets/blairandjack/Home_Trio_7.png',
+            'Assets/blairandjack/BJ-Anti-Bump-03.jpg',
+            'Assets/blairandjack/Blair_Jack-0285-web.jpg',
+            'Assets/blairandjack/B_J-WebBanner-AntiBump-16x9.jpg'
+          ]
+        },
+        finalResult: {
+          title: 'Final result',
+          description: 'The final deliverable is a complete men\'s skincare brand site that makes Blair & Jack feel physician-backed, approachable, and ready to shop.',
+          content: [
+            'Complete Website: A live site at https://is-studio-hub.github.io/blairandjack/ with Home, Science, Our Story, and Shop.',
+            'Ritual Clarity: Cleanse. Treat. Moisturize. Three steps presented as a daily habit men will actually keep.',
+            'Hero Product Focus: Anti-Bump Treatment positioned as the answer to razor bumps and shaving irritation.',
+            'Trust Building: Science storytelling, FAQs, and founder credibility that reduce hesitation before purchase.',
+            'Motion-Led Brand Feel: Product films and imagery that communicate texture, care, and real-skin results.',
+            'Ongoing Partnership: A flexible framework ready for new products, campaigns, and content updates as the brand grows.'
+          ],
+          images: [
+            'Assets/blairandjack/Home_Trio_7.png',
+            'Assets/blairandjack/BJ-Anti-Bump-01.jpg',
+            'Assets/blairandjack/BJ-Refreshing-Cleanser-01.jpg'
+          ]
+        }
       }
     };
     const SITE_MEDIA = {
@@ -2535,6 +2715,15 @@
         { type: 'image', src: 'Assets/site-shots/06/01-hero.jpg', alt: 'SORRY. site hero' },
         { type: 'image', src: 'Assets/site-shots/06/02-mid.jpg', alt: 'SORRY. site mid section' },
         { type: 'image', src: 'Assets/site-shots/06/03-lower.jpg', alt: 'SORRY. site lower section' }
+      ],
+      '07': [
+        { type: 'video', src: 'Video/blairandjack.mp4', alt: 'Blair & Jack site video' },
+        { type: 'image', src: 'Assets/blairandjack/Home_Trio_7.png', alt: 'Blair & Jack product trio' },
+        { type: 'image', src: 'Assets/blairandjack/BJ-Anti-Bump-01.jpg', alt: 'Anti-Bump Treatment' },
+        { type: 'image', src: 'Assets/blairandjack/BJ-Refreshing-Cleanser-01.jpg', alt: 'Refreshing Cleanser' },
+        { type: 'image', src: 'Assets/blairandjack/BJ-Moisterizer-01.jpg', alt: 'Ultra-Hydrating Moisturizer' },
+        { type: 'video', src: 'Assets/blairandjack/vid/01-product.mp4', alt: 'Blair & Jack product film' },
+        { type: 'video', src: 'Assets/blairandjack/vid/02-cuts.mp4', alt: 'Blair & Jack product cuts' }
       ]
     };
     function normalizeMediaItem(item, fallbackAlt) {
@@ -3103,6 +3292,7 @@
     const contentEl = document.getElementById('projectContent');
     if (contentEl && project) {
       document.body.classList.toggle('project-page--live', !!(project.liveSiteUrl || project.heroImage));
+      document.body.classList.toggle('project-theme--gatorade', projectId === '01');
 
       contentEl.innerHTML = `
         <!-- Sticky Stack Component -->

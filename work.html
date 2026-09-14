@@ -227,6 +227,35 @@
       color: var(--fg);
     }
 
+    /* Mobile: show hover videos inline between number and title */
+    .project-inline-preview {
+      display: none;
+    }
+
+    @media (max-width: 1023px) {
+      .project-inline-preview {
+        display: block;
+        width: min(78vw, 340px);
+        margin: 0 0 0.9rem;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #000;
+        aspect-ratio: 16 / 9;
+      }
+
+      .project-inline-preview video {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+      }
+
+      .project-number {
+        margin-bottom: 0.55rem;
+      }
+    }
+
     /* Slider navigation arrows */
     .projects-nav {
       pointer-events: auto;
@@ -235,7 +264,7 @@
       justify-content: center;
       gap: clamp(1rem, 3vw, 2rem);
       width: 100%;
-      margin-top: clamp(1.5rem, 3vh, 2.5rem);
+      margin-top: clamp(0.75rem, 1.5vh, 1.25rem);
       padding-left: var(--gutter);
       padding-right: var(--gutter);
       box-sizing: border-box;
@@ -442,7 +471,7 @@
       }
 
       .projects-nav {
-        margin-top: calc(clamp(1.5rem, 3vh, 2.5rem) + 150px);
+        margin-top: clamp(0.5rem, 1.2vh, 1rem);
       }
     }
 
@@ -649,37 +678,64 @@
             <li class="project-item" data-video="Video/gatorade.mp4">
               <a href="project.html?project=01" class="project-link">
                 <div class="project-number">01</div>
+                <div class="project-inline-preview" aria-hidden="true">
+                  <video muted playsinline loop preload="metadata" src="Video/gatorade.mp4"></video>
+                </div>
                 <div class="project-name">GATORADE</div>
               </a>
             </li>
             <li class="project-item" data-video="Video/magicspoon.mp4">
               <a href="project.html?project=02" class="project-link">
                 <div class="project-number">02</div>
+                <div class="project-inline-preview" aria-hidden="true">
+                  <video muted playsinline loop preload="metadata" src="Video/magicspoon.mp4"></video>
+                </div>
                 <div class="project-name">MAGIC SPOON</div>
               </a>
             </li>
             <li class="project-item" data-video="Video/ozint.mp4">
               <a href="project.html?project=03" class="project-link">
                 <div class="project-number">03</div>
+                <div class="project-inline-preview" aria-hidden="true">
+                  <video muted playsinline loop preload="metadata" src="Video/ozint.mp4"></video>
+                </div>
                 <div class="project-name">OZINT SECURITY</div>
               </a>
             </li>
             <li class="project-item" data-video="Video/superlocal.mp4">
               <a href="project.html?project=04" class="project-link">
                 <div class="project-number">04</div>
+                <div class="project-inline-preview" aria-hidden="true">
+                  <video muted playsinline loop preload="metadata" src="Video/superlocal.mp4"></video>
+                </div>
                 <div class="project-name">SUPERLOCAL</div>
               </a>
             </li>
             <li class="project-item" data-video="Video/dahari.mp4">
               <a href="project.html?project=05" class="project-link">
                 <div class="project-number">05</div>
+                <div class="project-inline-preview" aria-hidden="true">
+                  <video muted playsinline loop preload="metadata" src="Video/dahari.mp4"></video>
+                </div>
                 <div class="project-name">DAHARI</div>
               </a>
             </li>
             <li class="project-item" data-video="Video/sorry.mp4">
               <a href="project.html?project=06" class="project-link">
                 <div class="project-number">06</div>
+                <div class="project-inline-preview" aria-hidden="true">
+                  <video muted playsinline loop preload="metadata" src="Video/sorry.mp4"></video>
+                </div>
                 <div class="project-name">SORRY.</div>
+              </a>
+            </li>
+            <li class="project-item" data-video="Video/blairandjack.mp4">
+              <a href="project.html?project=07" class="project-link">
+                <div class="project-number">07</div>
+                <div class="project-inline-preview" aria-hidden="true">
+                  <video muted playsinline loop preload="metadata" src="Video/blairandjack.mp4"></video>
+                </div>
+                <div class="project-name">BLAIR&amp;JACK</div>
               </a>
             </li>
           </ul>
@@ -1573,6 +1629,84 @@
         if (e.relatedTarget && item.contains(e.relatedTarget)) return;
         hidePreview();
       });
+    })();
+
+    // Mobile: play the centered project's inline preview video
+    (function() {
+      const mq = window.matchMedia('(max-width: 1023px)');
+      const list = document.getElementById('projectsList');
+      const container = document.querySelector('.projects-container');
+      if (!list || !container) return;
+
+      let activeVideo = null;
+
+      function getCenteredItem() {
+        const items = Array.from(list.querySelectorAll('.project-item'));
+        if (!items.length) return null;
+        const mid = container.getBoundingClientRect().left + container.clientWidth / 2;
+        let best = null;
+        let bestDist = Infinity;
+        items.forEach((item) => {
+          const r = item.getBoundingClientRect();
+          const center = r.left + r.width / 2;
+          const dist = Math.abs(center - mid);
+          if (dist < bestDist) {
+            bestDist = dist;
+            best = item;
+          }
+        });
+        return best;
+      }
+
+      function syncInlineVideos() {
+        if (!mq.matches) {
+          list.querySelectorAll('.project-inline-preview video').forEach((v) => {
+            v.pause();
+            try { v.currentTime = 0; } catch (_) {}
+          });
+          activeVideo = null;
+          return;
+        }
+
+        const centered = getCenteredItem();
+        const next = centered ? centered.querySelector('.project-inline-preview video') : null;
+        if (activeVideo === next) {
+          if (next && next.paused) {
+            const p = next.play();
+            if (p && typeof p.catch === 'function') p.catch(() => {});
+          }
+          return;
+        }
+
+        list.querySelectorAll('.project-inline-preview video').forEach((v) => {
+          if (v !== next) {
+            v.pause();
+            try { v.currentTime = 0; } catch (_) {}
+          }
+        });
+
+        activeVideo = next;
+        if (next) {
+          const p = next.play();
+          if (p && typeof p.catch === 'function') p.catch(() => {});
+        }
+      }
+
+      let ticking = false;
+      function requestSync() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          ticking = false;
+          syncInlineVideos();
+        });
+      }
+
+      container.addEventListener('scroll', requestSync, { passive: true });
+      window.addEventListener('resize', requestSync, { passive: true });
+      mq.addEventListener('change', requestSync);
+      window.addEventListener('load', requestSync);
+      requestSync();
     })();
 
     // showreel demo
