@@ -574,8 +574,7 @@
       z-index: 99999;
       pointer-events: none;
       transform: translateY(100%);
-      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1),
-                  background 0.1s ease;
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     /* Red background when transitioning to work.html */
@@ -585,7 +584,8 @@
     
     /* Yellow background when transitioning to yellow pages */
     .page-transition.to-yellow {
-      __PROTECT_1__;
+      background: #F7E491 !important;
+      background-color: #F7E491 !important;
     }
 
     .page-transition.to-dark {
@@ -1711,20 +1711,27 @@
       const transition = document.getElementById('pageTransition');
       if (!transition) return;
 
-      // Check if page is loading
-      if (document.readyState === 'loading') {
-        document.body.classList.add('page-loading');
-        window.addEventListener('load', () => {
-          setTimeout(() => {
-            document.body.classList.remove('page-loading');
-            transition.classList.remove('is-active');
-          }, 100);
-        });
+      // Entrance wipe uses this page's background (the page the user landed on)
+      const landBg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#F7E491';
+      transition.style.setProperty('background', landBg, 'important');
+      transition.style.setProperty('background-color', landBg, 'important');
+
+      // Reveal page content — never leave the overlay stuck
+      let revealed = false;
+      const revealPage = () => {
+        if (revealed) return;
+        revealed = true;
+        document.body.classList.remove('page-loading');
+        transition.classList.remove('is-active');
+      };
+
+      document.body.classList.add('page-loading');
+      if (document.readyState === 'complete') {
+        setTimeout(revealPage, 80);
       } else {
-        // Page already loaded, fade in transition
-        setTimeout(() => {
-          transition.classList.remove('is-active');
-        }, 100);
+        window.addEventListener('load', () => setTimeout(revealPage, 80), { once: true });
+        // Failsafe if a resource hangs and load never fires
+        setTimeout(revealPage, 1600);
       }
 
       // Intercept all internal navigation links
@@ -1742,15 +1749,23 @@
           const pageColors = {
             'work.html': { bg: '#ce4127', text: '#FFFFFF' }, // Red page
             'index.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
+            '': { bg: '#F7E491', text: '#CE4127' }, // bare "/" homepage
             'project.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
             'About.html': { bg: '#ce4127', text: '#FFFFFF' },
             'contact.html': { bg: '#F7E491', text: '#CE4127' },
+            'privacy-sentinel.html': { bg: '#F7E491', text: '#CE4127' },
           };
           
           // Extract target page name
           const targetPage = href.split('/').pop().split('?')[0];
-          const targetColor = pageColors[targetPage] || pageColors['index.html'];
-          const isTargetRed = targetColor.bg === '#ce4127';
+          const targetKey = Object.keys(pageColors).find(k => k.toLowerCase() === targetPage.toLowerCase())
+            || (targetPage === '' || targetPage === '/' ? 'index.html' : null)
+            || 'index.html';
+          const targetColor = pageColors[targetKey] || pageColors['index.html'];
+          // Homepage (logo → index) must always wipe yellow from Work
+          const goingHome = /^(index\.html)?$/i.test(targetPage) || href === '/' || href === './';
+          const isTargetYellow = goingHome || targetColor.bg.toLowerCase() === '#f7e491';
+          const isTargetRed = !isTargetYellow && targetColor.bg === '#ce4127';
           const isTargetDark = targetColor.bg === '#060605';
           
           transition.classList.remove('to-red', 'to-yellow', 'to-dark');
@@ -1761,7 +1776,9 @@
           } else {
             transition.classList.add('to-yellow');
           }
-          
+          const wipeBg = isTargetYellow ? '#F7E491' : targetColor.bg;
+          transition.style.setProperty('background', wipeBg, 'important');
+          transition.style.setProperty('background-color', wipeBg, 'important');
           // Add transitioning class
           document.body.classList.add('transitioning');
           

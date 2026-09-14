@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="2000" viewBox="0 0 1600 2000" role="img" aria-label="OZINT placeholder">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#111111"/>
+      <stop offset="100%" stop-color="#0a0a0a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="2000" fill="url(#g)"/>
+  <rect x="80" y="80" width="1440" height="1840" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="2"/>
+  <text x="800" y="920" text-anchor="middle" fill="#ffffff" font-family="Inter, Helvetica, Arial, sans-serif" font-size="42" letter-spacing="0.28em">03</text>
+  <text x="800" y="1020" text-anchor="middle" fill="#F7E491" font-family="Inter, Helvetica, Arial, sans-serif" font-size="96" font-weight="700">OZINT</text>
+  <text x="800" y="1120" text-anchor="middle" fill="rgba(255,255,255,0.55)" font-family="Inter, Helvetica, Arial, sans-serif" font-size="28" letter-spacing="0.2em">PLACEHOLDER IMAGE</text>
+</svg>

@@ -266,7 +266,7 @@
       z-index: 99999;
       pointer-events: none;
       transform: translateY(100%);
-      transition: transform 1s cubic-bezier(.4,0,.2,1), background .1s ease;
+      transition: transform 1s cubic-bezier(.4,0,.2,1);
     }
     .page-transition.to-red { background: #ce4127; }
     .page-transition.to-yellow { background: #F7E491; }
@@ -607,18 +607,27 @@
       const transition = document.getElementById('pageTransition');
       if (!transition) return;
 
-      if (document.readyState === 'loading') {
-        document.body.classList.add('page-loading');
-        window.addEventListener('load', () => {
-          setTimeout(() => {
-            document.body.classList.remove('page-loading');
-            transition.classList.remove('is-active');
-          }, 100);
-        });
+      // Entrance wipe uses this page's background (the page the user landed on)
+      const landBg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#F7E491';
+      transition.style.setProperty('background', landBg, 'important');
+      transition.style.setProperty('background-color', landBg, 'important');
+
+      // Reveal page content — never leave the overlay stuck
+      let revealed = false;
+      const revealPage = () => {
+        if (revealed) return;
+        revealed = true;
+        document.body.classList.remove('page-loading');
+        transition.classList.remove('is-active');
+      };
+
+      document.body.classList.add('page-loading');
+      if (document.readyState === 'complete') {
+        setTimeout(revealPage, 80);
       } else {
-        setTimeout(() => {
-          transition.classList.remove('is-active');
-        }, 100);
+        window.addEventListener('load', () => setTimeout(revealPage, 80), { once: true });
+        // Failsafe if a resource hangs and load never fires
+        setTimeout(revealPage, 1600);
       }
 
       const pageColors = {
@@ -640,7 +649,8 @@
           e.preventDefault();
 
           const targetPage = href.split('/').pop().split('?')[0];
-          const targetColor = pageColors[targetPage] || pageColors['index.html'];
+          const targetKey = Object.keys(pageColors).find(k => k.toLowerCase() === targetPage.toLowerCase()) || 'index.html';
+          const targetColor = pageColors[targetKey] || pageColors['index.html'];
           const isTargetRed = targetColor.bg === '#ce4127';
           const isTargetDark = targetColor.bg === '#060605';
 
@@ -652,6 +662,8 @@
           } else {
             transition.classList.add('to-yellow');
           }
+          transition.style.setProperty('background', targetColor.bg, 'important');
+          transition.style.setProperty('background-color', targetColor.bg, 'important');
 
           document.body.classList.add('transitioning');
           transition.classList.add('is-active');

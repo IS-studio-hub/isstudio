@@ -1168,7 +1168,7 @@
       min-height: 400px;
     }
 
-    /* Magic Spoon — interactive live site preview (100vh, no page scroll) */
+    /* Live project pages — full-bleed left hero behind chrome */
     body.project-page--live {
       overflow: hidden;
       height: 100%;
@@ -1180,9 +1180,35 @@
       overflow: hidden;
     }
 
+    body.project-page--live .showreel,
+    body.project-page--live .bottom-left,
+    body.project-page--live .coords {
+      z-index: 30;
+    }
+
+    /* Back + menu readable over dark hero */
+    body.project-page--live .showreel {
+      color: #ffffff;
+    }
+    body.project-page--live .showreel .icon {
+      background-color: rgba(255,255,255,0.12);
+      outline-color: rgba(255,255,255,0.55);
+    }
+    body.project-page--live .showreel .icon::before {
+      border-color: rgba(255,255,255,0.35);
+    }
+    body.project-page--live .showreel .play {
+      border-left-color: #ffffff;
+    }
+    body.project-page--live .bottom-left .logo-svg path {
+      fill: #ffffff;
+    }
+
+
     body.project-page--live .center {
       align-items: stretch;
       height: 100%;
+      z-index: 1;
     }
 
     body.project-page--live .stack {
@@ -1190,7 +1216,7 @@
       flex-direction: column;
       height: 100%;
       overflow: hidden;
-      padding: clamp(64px, 9vh, 88px) clamp(12px, 2vw, 24px) clamp(88px, 11vh, 108px) 0;
+      padding: 0;
       box-sizing: border-box;
     }
 
@@ -1209,11 +1235,11 @@
     }
 
     body.project-page--live .examples__grid:has(.examples__left--embed) {
-      align-items: center;
+      align-items: stretch;
       height: 100%;
       min-height: 0;
       margin: 0;
-      gap: clamp(16px, 3vw, 48px);
+      gap: 0;
     }
 
     .examples__grid:has(.examples__left--embed) {
@@ -1223,16 +1249,20 @@
     body.project-page--live .examples__left--embed {
       position: relative;
       top: auto;
-      align-self: center;
+      align-self: stretch;
       width: 50%;
       min-width: 0;
       max-width: 50%;
       min-height: 0;
-      height: auto;
+      height: 100%;
       display: flex;
-      align-items: center;
-      justify-content: center;
+      align-items: stretch;
+      justify-content: stretch;
       flex: 1 1 50%;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+      z-index: 1;
     }
 
     .examples__left--embed {
@@ -1256,17 +1286,20 @@
       display: flex;
       align-items: center;
       overflow: hidden;
+      z-index: 2;
+      background: var(--bg);
     }
 
     body.project-page--live .examples__right-content {
       position: relative;
       top: auto;
-      padding: clamp(0.5rem, 2vw, 2.5rem);
+      padding: clamp(64px, 9vh, 88px) clamp(12px, 2vw, 24px) clamp(88px, 11vh, 108px) clamp(16px, 3vw, 48px);
       max-height: 100%;
       overflow-x: hidden;
       overflow-y: auto;
       scrollbar-width: thin;
       width: 100%;
+      box-sizing: border-box;
     }
 
     body.project-page--live .project-brand-title {
@@ -1284,20 +1317,97 @@
       overflow: hidden;
     }
 
-    .examples__live-site {
-      --live-preview-w: 1280;
-      --live-preview-h: 720;
-      --live-preview-box-w: 704px;
-      --live-preview-box-h: 396px;
-      width: var(--live-preview-box-w);
-      height: var(--live-preview-box-h);
-      max-width: 100%;
-      flex: 0 0 auto;
-      margin: 0 auto;
+    .examples__hero,
+    body.project-page--live .examples__live-site {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      max-height: none;
+      flex: 1 1 auto;
+      margin: 0;
       overflow: hidden;
-      border-radius: clamp(10px, 2vw, 16px);
-      background: #000;
+      border-radius: 0;
+      background: #0a0a0a;
       box-sizing: border-box;
+      align-self: stretch;
+    }
+
+    .examples__hero-grid {
+      display: grid;
+      grid-template-columns: 1.45fr 1fr 1.15fr;
+      grid-template-rows: 1.7fr 1fr; /* unequal rows: tall top, shorter bottom */
+      gap: clamp(4px, 0.55vw, 8px);
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      padding: clamp(4px, 0.55vw, 8px);
+      box-sizing: border-box;
+    }
+
+    .examples__hero-cell {
+      position: relative;
+      overflow: hidden;
+      background: #151515;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    /* Asymmetric placement across 2 unequal rows */
+    .examples__hero-cell:nth-child(1) {
+      grid-column: 1 / 3;
+      grid-row: 1;
+    }
+    .examples__hero-cell:nth-child(2) {
+      grid-column: 3;
+      grid-row: 1 / 3; /* tall right stack through both rows */
+    }
+    .examples__hero-cell:nth-child(3) {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    .examples__hero-cell:nth-child(4) {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    /* Gatorade-style: 4 stacked images left, 3 stacked videos right */
+    .examples__hero-grid--stack-split {
+      grid-template-columns: 1.2fr 1fr;
+      grid-template-rows: repeat(12, minmax(0, 1fr));
+    }
+    .examples__hero-grid--stack-split .examples__hero-cell:nth-child(1),
+    .examples__hero-grid--stack-split .examples__hero-cell:nth-child(2),
+    .examples__hero-grid--stack-split .examples__hero-cell:nth-child(3),
+    .examples__hero-grid--stack-split .examples__hero-cell:nth-child(4),
+    .examples__hero-grid--stack-split .examples__hero-cell:nth-child(5),
+    .examples__hero-grid--stack-split .examples__hero-cell:nth-child(6),
+    .examples__hero-grid--stack-split .examples__hero-cell:nth-child(7) {
+      grid-column: auto;
+      grid-row: auto;
+    }
+    .examples__hero-grid--stack-split .examples__hero-cell--image:nth-child(1) { grid-column: 1; grid-row: 1 / 4; }
+    .examples__hero-grid--stack-split .examples__hero-cell--image:nth-child(2) { grid-column: 1; grid-row: 4 / 7; }
+    .examples__hero-grid--stack-split .examples__hero-cell--image:nth-child(3) { grid-column: 1; grid-row: 7 / 10; }
+    .examples__hero-grid--stack-split .examples__hero-cell--image:nth-child(4) { grid-column: 1; grid-row: 10 / 13; }
+    .examples__hero-grid--stack-split .examples__hero-cell--video:nth-child(5) { grid-column: 2; grid-row: 1 / 5; }
+    .examples__hero-grid--stack-split .examples__hero-cell--video:nth-child(6) { grid-column: 2; grid-row: 5 / 9; }
+    .examples__hero-grid--stack-split .examples__hero-cell--video:nth-child(7) { grid-column: 2; grid-row: 9 / 13; }
+
+    .examples__hero-cell img,
+    .examples__hero-cell video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .examples__hero-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
     }
 
     @media (min-width: 901px) {
@@ -1457,14 +1567,25 @@
         overflow: visible;
         box-sizing: border-box;
       }
+      body.project-page--live .examples__hero,
       body.project-page--live .examples__live-site {
-        --live-preview-box-w: min(640px, 100%);
-        --live-preview-box-h: auto;
-        width: var(--live-preview-box-w);
+        width: 100%;
         height: auto;
-        aspect-ratio: 1280 / 720;
+        min-height: 48vh;
+        aspect-ratio: 4 / 5;
         max-width: 100%;
-        margin: 0 auto;
+        margin: 0;
+      }
+      body.project-page--live .examples__hero-grid {
+        min-height: 48vh;
+        height: 100%;
+      }
+      body.project-page--live .examples__hero-img,
+      body.project-page--live .examples__hero-cell img,
+      body.project-page--live .examples__hero-cell video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
       body.project-page--live .project-business-description {
         -webkit-line-clamp: unset;
@@ -1592,11 +1713,10 @@
     }
 
     @media (max-height: 700px) and (min-width: 901px) {
+      body.project-page--live .examples__hero,
       body.project-page--live .examples__live-site {
-        --live-preview-box-w: min(704px, calc((100dvh - 200px) * 1280 / 720));
-        --live-preview-box-h: calc(var(--live-preview-box-w) * 720 / 1280);
-        width: var(--live-preview-box-w);
-        height: var(--live-preview-box-h);
+        height: 100%;
+        max-height: 100%;
       }
       body.project-page--live .project-business-description {
         -webkit-line-clamp: 3;
@@ -1702,8 +1822,7 @@
       z-index: 99999;
       pointer-events: none;
       transform: translateY(100%);
-      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1),
-                  background 0.1s ease;
+      transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
     /* Red background when transitioning to work.html */
@@ -1856,6 +1975,17 @@
       '01': {
         name: 'GATORADE',
         number: '01',
+        heroImage: 'Assets/work-placeholders/01-hero.svg',
+        heroLayout: 'stack-split',
+        heroMedia: [
+          { type: 'image', src: 'Assets/gatorade/frames/01.jpg', alt: 'Gatorade page section 1' },
+          { type: 'image', src: 'Assets/gatorade/frames/02.jpg', alt: 'Gatorade page section 2' },
+          { type: 'image', src: 'Assets/gatorade/frames/03.jpg', alt: 'Gatorade page section 3' },
+          { type: 'image', src: 'Assets/gatorade/frames/04.jpg', alt: 'Gatorade page section 4' },
+          { type: 'video', src: 'Assets/gatorade/vid/01-breathing.mp4', alt: 'Athletes breathing with glitch' },
+          { type: 'video', src: 'Assets/gatorade/vid/02-preparing.mp4', alt: 'Athletes preparing for explosive movement' },
+          { type: 'video', src: 'Assets/gatorade/vid/03-webad.mp4', alt: 'Gatorade web ad' }
+        ],
         liveSiteUrl: 'https://is-studio-hub.github.io/gatorade/',
         video: '/Users/shamrikin/Desktop/ISstudio/Work/CuttingEdgeSites/Studio Portfolio/Video/Screen Recording 2025-12-05 at 3.02.08 PM.mov',
         description: 'We created a comprehensive digital experience including website, landing pages, and content strategy for Gatorade\'s new energy drink launch.',
@@ -1937,6 +2067,7 @@
       '02': {
         name: 'MAGIC SPOON',
         number: '02',
+        heroImage: 'Assets/work-placeholders/02-hero.svg',
         liveSiteUrl: 'https://is-studio-hub.github.io/Magic-Spoon/',
         video: '/Users/shamrikin/Desktop/ISstudio/Work/CuttingEdgeSites/Studio Portfolio/Video/Screen Recording 2025-12-07 at 10.40.28 AM.mov',
         description: 'We designed and developed a complete website and digital experience for Magic Spoon, a cereal brand targeting health-conscious younger audiences.',
@@ -2018,6 +2149,7 @@
       '03': {
         name: 'OZINT SECURITY',
         number: '03',
+        heroImage: 'Assets/work-placeholders/03-hero.svg',
         liveSiteUrl: 'https://www.ozintsecurity.com/',
         liveEmbedScript: 'embeds/ozint-embed.js',
         liveEmbedPath: 'embeds/ozint-embed.html',
@@ -2103,6 +2235,7 @@
       '04': {
         name: 'SUPERLOCAL',
         number: '04',
+        heroImage: 'Assets/work-placeholders/04-hero.svg',
         liveSiteUrl: 'https://is-studio-hub.github.io/superlocal/',
         video: '/Users/shamrikin/Desktop/ISstudio/Work/CuttingEdgeSites/Studio Portfolio/Video/Screen Recording 2025-12-25 at 10.14.29 PM.mov',
         description: 'We created an event mini-site and digital experience for Superlocal, a local pop-up market initiative that brings fresh produce directly to neighborhoods.',
@@ -2200,6 +2333,7 @@
       '05': {
         name: 'DAHARI',
         number: '05',
+        heroImage: 'Assets/work-placeholders/05-hero.svg',
         liveSiteUrl: 'https://is-studio-hub.github.io/dahari/',
         video: 'Video/dahari.mp4',
         description: 'We designed and developed a premium digital experience for Dahari, an Israeli real estate developer, showcasing residential and commercial projects through an immersive, video-led website.',
@@ -2281,6 +2415,7 @@
       '06': {
         name: 'SORRY.',
         number: '06',
+        heroImage: 'Assets/work-placeholders/06-hero.svg',
         liveSiteUrl: 'https://is-studio-hub.github.io/sorry/',
         video: 'Video/sorry.mp4',
         description: 'We designed and developed a complete e-commerce experience for SORRY.—a Canadian apparel brand built on honest fabric, heavyweight construction, and unapologetic attitude.',
@@ -2791,26 +2926,87 @@
       return project.liveSiteUrl;
     }
 
-    function generateLiveSiteEmbed(project) {
-      const safeTitle = (project.name + ' — live site preview').replace(/"/g, '&quot;');
-      const srcdocAttr = project.liveEmbedScript ? ' data-live-srcdoc="1"' : '';
-      const srcAttr = project.liveEmbedScript
-        ? ''
-        : ` src="${resolveLiveEmbedUrl(project)}"`;
-      return `
-        <div class="live-site-frame-scaler">
-          <iframe
-            class="live-site-frame"
-            ${srcdocAttr}${srcAttr}
-            title="${safeTitle}"
-            width="1280"
-            height="720"
-            loading="lazy"
-            allow="fullscreen"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-      `;
+    function resolveHeroImage(project) {
+      if (project.heroImage) return project.heroImage;
+      const n = project.number || '01';
+      return `Assets/work-placeholders/${n}-hero.svg`;
+    }
+
+    function getHeroMedia(project) {
+      if (project.heroMedia && project.heroMedia.length) {
+        return project.heroLayout === 'stack-split' ? project.heroMedia.slice(0, 7) : project.heroMedia.slice(0, 4);
+      }
+      const n = project.number || '01';
+      const fromSite = (SITE_MEDIA[n] || []).filter((item) => {
+        if (!item || !item.src) return false;
+        if (item.type === 'youtube') return false;
+        if (item.type === 'video' || item.type === 'image') return true;
+        return /\.(mp4|mov|webm|jpe?g|png|webp|gif|svg)(\?|$)/i.test(item.src);
+      });
+      const items = fromSite.slice(0, 4);
+      while (items.length < 4) {
+        items.push({
+          type: 'image',
+          src: `Assets/work-placeholders/${n}-hero.svg`,
+          alt: project.name + ' placeholder'
+        });
+      }
+      return items;
+    }
+
+    function generateHeroGrid(project) {
+      const layout = project.heroLayout || 'asymmetric';
+      let media = getHeroMedia(project);
+
+      if (layout === 'stack-split') {
+        // Prefer explicit media: first images (up to 4) left, videos (up to 3) right
+        const images = media.filter((item) => item.type === 'image' || /\.(jpe?g|png|webp|gif|svg)(\?|$)/i.test(item.src || '')).slice(0, 4);
+        const videos = media.filter((item) => item.type === 'video' || /\.(mp4|mov|webm)(\?|$)/i.test(item.src || '')).slice(0, 3);
+        while (images.length < 4) {
+          images.push({ type: 'image', src: resolveHeroImage(project), alt: project.name + ' placeholder' });
+        }
+        while (videos.length < 3) {
+          videos.push(videos[videos.length - 1] || { type: 'image', src: resolveHeroImage(project), alt: project.name });
+        }
+
+        const renderCell = (item, index, side) => {
+          const alt = (item.alt || (project.name + ' media')).replace(/"/g, '&quot;');
+          const isVideo = item.type === 'video' || /\.(mp4|mov|webm)(\?|$)/i.test(item.src || '');
+          const mediaHtml = isVideo
+            ? `<video src="${item.src}" muted autoplay loop playsinline preload="metadata" aria-label="${alt}"></video>`
+            : `<img class="examples__hero-img" src="${item.src}" alt="${alt}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" />`;
+          return `<div class="examples__hero-cell examples__hero-cell--${side}" data-hero-index="${index}">${mediaHtml}</div>`;
+        };
+
+        const left = images.map((item, i) => renderCell(item, i, 'image')).join('');
+        const right = videos.map((item, i) => renderCell(item, i, 'video')).join('');
+        return `<div class="examples__hero-grid examples__hero-grid--stack-split" aria-label="${(project.name + ' media grid').replace(/"/g, '&quot;')}">${left}${right}</div>`;
+      }
+
+      // Default asymmetric 2-row grid (4 cells)
+      media = media.slice(0, 4);
+      while (media.length < 4) {
+        media.push({ type: 'image', src: resolveHeroImage(project), alt: project.name + ' placeholder' });
+      }
+      const cells = media.map((item, index) => {
+        const alt = (item.alt || (project.name + ' media ' + (index + 1))).replace(/"/g, '&quot;');
+        const isVideo = item.type === 'video' || /\.(mp4|mov|webm)(\?|$)/i.test(item.src || '');
+        if (isVideo) {
+          return `
+            <div class="examples__hero-cell" data-hero-index="${index}">
+              <video src="${item.src}" muted autoplay loop playsinline preload="metadata" aria-label="${alt}"></video>
+            </div>`;
+        }
+        return `
+          <div class="examples__hero-cell" data-hero-index="${index}">
+            <img class="examples__hero-img" src="${item.src}" alt="${alt}" loading="${index < 2 ? 'eager' : 'lazy'}" decoding="async" />
+          </div>`;
+      }).join('');
+      return `<div class="examples__hero-grid" aria-label="${(project.name + ' media grid').replace(/"/g, '&quot;')}">${cells}</div>`;
+    }
+
+    function generateHeroImage(project) {
+      return generateHeroGrid(project);
     }
 
     function hideIframeScrollbars(iframe) {
@@ -2906,17 +3102,17 @@
     // Load project content
     const contentEl = document.getElementById('projectContent');
     if (contentEl && project) {
-      document.body.classList.toggle('project-page--live', !!project.liveSiteUrl);
+      document.body.classList.toggle('project-page--live', !!(project.liveSiteUrl || project.heroImage));
 
       contentEl.innerHTML = `
         <!-- Sticky Stack Component -->
         <section class="examples-section" id="examples">
           <div class="examples__grid">
             <!-- LEFT COLUMN (sticky items) -->
-            <div class="examples__left${project.liveSiteUrl ? ' examples__left--embed' : ''}">
-              ${project.liveSiteUrl ? `
-              <div class="examples__live-site">
-                ${generateLiveSiteEmbed(project)}
+            <div class="examples__left${(project.liveSiteUrl || project.heroImage) ? ' examples__left--embed' : ''}">
+              ${(project.liveSiteUrl || project.heroImage) ? `
+              <div class="examples__hero examples__live-site">
+                ${generateHeroImage(project)}
               </div>
               ` : `
               <div class="examples__collection">
@@ -2967,22 +3163,6 @@
         });
       }
 
-      if (project.liveEmbedScript) {
-        mountSrcdocEmbed(project, contentEl);
-      }
-      if (project.liveSiteUrl) {
-        const scheduleFit = () => {
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => fitLivePreview(contentEl));
-          });
-        };
-        scheduleFit();
-        window.addEventListener('resize', scheduleFit);
-        if (typeof ResizeObserver !== 'undefined') {
-          const wrap = contentEl.querySelector('.examples__live-site');
-          if (wrap) new ResizeObserver(scheduleFit).observe(wrap);
-        }
-      }
 
       // Animate examples sections after content loads
       setTimeout(() => {
@@ -3121,20 +3301,27 @@
       const transition = document.getElementById('pageTransition');
       if (!transition) return;
 
-      // Check if page is loading
-      if (document.readyState === 'loading') {
-        document.body.classList.add('page-loading');
-        window.addEventListener('load', () => {
-          setTimeout(() => {
-            document.body.classList.remove('page-loading');
-            transition.classList.remove('is-active');
-          }, 100);
-        });
+      // Entrance wipe uses this page's background (the page the user landed on)
+      const landBg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#F7E491';
+      transition.style.setProperty('background', landBg, 'important');
+      transition.style.setProperty('background-color', landBg, 'important');
+
+      // Reveal page content — never leave the overlay stuck
+      let revealed = false;
+      const revealPage = () => {
+        if (revealed) return;
+        revealed = true;
+        document.body.classList.remove('page-loading');
+        transition.classList.remove('is-active');
+      };
+
+      document.body.classList.add('page-loading');
+      if (document.readyState === 'complete') {
+        setTimeout(revealPage, 80);
       } else {
-        // Page already loaded, fade in transition
-        setTimeout(() => {
-          transition.classList.remove('is-active');
-        }, 100);
+        window.addEventListener('load', () => setTimeout(revealPage, 80), { once: true });
+        // Failsafe if a resource hangs and load never fires
+        setTimeout(revealPage, 1600);
       }
 
       // Page color mapping
@@ -3144,6 +3331,7 @@
         'project.html': { bg: '#F7E491', text: '#CE4127' }, // Yellow page
         'About.html': { bg: '#ce4127', text: '#FFFFFF' },
         'contact.html': { bg: '#F7E491', text: '#CE4127' },
+        'privacy-sentinel.html': { bg: '#F7E491', text: '#CE4127' }
       };
 
       // Intercept all internal navigation links
@@ -3159,7 +3347,8 @@
           
           // Extract target page name
           const targetPage = href.split('/').pop().split('?')[0];
-          const targetColor = pageColors[targetPage] || pageColors['index.html'];
+          const targetKey = Object.keys(pageColors).find(k => k.toLowerCase() === targetPage.toLowerCase()) || 'index.html';
+          const targetColor = pageColors[targetKey] || pageColors['index.html'];
           const currentBg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
           const isCurrentRed = currentBg === '#ce4127' || currentBg === 'rgb(206, 65, 39)';
           const isTargetRed = targetColor.bg === '#ce4127';
@@ -3173,6 +3362,8 @@
           } else {
             transition.classList.add('to-yellow');
           }
+          transition.style.setProperty('background', targetColor.bg, 'important');
+          transition.style.setProperty('background-color', targetColor.bg, 'important');
           
           // Add transitioning class
           document.body.classList.add('transitioning');
